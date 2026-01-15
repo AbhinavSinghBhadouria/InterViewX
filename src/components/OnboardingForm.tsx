@@ -1,5 +1,5 @@
 "use client"
-import { useState ,useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm ,Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { onboardingScehma } from '../schema/schema';
@@ -86,6 +86,8 @@ const onSubmit= async(values :any)=>{
        const formattedSubIndustry = toKebabCase(values.subIndustry);
       const combinedIndustry = `tech-${formattedSubIndustry}`; //tech is set by default
    
+
+
     //sending the values from the form to updatUserFn from our custom hook
    await updateUserFn({
        experience: values.experience,
@@ -238,12 +240,8 @@ useEffect(()=>{
  }
 </Button>
 
-
-
-
-
-   </form>
-  </CardContent>
+</form>
+</CardContent>
   
 </Card>
     </div>

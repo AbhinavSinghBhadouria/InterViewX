@@ -2,8 +2,7 @@
 import Image from "next/image";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Header from "@/src/components/ui/Header";
-import Footer from "@/src/components/ui/Footer";
+import { toast } from "sonner";
 
 export default function InterviewXDashboard() {
   const router = useRouter();
@@ -22,6 +21,15 @@ export default function InterviewXDashboard() {
       }, 100 * index);
     });
   }, []);
+
+  const handleClick=()=>{
+        toast.success("Redirecting to InterviewX Carrier Tools..");
+        router.push("/tools/onboarding")
+ }
+ const handleClick1=()=>{
+   toast.success("Redirecting to AI Powered Mock Interview Page..");
+   router.push("/")
+ }
 
   return (
    
@@ -51,7 +59,7 @@ export default function InterviewXDashboard() {
 
        
         <div className="cards-container">
-          <div className="card" onClick={() => router.push("/")}>
+          <div className="card" onClick={handleClick1}>
  <div className="text-4xl mb-4">🎤</div>
 
             <h2 className="text-2xl font-semibold text-blue-400 mb-3">
@@ -71,17 +79,9 @@ export default function InterviewXDashboard() {
             </ul>    
          </div>
 
-          {/* <div className="card" onClick={() => router.push("/coding-arena")}>
-            <div className="card-content">
-              <div className="card-icon"></div>
-              <h2 className="card-title">Enter Coding Arena</h2>
-              <p className="card-description">
-                Get deep insights into accuracy, clarity, and confidence.
-              </p>
-            </div>
-          </div> */}
+          
 
-          <div className="card" onClick={() => router.push("/tools/onboarding")}>
+          <div className="card" onClick={handleClick}>
               <div className="text-4xl mb-4">📊</div>
 
             <h2 className="text-2xl font-semibold text-blue-400 mb-3">

@@ -10,8 +10,8 @@ const page = async() => {
   console.log(user);
   if(!user) return null;
   return (
-   <div className="min-h-screen flex flex-col items-center w-full p-3">
-   <h3>Interview Generation</h3>
+   <div className="min-h-screen flex flex-col items-center w-full p-5">
+   <div className="text-5xl font-bold mt-10 mb-10">Interview Generation</div>
    <Agent userName={user?.name} userId={user?._id.toString()} type="generate"/>
    </div>
   )

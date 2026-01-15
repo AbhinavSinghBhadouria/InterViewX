@@ -1,8 +1,6 @@
 import {NextAuthOptions} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import dbConnect from "@/src/lib/dbConnect";
-import UserModel from "@/src/models/User";
 import type { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
@@ -30,7 +28,7 @@ export const authOptions: NextAuthOptions={
 
             //designing the custom method for authorizing the credentials
             async authorize(credentials:any):Promise<any>{
-                // await dbConnect();
+                
                 const client = await clientPromise;
                  const db = client.db();
 

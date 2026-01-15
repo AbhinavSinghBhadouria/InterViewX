@@ -2,12 +2,14 @@
 import  { useEffect, useRef } from 'react';
 import Link from "next/link";
 import Image from 'next/image';
+import { useState } from 'react';
+import  { useRouter } from 'next/navigation';
 
 
 export default function landingPage() {
 
 
-  
+  const router=useRouter();
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const orbsRef = useRef<HTMLDivElement>(null);
 
@@ -117,6 +119,13 @@ export default function landingPage() {
   }
 ];
 
+const [loading, setLoading] = useState(false);
+
+  const handleClick = () => {
+    setLoading(true);
+    router.push("/sign-up");
+  };
+
   
 
   return (
@@ -151,11 +160,27 @@ export default function landingPage() {
           <p className="text-2xl text-gray-400 mb-10">Transform Your Interview Process with AI-Powered Intelligence</p>
           
           <div className="flex gap-5 justify-center">
-            <Link href="/sign-up">
+            {/* <Link href="/sign-up">
             <button className="px-10 py-4 text-lg rounded-full bg-linear-to-r from-blue-900 to-blue-500 text-white shadow-lg shadow-blue-500/40 btn-3d hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/60">
               Get Started
             </button>
-            </Link>
+            </Link> */}
+              <button
+      onClick={handleClick}
+      disabled={loading}
+      className={`px-10 py-4 text-lg rounded-full bg-linear-to-r from-blue-900 to-blue-500 text-white shadow-lg shadow-blue-500/40 btn-3d 
+      hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/60 
+      disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 flex items-center justify-center gap-3`}
+    >
+      {loading ? (
+        <>
+          <span className="w-5 h-5 rounded-full border-2 border-white/60 border-t-white animate-spin" />
+          Loading...
+        </>
+      ) : (
+        "Get Started"
+      )}
+    </button>
            
           </div>
         </div>

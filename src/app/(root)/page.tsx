@@ -4,12 +4,15 @@ import Link from 'next/link'
 import InterviewCard from '@/src/components/InterviewCard'
 import { getCurrentUser } from '@/src/models/User'
 import { getInterviewByUserId, getLatestInterviews } from '@/src/lib/action'
+import StartInterviewButton from '@/src/components/StartInterviewButton'
 
 
 
 
 const page = async() => {
   const user=await getCurrentUser();
+
+
   if(!user) return null;
   const userInterviews=await getInterviewByUserId(user?._id.toString());
   const latestInterviews=await getLatestInterviews({userId:user?._id.toString()}); //since there are two arguments for this function
@@ -27,9 +30,12 @@ const page = async() => {
     <p className="text-lg">
       Practice on real interview questions and get instant feedback
     </p>
-    <Button asChild className="btn-primary max-sm:w-full">
+
+    <StartInterviewButton/>
+    {/* <Button className="btn-primary max-sm:w-full flex items-center gap-2">
       <Link href="/interview">Start an interview</Link>
-    </Button>
+    </Button> */}
+
    </div>
    
    <Image src="/robot.png" alt="robot image" width={400} height={400}  className="mask-img hidden md:block"></Image>

@@ -169,7 +169,7 @@ const AuthForm = ({type}:{type:FormType}) => {
          placeholder="Enter your password"/> 
 
    
-        <Button type="submit" className="btn" disabled={isSubmitting}>
+        <Button type="submit" className="btn" disabled={isSubmitting || loadingProvider=="github" || loadingProvider=="google"}>
           {
             isSubmitting ?(
                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
@@ -207,7 +207,7 @@ const AuthForm = ({type}:{type:FormType}) => {
   <Button
     type="button"
     className="btn-secondary w-full rounded-full"
-    disabled={loadingProvider === "github"}
+    disabled={loadingProvider === "github" || loadingProvider=="google" || isSubmitting}
       onClick={() => handleProviderSignIn("github")}
 
   >

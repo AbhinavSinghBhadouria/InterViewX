@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import db from "@/src/lib/prisma";
 import { authOptions } from '../app/api/auth/[...nextauth]/options';
 import { onboardingStatus } from "../types";
+import { generateAIInsights } from "./dashboard";
 
 export async function updateUser(data : any){
      const session = await getServerSession(authOptions);
@@ -45,21 +46,15 @@ export async function updateUser(data : any){
     // SECOND API -> if the industry does not exist then we will create it with default values and will replace it with AI later
 
     if(!industryInsight){
-      industryInsight=await tx.industryInsight.create({
-        data:{
-            industry : data.industry ,
-            salaryRanges:[], //default empty array
-            growthRate:0, //default value
-            demandLevel:"MEDIUM" ,
-            topSkills:[] ,
-            marketOutlook:"NEUTRAL",
-            keyTrends:[] ,
-            recommendedSkills:[] ,
-            nextUpdate:new Date(Date.now() + 7*24*60*60*1000) , // 1 week
-
-
-        }
-      })
+       //we will generate them using AI
+          const insights = await generateAIInsights("Technology");
+          const industryInsight = await db.industryInsight.create({
+              data:{
+                  industry:"tech",
+                  ...insights , //from the AI
+                  nextUpdate:new Date(Date.now() +7*24*60*60*1000),  //we will update it after one week
+              } ,
+          })
     }
 
     // Third API -> update the user

@@ -33,7 +33,19 @@ const Header = () => {
        
       
        
-       <Button className="btn-secondary" onClick={logout}>
+       <Button
+       className="
+     inline-flex items-center justify-center
+     px-5 py-2.5 rounded-xl font-semibold
+     bg-gradient-to-r from-red-600 to-pink-600
+    text-white shadow-lg shadow-red-500/30
+    hover:from-red-500 hover:to-pink-500
+    hover:shadow-red-500/45
+    active:scale-[0.97]
+    transition-all duration-200
+    focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2
+  "
+        onClick={logout}>
        
         {
           loggingOut?(
@@ -45,7 +57,7 @@ const Header = () => {
      : (
        <>
       <LogOut className="h-4 w-4 mr-2" />
-      Logout
+      <p className="text-sm">Logout</p> 
      </>
       )
 

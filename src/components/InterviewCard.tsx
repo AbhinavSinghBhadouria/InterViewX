@@ -1,4 +1,3 @@
-import React from 'react'
 import dayjs from "dayjs"
 import Image from 'next/image';
 import { getRandomInterviewCover } from '../lib/utils';
@@ -6,14 +5,23 @@ import { Button } from './ui/button';
 import Link from 'next/link';
 import DisplayTechIcons from './DisplayTechIcons';
 import { InterviewCardProps } from '../types';
-import { FeedbackType } from '../types';
 import { getFeedbackByInterviewId } from '../lib/action';
+import { getServerSession } from 'next-auth';
+import { authOptions } from "../app/api/auth/[...nextauth]/options";
+import ViewInterviewButton from "./ViewInterviewButton";
+
 
 const InterviewCard = async({interviewId , userId , role , type , techstack , createdAt}: InterviewCardProps) => {
 
   const feedback=userId && interviewId ? await getFeedbackByInterviewId({interviewId , userId }): null ;
   const normalizedType= /mix/gi.test(type) ? "Mixed" : type;
   const formattedDate=dayjs(feedback?.createdAt || createdAt?.toString() || Date.now()).format("DD/MM/YYYY");
+
+
+  const session = await getServerSession(authOptions);
+  const sessionUserId= session?.user?._id;
+
+  const isOwner= (sessionUserId==userId) && Boolean(feedback);
 
   return (
     <div className="card-border w-90 max-sm:w-full min-h-96 m-3 bg-[#0B0F24] 
@@ -37,10 +45,9 @@ const InterviewCard = async({interviewId , userId , role , type , techstack , cr
                     <p>{formattedDate}</p>
                   </div>
 
-                  <div className="flex flex-row gap-2 items-center">
-                    <Image src="/star.svg" alt="stars" width={22} height={22} />
-                    <p>{feedback?.totalScore || "---"}/100</p>
-                  </div>
+                 
+
+
                 </div>
 
                 <p className="line-clamp-2 mt-5">{feedback?.finalAssessment || "You’re just one step away! Take the interview now and level up your skills."}</p>
@@ -49,14 +56,8 @@ const InterviewCard = async({interviewId , userId , role , type , techstack , cr
             <div>
               <div className="flex flex-row justify-between">
               <DisplayTechIcons techStack={techstack}/>
-                <Button className="btn-primary">
-                  <Link href={feedback
-                    ? `/interview/${interviewId}/feedback`
-                    :`/interview/${interviewId}`
-                  }>
-                    {feedback? "Check feedback" : "View Interview"}
-                  </Link>
-                </Button>
+               
+              <ViewInterviewButton interviewId={interviewId} isOwner={isOwner} />
               </div>
             </div>
         </div>

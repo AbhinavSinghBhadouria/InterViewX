@@ -1,3 +1,4 @@
+import { getIndustryInshights } from '@/src/actions/dashboard';
 import { getUserOnboardingStatus } from '@/src/actions/user'
 import { redirect } from 'next/navigation'
 import React from 'react'
@@ -12,6 +13,8 @@ const page = async() => {
 if(!isOnboarded){
   redirect("/tools/onboarding")
 }
+
+const insights=await getIndustryInshights();
   return (
     <div>
       tools wala dashboard yani industry insights page

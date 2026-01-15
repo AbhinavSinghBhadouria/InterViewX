@@ -26,12 +26,12 @@ const page = async({params}: RouteParams) => {
 
     if(!interview) redirect('/');  //if no interview then redirect the user to the home page
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-6">
     <div className="flex flex-row gap-4 justify-center items-center ">
      <div className="flex flex-row gap-4 items-center max-sm:flex-col">
       <div className="flex flex-row gap-4 items-center">
         <Image src={getRandomInterviewCover()} alt="cover-mage" width={40} height={40} className="rounded-full object-cover size-10 ml-2"/>
-        <h3 className="capitalize">{interview.role} Interview</h3>
+        <div className="font-bold text-4xl">{interview.role} Interview</div>
       </div>
       <DisplayTechIcons techStack={interview.techstack}/>
 
