@@ -234,6 +234,7 @@ useEffect(()=>{
 <Button type="submit" className="btn-primary w-full" disabled={updateLoading}>
  { updateLoading ? (
    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+   
  ):
   "Complete your profile"
 

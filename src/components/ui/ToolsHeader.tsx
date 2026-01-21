@@ -42,7 +42,7 @@ const ToolsHeader = () => {
             </Button>
             </Link>
 
-            <DropdownMenu>
+    <DropdownMenu >
    <DropdownMenuTrigger asChild>
     <Button className="btn-primary">
         <StarsIcon className="h-4 w-4"/>
@@ -52,23 +52,23 @@ const ToolsHeader = () => {
    </DropdownMenuTrigger>
    <DropdownMenuContent>
    
-    <DropdownMenuItem>
-        <Link href={"tools/resume"} className="flex items-center gap-2">
-        <FileText className="w-4 h-4"/>
+    <DropdownMenuItem className='bg-black m-1'>
+        <Link href={"/tools/resume"} className="flex items-center gap-2">
+        <FileText className="w-4 h-4 font-bold "/>
         Build Resume
         </Link>
     </DropdownMenuItem>
 
-    <DropdownMenuItem>
-        <Link href={"tools/ai-cover-letter"} className="flex items-center gap-2">
+    <DropdownMenuItem className="bg-black m-1">
+        <Link href={"/tools/ai-cover-letter"} className="flex items-center gap-2 ">
         <PenBox className="w-4 h-4"/>
         Build Cover Letter
         </Link>
     </DropdownMenuItem>
 
-    <DropdownMenuItem >
-        <Link href={"tools/interview-prep"} className="flex items-center gap-2">
-        <GraduationCap className="w-4 h-4"/>
+    <DropdownMenuItem className="bg-black m-1" >
+        <Link href={"/tools/interview-prep"} className="flex items-center gap-2">
+        <GraduationCap />
         Interview Prep
         </Link>
     </DropdownMenuItem>
@@ -89,7 +89,7 @@ const ToolsHeader = () => {
     hover:shadow-red-500/45
     active:scale-[0.97]
     transition-all duration-200
-    focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2
+    focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ml-2
   "
         onClick={logout}>
        

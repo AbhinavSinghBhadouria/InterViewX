@@ -161,3 +161,20 @@ export interface OnboardingFormProps{
 }
 
 
+ // Tools types
+
+export type AIIndustryInsights = {
+  salaryRanges: {
+    role: string;
+    min: number;
+    max: number;
+    median: number;
+    location?: string;
+  }[];
+  growthRate: number;
+  demandLevel: "HIGH" | "MEDIUM" | "LOW";
+  topSkills: string[];
+  marketOutlook: "POSITIVE" | "NEUTRAL" | "NEGATIVE";
+  keyTrends: string[];
+  recommendedSkills: string[];
+};

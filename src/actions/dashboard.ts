@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import db from "@/src/lib/prisma";
 import { authOptions } from '../app/api/auth/[...nextauth]/options';
 import {GoogleGenerativeAI} from "@google/generative-ai"
-
+import { AIIndustryInsights } from "../types";
 
 //explicitly validating the api key
 const apiKey = process.env.GEMINI_API_KEY;
@@ -17,24 +17,9 @@ const model=genAI.getGenerativeModel({
  model: "gemini-2.5-flash"
 })
 
-type AIIndustryInsights = {
-  salaryRanges: {
-    role: string;
-    min: number;
-    max: number;
-    median: number;
-    location?: string;
-  }[];
-  growthRate: number;
-  demandLevel: "HIGH" | "MEDIUM" | "LOW";
-  topSkills: string[];
-  marketOutlook: "POSITIVE" | "NEUTRAL" | "NEGATIVE";
-  keyTrends: string[];
-  recommendedSkills: string[];
-};
 
 
-export const generateAIInsights=async( industry:string ) : Promise<AIIndustryInsights>=>{
+export const generateAIInsights= async( industry:string ) : Promise<AIIndustryInsights>=>{
     const prompt = `
           Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format without any additional notes or explanations:
           {
@@ -99,14 +84,21 @@ export async function getIndustryInshights(){
 
    if(!user.industryInsight){
     //we will generate them using AI
-    const insights = await generateAIInsights("Technology");
-    const industryInsight = await db.industryInsight.create({
-        data:{
-            industry:"tech",
-            ...insights , //from the AI
-            nextUpdate:new Date(Date.now() +7*24*60*60*1000),  //we will update it after one week
-        } ,
-    })
+    const insights = await generateAIInsights("tech");
+
+    const industryInsight = await db.industryInsight.upsert({
+    where: { industry: "tech" },
+        update: {
+    ...insights,
+  },
+  create: {
+    industry: "tech",
+    ...insights,
+    nextUpdate:new Date(Date.now() +7*24*60*60*1000),
+  },
+});
+   
+
     return industryInsight;
    }
    return user.industryInsight; //if we already had the industry insight

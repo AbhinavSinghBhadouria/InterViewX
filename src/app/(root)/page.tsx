@@ -60,7 +60,7 @@ const page = async() => {
               
               />
             ))
-           ):      <p className="pl-2">You have not taken any inteviews yet...</p> 
+           ):      <p className="pl-2 text-center text-green-600">You have not taken any inteviews yet...</p> 
           }
     </div>
    </section>
@@ -86,7 +86,7 @@ const page = async() => {
               
               />
             ))
-           ):      <p className="pl-2">There are no new interviews available</p> 
+           ):      <p className="pl-2 text-center text-green-600">There are no new interviews available</p> 
           }
 
         

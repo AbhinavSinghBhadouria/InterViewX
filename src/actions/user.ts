@@ -38,7 +38,7 @@ export async function updateUser(data : any){
 
     let industryInsight = await tx.industryInsight.findUnique({
         where:{
-            industry : data.industry ,
+            industry : "tech" ,
         } ,
     });
 
@@ -48,13 +48,17 @@ export async function updateUser(data : any){
     if(!industryInsight){
        //we will generate them using AI
           const insights = await generateAIInsights("Technology");
-          const industryInsight = await db.industryInsight.create({
-              data:{
-                  industry:"tech",
-                  ...insights , //from the AI
-                  nextUpdate:new Date(Date.now() +7*24*60*60*1000),  //we will update it after one week
-              } ,
-          })
+          industryInsight = await tx.industryInsight.upsert({
+              where: { industry: "tech" },
+                  update: {
+              ...insights,
+            },
+            create: {
+              industry: "tech",
+              ...insights,
+              nextUpdate:new Date(Date.now() +7*24*60*60*1000),
+            },
+          });
     }
 
     // Third API -> update the user
@@ -63,7 +67,7 @@ export async function updateUser(data : any){
         id:user.id ,
     } ,
     data:{
-        industry:data.industry ,
+        industry:"tech" ,
         experience : data.experience  ,
         bio: data.bio ,
         skills : data.skills ,
@@ -73,7 +77,7 @@ export async function updateUser(data : any){
   return {updatedUser, industryInsight}
   } , 
   {
-  timeout:10000 , //default :5000
+  timeout:30000 , //default :5000
   }
     );
 

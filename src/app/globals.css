@@ -3,6 +3,8 @@
 ------------------------------------------ */
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 /* -----------------------------------------
    ROOT THEME VARIABLES
 ------------------------------------------ */
@@ -32,8 +34,6 @@
   --bg-pattern: url("/pattern.png");
 
   /* Light mode default tokens */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -67,6 +67,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
 }
 
 /* -----------------------------------------
@@ -84,7 +86,7 @@
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: var(--color-light-100);
+  --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
@@ -124,7 +126,6 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  color: var(--foreground);
 }
 
 p {
@@ -168,7 +169,7 @@ li {
   cursor: pointer;
   min-width: 7rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  
+
 }
 
 .btn-disconnect {
@@ -196,9 +197,8 @@ li {
 }
 .btn-primary:hover {
   background-color: gray;
-  
-}
 
+}
 
 .btn-secondary {
   background-color: var(--color-dark-200);
@@ -235,8 +235,7 @@ li {
   background: linear-gradient(to bottom, #4B4D4F, #4B4D4F33);
   padding: 0.125rem;
   border-radius: 1rem;
-  
-  
+
 }
 
 .card {
@@ -257,8 +256,6 @@ li {
   gap: 2.5rem;               /* gap-10 */
   justify-content: space-between;
 }
-
-
 
 /* -----------------------------------------
    CARD CTA (CALLOUT / PROMO BANNER)
@@ -282,8 +279,6 @@ li {
     padding: 1.5rem 1rem; /* max-sm:px-4 */
   }
 }
-
-
 
 /* -----------------------------------------
    LAYOUT UTILITIES
@@ -365,7 +360,6 @@ li {
   box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.5);  /* focus:shadow-2xl */
 }
 
-
 /* -----------------------------------------
    ANIMATIONS
 ------------------------------------------ */
@@ -383,7 +377,6 @@ li {
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-in-out;
 }
-
 
 .mask-img {
   mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
@@ -415,7 +408,6 @@ li {
   display: flex;
 }
 
-
 .card-interviewer {
   display: flex;
   flex-direction: column;
@@ -429,7 +421,7 @@ li {
   flex: 1;                  /* flex-1 */
   border-radius: 0.5rem;    /* rounded-lg */
   border: 2px solid rgba(202, 197, 254, 0.5); /* border-primary-200/50 */
-  
+
   background: linear-gradient(to bottom, #171532, #08090D); /* blue-gradient-dark */
 
   /* sm:basis-1/2 */
@@ -447,8 +439,6 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  
 
   background: linear-gradient(to left, white, #CAC5FE); /* blue-gradient */
 }
@@ -475,7 +465,7 @@ li {
 
 .transcript-border {
   padding: 0.125rem; /* p-0.5 */
- 
+
   border-radius: 1rem; /* rounded-2xl */
 
   /* border-gradient (replace with your gradient color) */
@@ -541,8 +531,6 @@ li {
     align-items: center;         /* max-sm:items-center */
   }
 }
-
-
 
 /* Landing page  */
 
@@ -631,6 +619,53 @@ li {
           transition: all 0.3s;
         }
 
+        @theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
 
-
+        @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
 

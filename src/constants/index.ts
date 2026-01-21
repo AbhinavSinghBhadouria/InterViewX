@@ -203,3 +203,22 @@ export const interviewCovers = [
   "/yahoo.png",
 ];
 
+
+
+// FOR TOOLS
+
+import { Prisma } from "@prisma/client";
+import { AIIndustryInsights } from "@/src/types";
+
+export function parseIndustryInsightRow(row: any): AIIndustryInsights {
+  return {
+    salaryRanges: row.salaryRanges as AIIndustryInsights["salaryRanges"],
+    growthRate: row.growthRate,
+    demandLevel: row.demandLevel,
+    topSkills: row.topSkills as string[],
+    marketOutlook: row.marketOutlook,
+    keyTrends: row.keyTrends as string[],
+    recommendedSkills: row.recommendedSkills as string[],
+  };
+}
+
