@@ -20,7 +20,7 @@ const InterviewCard = async({interviewId , userId , role , type , techstack , cr
 
   const session = await getServerSession(authOptions);
   const sessionUserId= session?.user?._id;
-
+  //checking if the user has generated that interview and taken that interview as well
   const isOwner= (sessionUserId==userId) && Boolean(feedback);
 
   return (
@@ -28,14 +28,21 @@ const InterviewCard = async({interviewId , userId , role , type , techstack , cr
          cursor-pointer transition-all duration-300 
             hover:-translate-y-2 
             hover:shadow-[0_0_25px_5px_rgba(56,189,248,0.35)] 
-            rounded-2xl">
+            rounded-2xl ml-15 mr-10"
+            >
         <div className="card-interview">
             <div>
                 <div className="absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-blue-950">
                     <p className="badge-text">{normalizedType}</p>
                 </div>
-
+                <div className="flex justify-between">
                 <Image src={getRandomInterviewCover()} alt="cover image" width={90} height={90} className="rounded-full object-fit size-[90px]"/>
+                {isOwner ?(
+                  <div className="flex justify-center items-center">
+                    <span className="bg-green-600 p-4 rounded-md font-bold mt-4">Completed</span>
+                    </div>
+                   ):null}
+                </div>
                 <h3 className="mt-5 capitalize">
                  {role} Interview
                 </h3>
@@ -50,7 +57,7 @@ const InterviewCard = async({interviewId , userId , role , type , techstack , cr
 
                 </div>
 
-                <p className="line-clamp-2 mt-5">{feedback?.finalAssessment || "You’re just one step away! Take the interview now and level up your skills."}</p>
+                <p className="line-clamp-2 mt-5">{ isOwner ? feedback?.finalAssessment : "You’re just one step away! Take the interview now and level up your skills."}</p>
             </div>
 
             <div>

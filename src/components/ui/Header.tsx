@@ -37,7 +37,7 @@ const Header = () => {
        className="
      inline-flex items-center justify-center
      px-5 py-2.5 rounded-xl font-semibold
-     bg-gradient-to-r from-red-600 to-pink-600
+     bg-linear-to-r from-red-600 to-pink-600
     text-white shadow-lg shadow-red-500/30
     hover:from-red-500 hover:to-pink-500
     hover:shadow-red-500/45
@@ -59,9 +59,7 @@ const Header = () => {
       <LogOut className="h-4 w-4 mr-2" />
       <p className="text-sm">Logout</p> 
      </>
-      )
-
-        }
+      )}
        
         </Button>
 

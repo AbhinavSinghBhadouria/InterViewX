@@ -3,13 +3,23 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/src/components/ui/button'
 import { signOut } from 'next-auth/react'
-
-import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,  DropdownMenuLabel, DropdownMenuSeparator,DropdownMenuTrigger} from '@/components/ui/dropdown-menu'
+import { useState } from 'react'
+import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,DropdownMenuTrigger} from '@/components/ui/dropdown-menu'
 import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
+
 const HEADER_HEIGHT = "h-16";
 
 
 const ToolsHeader = () => {
+
+     const[loggingOut , setIsLoggingOut]=useState(false);
+    
+      const logout= async():Promise<void>=>{
+       setIsLoggingOut(true);
+       await signOut({callbackUrl:"/landingPage?loggedOut=true"}); //sending a query as well so that i can display the toast message on the main page
+      
+      }
   
   return (
     <>
@@ -69,10 +79,36 @@ const ToolsHeader = () => {
        
     
 
-       <Button className="btn-secondary" onClick={()=>signOut({callbackUrl:"/"})}>
-        <LogOut className="h-4 w-4" />
-        Logout
+     <Button
+       className="
+     inline-flex items-center justify-center
+     px-5 py-2.5 rounded-xl font-semibold
+     bg-linear-to-r from-red-600 to-pink-600
+    text-white shadow-lg shadow-red-500/30
+    hover:from-red-500 hover:to-pink-500
+    hover:shadow-red-500/45
+    active:scale-[0.97]
+    transition-all duration-200
+    focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2
+  "
+        onClick={logout}>
+       
+        {
+          loggingOut?(
+             <>
+      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+      Logging out...
+     </>
+     )
+     : (
+       <>
+      <LogOut className="h-4 w-4 mr-2" />
+      <p className="text-sm">Logout</p> 
+     </>
+      )}
+       
         </Button>
+
        </div>
 
     </div>

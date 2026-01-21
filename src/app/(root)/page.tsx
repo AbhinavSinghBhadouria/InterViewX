@@ -1,6 +1,4 @@
-import { Button } from '@/src/components/ui/button'
 import Image from 'next/image'
-import Link from 'next/link'
 import InterviewCard from '@/src/components/InterviewCard'
 import { getCurrentUser } from '@/src/models/User'
 import { getInterviewByUserId, getLatestInterviews } from '@/src/lib/action'
@@ -8,9 +6,9 @@ import StartInterviewButton from '@/src/components/StartInterviewButton'
 
 
 
-
 const page = async() => {
   const user=await getCurrentUser();
+ 
 
 
   if(!user) return null;
@@ -44,8 +42,8 @@ const page = async() => {
 
 
 
-   <section className="flex flex-col gap-6 mt-8">
-    <h2 className="m-2">Your interviews</h2>
+    <section className="flex flex-col gap-6 mt-8 border-white">
+    <div className="text-4xl font-bold m-2 text-center">Your Interviews : </div>
     <div className="interviews-section flex flex-wrap">
        {
           hasPastInterviews ? (
@@ -62,14 +60,14 @@ const page = async() => {
               
               />
             ))
-           ):      <p className="pl-2">You have not taken any inteviews yet</p> 
+           ):      <p className="pl-2">You have not taken any inteviews yet...</p> 
           }
     </div>
    </section>
 
 
    <section className="flex flex-col gap-6 mt-8">
-    <h2 className="m-2">Take an interview</h2>
+     <div className="text-4xl font-bold m-2 text-center">Take an Interview : </div>
     <div className="interview-section flex flex-wrap">
 
         {
