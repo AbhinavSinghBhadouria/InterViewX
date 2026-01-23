@@ -1,18 +1,11 @@
-
 import { PrismaClient } from "@prisma/client";
-import {PrismaPg} from "@prisma/adapter-pg"
-
-const adapter = new PrismaPg({
-    connectionString : process.env.DATABASE_URL
-})
 
 const prismaClientSingleton = () => {
-  return new PrismaClient({
-    adapter
-  });
+  return new PrismaClient();
 };
 
 declare global {
+  // eslint-disable-next-line no-var
   var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
@@ -20,4 +13,5 @@ const db = globalThis.prisma ?? prismaClientSingleton();
 
 export default db;
 
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = db;
+if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
+
