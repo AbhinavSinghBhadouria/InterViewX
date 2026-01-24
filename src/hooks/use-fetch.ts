@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 const useFetch = (cb :any) =>{ //the update user is the call back function
 
-    const [data ,setData] = useState({success:false});
+    const [data ,setData] = useState<null | any>(null);
     const [loading , setLoading]=useState(false);
     const [error , setError]= useState(null);
 

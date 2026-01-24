@@ -35,7 +35,7 @@ const ToolsHeader = () => {
 
 
         <div className="gap-2">
-           <Link href="/tools-dashboard" >
+           <Link href="/tools/dashboard" >
            <Button className="mr-4 btn-primary">
                <LayoutDashboard className="h-4 w-4"></LayoutDashboard>
                 Industry Analytics 
@@ -44,7 +44,7 @@ const ToolsHeader = () => {
 
     <DropdownMenu >
    <DropdownMenuTrigger asChild>
-    <Button className="btn-primary">
+    <Button className="btn-secondary">
         <StarsIcon className="h-4 w-4"/>
          Career Toolkit
          <ChevronDown className="h-4 w-4"/>
@@ -69,7 +69,7 @@ const ToolsHeader = () => {
     <DropdownMenuItem className="bg-black m-1" >
         <Link href={"/tools/interview-prep"} className="flex items-center gap-2">
         <GraduationCap />
-        Interview Prep
+        MCQ Practice
         </Link>
     </DropdownMenuItem>
   

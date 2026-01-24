@@ -1,8 +1,7 @@
-import ToolsHeader from '@/src/components/ui/ToolsHeader';
 import React, { Suspense } from 'react'
 import { ReactNode } from 'react'
 import ClipLoader from "react-spinners/ClipLoader";
-import Footer from '@/src/components/ui/Footer';
+
 
 
 //until the data for the children is fetched we will use loading indicator
@@ -10,7 +9,7 @@ import Footer from '@/src/components/ui/Footer';
 export default function layout({children}:{ children: ReactNode }) {
   return ( 
    <>
-    <ToolsHeader/>
+  
     <div className="min-h-screen">
     <div className="px-5">
        <div className="flex items-center justify-center mb-5" >
@@ -27,7 +26,7 @@ export default function layout({children}:{ children: ReactNode }) {
         </Suspense>
     </div>
     </div>
-    <Footer/>
+  
     </>
   )
 }
