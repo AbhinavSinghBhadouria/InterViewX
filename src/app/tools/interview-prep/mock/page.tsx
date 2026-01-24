@@ -9,7 +9,7 @@ const page = () => {
       <Link href={"/tools/interview-prep"}>
       <Button variant="link" className="gap-2  pl-0">
         <ArrowLeft className="h-4 w-4"/>
-        Back to interview Preparation
+        Back to Performance DashBoard
         </Button>
         </Link>
 

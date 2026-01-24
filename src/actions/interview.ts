@@ -21,6 +21,8 @@ interface QuizQuestion {
 
 /* -------------------- GENERATE QUIZ -------------------- */
 export async function generateQuiz() {
+
+  //getting the user id from the session of next auth
   const session = await getServerSession(authOptions);
 
   if (!session?.user?._id) {
@@ -190,3 +192,41 @@ Keep the response:
 }
 
 
+//-------------------------Displaying Interview Progress-----------------
+
+export async function getAssessments(){
+  //check if the user is authenticated or not
+
+   const session = await getServerSession(authOptions);
+
+  if (!session?.user?._id) {
+    throw new Error("Unauthorized");
+  }
+
+  const authUserId = session.user._id;
+
+  const user = await db.user.findUnique({
+    where: {authUserId },
+  });
+
+  if (!user) {
+    throw new Error("User not found in neon db");
+  }
+
+
+  try{
+
+   const assessments=await db.assessment.findMany({
+     where: {userId:user.id} ,
+     orderBy:{
+      createdAt: "asc"
+     } ,
+   }) ;
+
+   return assessments;
+
+  }catch(error){
+console.log("Error fetching assessments" ,error);
+throw new Error("Failed to fetch assessments");
+  }
+}
