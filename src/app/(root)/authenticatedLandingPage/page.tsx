@@ -73,7 +73,7 @@ export default function InterviewXDashboard() {
             </p>
 
             <ul className="text-sm text-gray-400 space-y-1">
-              <li> Voice & text interviews</li>
+              <li> Voice based interviews</li>
               <li> Role-specific questions</li>
               <li> Real-time AI feedback</li>
             </ul>    
@@ -89,13 +89,13 @@ export default function InterviewXDashboard() {
             </h2>
 
             <p className="text-gray-400 leading-relaxed mb-5">
-              Build job-ready resumes and CVs, generate tailored cover letters,
+              Build job-ready resumes , generate tailored cover letters,
               and practice MCQ-based mock interviews — all powered by AI.
             </p>
 
             <ul className="text-sm text-gray-400 space-y-1">
-              <li> Resume & CV Builder</li>
-              <li> Cover Letter Generator</li>
+              <li> AI Resume Studio</li>
+              <li> AI Cover Letter Studio</li>
               <li> MCQ Mock Interview Practice</li>
             </ul>
           </div>

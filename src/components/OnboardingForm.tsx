@@ -27,7 +27,7 @@ import { Loader2 } from 'lucide-react';
 
 const OnboardingForm = () => {
 
-  
+  //list of subindustries
    const subIndustries= [
       "Software Development",
       "IT Services",
@@ -115,7 +115,7 @@ useEffect(()=>{
   return (
    
  <div className="min-h-screen w-full flex justify-center ">
-    <Card className="w-full max-w-lg mt-10 mx-2 h-fit  bg-linear-to-r from-[#3d3e3f] to-[#73747533] border-l-white text-white">
+    <Card className="w-full max-w-lg mt-10 mx-2 h-fit  bg-muted/40 border-l-white text-white">
    <CardHeader>
 
     <div className="flex items-center justify-center">
@@ -128,7 +128,7 @@ useEffect(()=>{
 
   <div className="text-center">
     <CardTitle className="gradient-title text-4xl font-bold">Build your InterviewX profile</CardTitle>
-    <CardDescription className="text-lg mt-1">Choose your Specialization to unlock personalized career insights and tailored recommendations</CardDescription>
+    <CardDescription className="text-lg mt-1 text-white ">Choose your Specialization to unlock personalized career insights and tailored recommendations</CardDescription>
   </div>
    </CardHeader>
 
@@ -162,7 +162,7 @@ useEffect(()=>{
 />
 
 {errors.subIndustry && (
-  <p className="text-sm text-red-500 mt-1 ">
+  <p className="text-sm text-red-500! mt-1 ">
     {errors.subIndustry.message}
   </p>
 )}
@@ -183,7 +183,7 @@ useEffect(()=>{
        />
 
 {errors.experience && (
-  <p className="text-sm text-red-500 mt-1">
+  <p className="text-sm text-red-500! mt-1">
     {errors.experience.message}
   </p>
 )}
@@ -201,12 +201,12 @@ useEffect(()=>{
        {...register("skills")}
        />
 
-       <p className="text-sm text-muted-foreground mt-1 text-green-600">
+       <p className="text-sm mt-1 text-green-600!">
         Seperate multiple skills with commas
        </p>
 
 {errors.skills && (
-  <p className="text-sm text-red-500 mt-1">
+  <p className="text-sm text-red-500! mt-1">
     {errors.skills.message}
   </p>
 )}
@@ -225,7 +225,7 @@ useEffect(()=>{
 
 
 {errors.bio && (
-  <p className="text-sm text-red-500 mt-1">
+  <p className="text-sm text-red-500! mt-1">
     {errors.bio.message}
   </p>
 )}

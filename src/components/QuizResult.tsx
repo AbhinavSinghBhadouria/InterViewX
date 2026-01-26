@@ -2,6 +2,7 @@ import { CheckCircle2, Trophy, XCircle } from 'lucide-react';
 import { CardContent ,Card } from '@/components/ui/card';
 import { CardFooter } from '@/components/ui/card';
 import { Button } from './ui/button';
+import StartNewQuizBtn from './StartNewQuizBtn';
 
 const QuizResult = ({result , hideStartNew=false , onStartNew}:any) => {
 
@@ -9,24 +10,23 @@ const QuizResult = ({result , hideStartNew=false , onStartNew}:any) => {
   return (
     <div className="mx-auto">
 
-     <div className="flex justify-center items-center">
-    <h1 className="flex items-center gap-2 text-4xl gradient-title ">
+     <div className="flex justify-center items-center m-4">
+    <div className="flex items-center sm:gap-2 gap-1 text-1xl sm:text-4xl gradient-title ">
 
-      <Trophy  className="h-10 w-10 text-yellow-500"/>
-     Your Quiz Results
-    </h1>
+    <Trophy  className="h-10 w-10 text-yellow-500"/>
+     You Scored :
+    </div>
+         <div className="ml-2 sm:text-4xl font-bold text-green-600 ">{result.quizScore.toFixed(1)}%</div> 
       </div>
 
-      <div className="text-center space-y-2 m-2">
-        <div className="text-5xl font-bold text-green-600 mb-2">{result.quizScore.toFixed(1)}%</div> 
-      </div>
+   
   
 
 
     <CardContent  >
 
  {result.improvementTip && (
-  <div className="bg-black p-4 rounded-lg">
+  <div className="bg-black p-4 rounded-lg m-4">
     <div className="text-lg font-semibold text-yellow-500 mb-2">
       Improvement Tip
     </div>
@@ -36,10 +36,11 @@ const QuizResult = ({result , hideStartNew=false , onStartNew}:any) => {
   </div>
 )}
 
- <div>
-  <h3 className="text-4xl text-center mt-3">Questions Review</h3>
-  {result.questions.map((q:any)=>(
-         <div className="border rounded-lg p-4 space-y-2 m-3 bg-black">
+
+ <div className="bg-muted/50 rounded-sm p-4 m-2">
+  <div className="text-4xl font-medium text-center mt-3">Questions Review</div>
+  {result.questions.map((q:any , index:number)=>(
+         <div className="border rounded-lg p-4 space-y-2 m-3 bg-black" key={index}>
           <div className="flex items-start justify-between gap-2">
             <div className="font-medium text-red-600"> <span className="text-red-300">Question</span> :{q.question}</div>
             {q.isCorrect?(
@@ -71,12 +72,11 @@ const QuizResult = ({result , hideStartNew=false , onStartNew}:any) => {
 
     {!hideStartNew && (
       <CardFooter className="mb-5 flex items-center justify-center">
-        <Button onClick={onStartNew}>
-          Start New Quiz
-        </Button>
+       <StartNewQuizBtn/>
       </CardFooter>
     )}
     </div>
+  
   
   )
 }

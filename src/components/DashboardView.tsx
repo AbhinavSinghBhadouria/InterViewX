@@ -62,7 +62,7 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
 
    const nextUpdateDistance = formatDistanceToNow(  new Date(nextUpdate),  { addSuffix: true } );
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-12">
 
 
       <div className="flex jusitfy-between items-center">
@@ -71,9 +71,12 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
 
       {/* Market Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className=" bg-black
+  border border-blue-500/30
+  shadow-[0_0_10px_rgba(0,140,255,0.35)]
+  rounded-x">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-yellow-300">
               Market Outlook
             </CardTitle>
             
@@ -89,27 +92,33 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
 
          {/* INDUSTRY GROWTH CARD */}
 
-           <Card>
+           <Card className=" bg-black
+  border border-blue-500/30
+  shadow-[0_0_10px_rgba(0,140,255,0.35)]
+  rounded-x">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-yellow-300">
               Industry Growth
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {insights.growthRate.toFixed(1)}%
             </div>
-            <Progress value={insights.growthRate} className="mt-2" />
+            <Progress value={insights.growthRate} className="mt-2 text-green-400" />
           </CardContent>
         </Card>  
   
 
          {/* DEMAND LEVEL */}
-    <Card>
+     <Card className=" bg-black
+  border border-blue-500/30
+  shadow-[0_0_10px_rgba(0,140,255,0.35)]
+  rounded-x">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Demand Level</CardTitle>
-            <BriefcaseIcon className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-yellow-300">Demand Level</CardTitle>
+            <BriefcaseIcon className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{insights.demandLevel}</div>
@@ -122,15 +131,18 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
         </Card>
  
   {/* TOP SKILLS */}
-             <Card>
+             <Card className=" bg-black
+  border border-blue-500/30
+  shadow-[0_0_10px_rgba(0,140,255,0.35)]
+  rounded-x">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Top Skills</CardTitle>
-            <Brain className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-yellow-300">Top Skills</CardTitle>
+            <Brain className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-1">
               {insights.topSkills.map((skill) => (
-                <Badge key={skill} variant="secondary">
+                <Badge key={skill} variant="secondary" className="font-bold p-1">
                   {skill}
                 </Badge>
               ))}
@@ -141,9 +153,13 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
     
 
      {/* Salary Ranges Chart */}
-      <Card className="col-span-4">
+  <Card className=" bg-black
+  border border-blue-500/30
+  shadow-[0_0_10px_rgba(0,140,255,0.35)]
+  rounded-x col-span-4">
+    
         <CardHeader>
-          <CardTitle>Salary Ranges by Role</CardTitle>
+          <CardTitle className='text-yellow-300'>Salary Ranges by Role</CardTitle>
           <CardDescription>
             Displaying minimum, median, and maximum salaries (in thousands)
           </CardDescription>
@@ -151,31 +167,42 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
         <CardContent>
           <div className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
+ 
               <BarChart data={salaryData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip
-                  content={({ active, payload, label }) => {
-                    if (active && payload && payload.length) {
-                      return (
-                        <div className="bg-background border rounded-lg p-2 shadow-md">
-                          <p className="font-medium">{label}</p>
-                          {payload.map((item) => (
-                            <p key={item.name} className="text-sm">
-                              {item.name}: ${item.value}K
-                            </p>
-                          ))}
-                        </div>
-                      );
-                    }
-                    return null;
-                  }}
-                />
-                <Bar dataKey="min" fill="#94a3b8" name="Min Salary (K)" />
-                <Bar dataKey="median" fill="#64748b" name="Median Salary (K)" />
-                <Bar dataKey="max" fill="#475569" name="Max Salary (K)" />
-              </BarChart>
+  <defs>
+    <filter id="barGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <CartesianGrid stroke="#14532d" strokeDasharray="3 3" />
+
+  <XAxis
+    dataKey="name"
+    tick={{ fill: "#22c55e" }}
+    axisLine={{ stroke: "#22c55e" }}
+    tickLine={{ stroke: "#22c55e" }}
+  />
+
+  <YAxis
+    tick={{ fill: "#22c55e" }}
+    axisLine={{ stroke: "#22c55e" }}
+    tickLine={{ stroke: "#22c55e" }}
+  />
+
+  
+
+  <Bar dataKey="min" fill="#22c55e"  />
+  <Bar dataKey="median" fill="#4ade80" />
+  <Bar dataKey="max" fill="#16a34a"  />
+</BarChart>
+
+
+
             </ResponsiveContainer>
           </div>
         </CardContent>
@@ -183,9 +210,12 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
 
       {/* Industry Trends */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <Card>
+        <Card className=" bg-black
+  border border-blue-500/30
+  shadow-[0_0_10px_rgba(0,140,255,0.35)]
+  rounded-x">
           <CardHeader>
-            <CardTitle>Key Industry Trends</CardTitle>
+            <CardTitle className="text-yellow-300">Key Industry Trends</CardTitle>
             <CardDescription>
               Current trends shaping the industry
             </CardDescription>
@@ -195,22 +225,26 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
               {insights.keyTrends.map((trend, index) => (
                 <li key={index} className="flex items-start space-x-2">
                   <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
-                  <span>{trend}</span>
+                  <span className="font-bold">{trend}</span>
                 </li>
               ))}
             </ul>
           </CardContent>
         </Card>
 
-        <Card>
+
+          <Card className=" bg-black
+  border border-blue-500/30
+  shadow-[0_0_10px_rgba(0,140,255,0.35)]
+  rounded-x">
           <CardHeader>
-            <CardTitle>Recommended Skills</CardTitle>
+            <CardTitle className="text-yellow-300">Recommended Skills</CardTitle>
             <CardDescription>Skills to consider developing</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {insights.recommendedSkills.map((skill) => (
-                <Badge key={skill} variant="outline">
+                <Badge key={skill} variant="outline" className="p-1 font-bold bg-muted/50">
                   {skill}
                 </Badge>
               ))}

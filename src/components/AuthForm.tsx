@@ -82,8 +82,8 @@ const AuthForm = ({type}:{type:FormType}) => {
         }catch(error){
            console.error("Error in signing up the user" ,error);
            const axiosError= error as AxiosError<ApiResponse>;
-           let errorMessage = axiosError.response?.data.message;
-           toast(errorMessage);
+    
+           toast("User with this email already exists");
            router.push("/sign-up");
         }finally{
         setIsSubmitting(false);

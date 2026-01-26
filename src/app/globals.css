@@ -669,3 +669,10 @@ li {
   }
 }
 
+
+input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* turns icon white */
+  cursor: pointer;
+}
+
+

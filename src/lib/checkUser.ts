@@ -8,7 +8,7 @@ export const checkUser = async () => {
  try{
   //if no user id in the session
   if (!session?.user?._id) {
-    return new Response("Unauthorized", { status: 401 });
+    return null;
   }
 
  //user id from the session
@@ -19,7 +19,10 @@ export const checkUser = async () => {
   // find or create user in NeonDB
   const user = await db.user.upsert({
     where: { authUserId },
-    update: {},
+    update: {
+        email: session.user.email,
+        name: session.user.name,
+    },
     create: {
       authUserId,
       email: session.user.email,
@@ -31,6 +34,7 @@ export const checkUser = async () => {
 
 }catch(err){
   console.log(err);
+  throw err;
 }
 
 

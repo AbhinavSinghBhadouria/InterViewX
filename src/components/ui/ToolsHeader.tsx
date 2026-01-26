@@ -7,11 +7,14 @@ import { useState } from 'react'
 import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,DropdownMenuTrigger} from '@/components/ui/dropdown-menu'
 import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from "next/navigation";
 
 const HEADER_HEIGHT = "h-16";
 
 
 const ToolsHeader = () => {
+  
+const router = useRouter();
 
      const[loggingOut , setIsLoggingOut]=useState(false);
     
@@ -52,25 +55,20 @@ const ToolsHeader = () => {
    </DropdownMenuTrigger>
    <DropdownMenuContent>
    
-    <DropdownMenuItem className='bg-black m-1'>
-        <Link href={"/tools/resume"} className="flex items-center gap-2">
-        <FileText className="w-4 h-4 font-bold "/>
-        Build Resume
-        </Link>
-    </DropdownMenuItem>
+   <DropdownMenuItem
+  onSelect={() => router.push("/tools/resume")}
+  className="bg-black m-1 flex items-center gap-2 cursor-pointer"
+>
+  <FileText className="w-4 h-4" />
+  Build Resume
+</DropdownMenuItem>
 
-    <DropdownMenuItem className="bg-black m-1">
-        <Link href={"/tools/ai-cover-letter"} className="flex items-center gap-2 ">
-        <PenBox className="w-4 h-4"/>
-        Build Cover Letter
-        </Link>
-    </DropdownMenuItem>
-
-    <DropdownMenuItem className="bg-black m-1" >
-        <Link href={"/tools/interview-prep"} className="flex items-center gap-2">
-        <GraduationCap />
+<DropdownMenuItem
+  onSelect={() => router.push("/tools/interview-prep")}
+  className="bg-black m-1 flex items-center gap-2 cursor-pointer"
+>     <GraduationCap className="h-4 w-4" />
         MCQ Practice
-        </Link>
+    
     </DropdownMenuItem>
   
   </DropdownMenuContent>

@@ -27,8 +27,8 @@ const StatsCards = ({assessments}:any) => {
     );
   };
   return (
-    <div className="grid gap-2 md:grid-cols-3 p-4">
- <Card className="w-130 bg-black
+    <div className="grid gap-2 md:grid-cols-3 p-2">
+ <Card className="w-110 bg-black
   border border-blue-500/30
   shadow-[0_0_25px_rgba(0,140,255,0.35)]
   rounded-x">
@@ -45,7 +45,7 @@ const StatsCards = ({assessments}:any) => {
       </Card>
    
 
-    <Card className="w-130  bg-black
+    <Card className="w-110  bg-black
   border border-blue-500/30
   shadow-[0_0_15px_rgba(0,140,255,0.35)]
   rounded-x" >
@@ -61,7 +61,7 @@ const StatsCards = ({assessments}:any) => {
         </CardContent>
       </Card>
 
-      <Card className="w-130  bg-black
+      <Card className="w-110  bg-black
   border border-blue-500/30
   shadow-[0_0_15px_rgba(0,140,255,0.35)]
   rounded-x">

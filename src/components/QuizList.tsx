@@ -6,6 +6,8 @@ import {Card,CardContent,CardDescription,CardHeader, CardTitle,} from "@/compone
 import { Dialog,DialogContent, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
 import {format} from "date-fns"
 import QuizResult from './QuizResult';
+import StartNewQuizBtn from './StartNewQuizBtn';
+
 
 const QuizList = ({assessments}:any) => {
     const router=useRouter();
@@ -18,15 +20,13 @@ const QuizList = ({assessments}:any) => {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="gradient-title text-3xl md:text-4xl">
-                Recent Quizzes
+              <span className="text-orange-400"> Recent Quizzes</span>
               </CardTitle>
               <CardDescription>
                 Review your past quiz performance
               </CardDescription>
             </div>
-            <Button className="btn-primary" onClick={() => router.push("/tools/interview-prep/mock")}>
-              Start New Quiz
-            </Button>
+            <StartNewQuizBtn/>
           </div>
         </CardHeader>
         <CardContent>
@@ -38,11 +38,11 @@ const QuizList = ({assessments}:any) => {
                 onClick={() => setSelectedQuiz(assessment)}
               >
                 <CardHeader>
-                  <CardTitle className="gradient-title text-2xl">
+                  <CardTitle className="text-orange-600 text-3xl">
                     Quiz {i + 1}
                   </CardTitle>
                   <CardDescription className="flex justify-between w-full">
-                    <div className="text-green-400 text-md font-bold">Score: {assessment.quizScore.toFixed(1)}%</div>
+                    <div className="text-green-400 text-2xl font-bold">Score: {assessment.quizScore.toFixed(1)}%</div>
                     <div className="text-yellow-300">
                       {format(
                         new Date(assessment.createdAt),

@@ -3,8 +3,9 @@ import InterviewCard from '@/src/components/InterviewCard'
 import { getCurrentUser } from '@/src/models/User'
 import { getInterviewByUserId, getLatestInterviews } from '@/src/lib/action'
 import StartInterviewButton from '@/src/components/StartInterviewButton'
-
-
+import Link from 'next/link'
+import { Button } from '@/src/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
 
 const page = async() => {
   const user=await getCurrentUser();
@@ -22,6 +23,14 @@ const page = async() => {
 
   return (
    <>
+
+    <Link href={"/authenticatedLandingPage"}>
+         <Button variant="link" className="gap-2  pl-0 m-2">
+           <ArrowLeft className="h-4 w-4"/>
+           Back to DashBoard
+           </Button>
+           </Link>
+
    <section className="card-cta m-3">
    <div className="flex flex-col gap-6 max-w-sm">
     <h2>Ace Your Interview with Smart AI Practice & Real-Time Feedback</h2>

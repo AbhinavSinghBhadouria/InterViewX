@@ -5,6 +5,9 @@ import OnboardingForm from '@/src/components/OnboardingForm'
 import { getUserOnboardingStatus } from '@/src/actions/user'
 import { redirect } from 'next/navigation'
 import { checkUser } from '@/src/lib/checkUser'
+import Link from 'next/link'
+import { Button } from '@/src/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
 
 
 const page = async() => {
@@ -20,15 +23,16 @@ if(isOnboarded){
 
 
   return (
-   <>
-   <ToolsHeader/>
-     
-      
+   < div className="min-h-screen">  
+    <Link href={"/authenticatedLandingPage"}>
+            <Button variant="link" className="gap-2  pl-0 m-2">
+              <ArrowLeft className="h-4 w-4"/>
+              Back to DashBoard
+              </Button>
+              </Link>  
       <OnboardingForm/>
     
-  <Footer/>
-    
-  </>
+  </div>
     
   )
 }

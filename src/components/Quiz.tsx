@@ -154,25 +154,25 @@ const Quiz = () => {
     <div>
      
        <div className="flex items-center justify-center m-4 ">
-      <Card className="w-1.5/2 space-y-2">
+      <Card className="w-full space-y-2 m-3">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Question {currentQuestion+1} out of {quizData.length} </CardTitle>
         </CardHeader>
 
         <CardContent >
           <div >
-         <span className="text-red-500 text-xl">
+         <span className="text-red-500 text-2xl font-bold">
            {question.question}
 </span>
            <RadioGroup
-            className="space-y-2 mt-2 text-xl" 
+            className="space-y-2 mt-2 " 
             onValueChange={handleAnswer}
             value={answers[currentQuestion]}>
             {
                 question.options.map((option:any , index:number)=>(
- <div className="flex items-center gap-3" key={index}>
+ <div className="flex items-center gap-3 " key={index}>
     <RadioGroupItem value={option} id={`option-${index}`} />
-    <Label htmlFor={`option-${index}`}>{option}</Label>
+    <Label htmlFor={`option-${index}`}  className="text-xl font-medium cursor-pointer" >{option}</Label>
   </div>
                 ))
             }
@@ -181,16 +181,18 @@ const Quiz = () => {
 
 {/* //SHOWING EXPLANATION */}
 
+      </div>
+        </CardContent>
+
+        <CardFooter className="space-x-2 justify-between">
+
+
 {showExplanation && (
     <div className="mt-4 p-4 bg-black rounded-lg">
         <div className="font-medium text-yellow-300">Explanation for the question : </div>
         <div className="text-green-400">{question.explanation}</div>
     </div>
 )}
-          </div>
-        </CardContent>
-
-        <CardFooter className="space-x-2 justify-between">
 
        {!showExplanation && (
             <Button

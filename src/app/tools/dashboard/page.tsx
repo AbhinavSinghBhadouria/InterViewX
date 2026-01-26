@@ -1,12 +1,12 @@
 import { getIndustryInshights } from '@/src/actions/dashboard';
 import { getUserOnboardingStatus } from '@/src/actions/user'
-import Footer from '@/src/components/ui/Footer';
-import ToolsHeader from '@/src/components/ui/ToolsHeader';
 import { redirect } from 'next/navigation'
 import React from 'react'
 import DashboardView from '../../../components/DashboardView';
 import { parseIndustryInsightRow } from '@/src/constants';
-
+import Link from 'next/link'
+import { Button } from '@/src/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
 
 const page = async() => {
 
@@ -19,13 +19,22 @@ if(!isOnboarded){
 
 const row = await getIndustryInshights();  //since our db returns json thereofore we are converting into obj type
   return (
+<>
+     
     <div className="container mx-auto">
+       <Link href={"/authenticatedLandingPage"}>
+            <Button variant="link" className="gap-2 pl-0 ">
+              <ArrowLeft className="h-4 w-4"/>
+              Back to DashBoard
+              </Button>
+        </Link> 
      
       <DashboardView  insights={parseIndustryInsightRow(row)}
           lastUpdated={row.lastUpdated}
             nextUpdate={row.nextUpdate}/>
      
     </div>
+    </>
   )
 }
 
