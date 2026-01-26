@@ -3,7 +3,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../app/api/auth/[...nextauth]/options";
 import db from "../lib/prisma";
-import { useReducer } from "react";
 import { revalidatePath } from "next/cache";
 import Groq from "groq-sdk";
 
