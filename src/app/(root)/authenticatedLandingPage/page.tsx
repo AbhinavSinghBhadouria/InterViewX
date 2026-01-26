@@ -89,13 +89,12 @@ export default function InterviewXDashboard() {
             </h2>
 
             <p className="text-gray-400 leading-relaxed mb-5">
-              Build job-ready resumes , generate tailored cover letters,
-              and practice MCQ-based mock interviews — all powered by AI.
+              Build professional resumes, practice AI-powered mock interviews, and take role-based MCQ assessments, all enhanced with intelligent feedback.
             </p>
 
             <ul className="text-sm text-gray-400 space-y-1">
               <li> AI Resume Studio</li>
-              <li> AI Cover Letter Studio</li>
+              <li> Industry Analytics</li>
               <li> MCQ Mock Interview Practice</li>
             </ul>
           </div>
