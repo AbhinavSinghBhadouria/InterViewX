@@ -41,7 +41,7 @@ const page = async ({params} : RouteParams) => {
  return (
    
 
-     <section className="section-feedback">
+     <section className="section-feedback p-10 min-h-screen">
       <div className="flex flex-row justify-center">
         <h1 className="text-4xl font-semibold">
           Feedback on the Interview -{" "}
@@ -51,17 +51,7 @@ const page = async ({params} : RouteParams) => {
 
       <div className="flex flex-row justify-center ">
         <div className="flex flex-row gap-5">
-          {/* Overall Impression */}
-          {/* <div className="flex flex-row gap-2 items-center">
-            <Image src="/star.svg" width={22} height={22} alt="star" />
-            <p>
-              Overall Impression:{" "}
-              <span className="text-primary-200 font-bold">
-                {feedback?.totalScore}
-              </span>
-              /100
-            </p>
-          </div> */}
+        
 
           {/* Date */}
           <div className="flex flex-row gap-2">
@@ -82,14 +72,7 @@ const page = async ({params} : RouteParams) => {
       {/* Interview Breakdown */}
       <div className="flex flex-col gap-4">
         <h2>Breakdown of the Interview:</h2>
-        {/* {feedback?.categoryScores?.map((category, index) => (
-          <div key={index}>
-            <p className="font-bold">
-              {index + 1}. {category.name} ({category.score}/100)
-            </p>
-            <p>{category.comment}</p>
-          </div>
-        ))} */}
+        
       </div>
 
       <div className="flex flex-col gap-3">
@@ -110,7 +93,9 @@ const page = async ({params} : RouteParams) => {
         </ul>
       </div>
 
+
       <div className="buttons">
+
         <Button className="btn-secondary flex-1">
           <Link href="/" className="flex w-full justify-center">
             <p className="text-sm font-semibold text-primary-200 text-center">
@@ -119,7 +104,7 @@ const page = async ({params} : RouteParams) => {
           </Link>
         </Button>
 
-        <Button className="bg-gray-600 flex-1 rounded-full hover:bg-gray-950">
+        <Button className="btn-secondary flex-1 ">
           <Link
             href={`/interview/${id}`}
             className="flex w-full justify-center"
@@ -130,6 +115,8 @@ const page = async ({params} : RouteParams) => {
           </Link>
         </Button>
       </div>
+
+
     </section>
   )
 }

@@ -171,8 +171,10 @@ const Agent = ({userName ,userId ,type ,interviewId ,questions}:AgentProps) => {
 
   return (
   <>  
-  <div className="flex flex-col justify-center items-center w-full ">
-    <div className="flex gap-4 m-4 w-[70%] items-center">
+  <div className="flex flex-col justify-center items-center w-full gap-2">
+    <div className="flex gap-7 m-4 w-[70%] items-center">
+
+
         <div className="card-interviewer ">
             <div className="relative flex items-center justify-center">
               <Image src="/ai-avatar.png" alt="vapi" width={200} height={200} className="object-cover rounded-full"/>
@@ -180,6 +182,8 @@ const Agent = ({userName ,userId ,type ,interviewId ,questions}:AgentProps) => {
             </div>
             <h3>AI Interviewer</h3>
         </div>
+
+
         <div className="card-interviewer">
           <div className="relative flex items-center justify-center">
           <Image src="/user-avatar.png" alt="user avatar" width={200} height={200}className="object-cover rounded-full" />

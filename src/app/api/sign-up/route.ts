@@ -1,6 +1,7 @@
 import dbConnect from "@/src/lib/dbConnect";
 import UserModel from "@/src/models/User";
 import bcrypt from "bcryptjs";
+import {toast} from "sonner";
 
 
 export async function POST(request:Request){
@@ -15,6 +16,7 @@ export async function POST(request:Request){
     const existingUser= await UserModel.findOne({email:normalizedEmail});
 
     if(existingUser){
+        toast("User with email already exists...Try with another email")
         return Response.json({
                 success:false ,
                 message:"User with this email already exists"
@@ -29,7 +31,7 @@ export async function POST(request:Request){
             password:hashedPassword
         })
 
-        //save the user
+         //save the user
             await newUser.save();
 
             return Response.json({
