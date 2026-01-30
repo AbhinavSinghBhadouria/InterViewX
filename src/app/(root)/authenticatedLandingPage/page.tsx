@@ -1,11 +1,15 @@
 "use client";
-import Image from "next/image";
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react"
 import { toast } from "sonner";
+
+
 
 export default function InterviewXDashboard() {
   const router = useRouter();
+  const { data: session } = useSession()  //for extracting the information of the user from the sesson in client component
 
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLDivElement>(".card");
@@ -22,11 +26,25 @@ export default function InterviewXDashboard() {
     });
   }, []);
 
+  //function when we click the interviewX tools card
+
   const handleClick=()=>{
-        toast.success("Redirecting to InterviewX Carrier Tools..");
-        router.push("/tools/onboarding")
+
+    
+
+      toast.success("Redirecting to InterviewX Carrier Tools..");
+      router.push("/tools/onboarding")
  }
+
+  //function when we click the VAPI interview card
  const handleClick1=()=>{
+   //allowing only the admin i.e Amber Hasan to access the VAPI as it is paid 
+      const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL
+
+    if (!isAdmin) {
+      toast.error("This AI interview feature is available in demo only")
+      return
+    }
    toast.success("Redirecting to AI Powered Mock Interview Page..");
    router.push("/")
  }

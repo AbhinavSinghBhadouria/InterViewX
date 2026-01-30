@@ -6,9 +6,26 @@ import StartInterviewButton from '@/src/components/StartInterviewButton'
 import Link from 'next/link'
 import { Button } from '@/src/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
+import { getServerSession } from "next-auth"
+import { authOptions } from '../api/auth/[...nextauth]/options'
+import { redirect } from "next/navigation"
+
+
 
 const page = async() => {
+
+  const session = await getServerSession(authOptions);
+    
+  if (!session) {
+    redirect("/landingPage");  
+  }
+
+    if (session.user.email !== process.env.ADMIN_EMAIL) {
+    redirect("/authtenticatedLandingPage")  
+  }
   const user=await getCurrentUser();
+
+  
  
 
 

@@ -161,11 +161,7 @@ const [loading, setLoading] = useState(false);
           <p className="text-2xl text-gray-400 mb-10">Transform Your Interview Process with AI-Powered Intelligence</p>
           
           <div className="flex gap-5 justify-center">
-            {/* <Link href="/sign-up">
-            <button className="px-10 py-4 text-lg rounded-full bg-linear-to-r from-blue-900 to-blue-500 text-white shadow-lg shadow-blue-500/40 btn-3d hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/60">
-              Get Started
-            </button>
-            </Link> */}
+           
               <button
       onClick={handleClick}
       disabled={loading}
