@@ -19,9 +19,11 @@ const page = async() => {
   if (!session) {
     redirect("/landingPage");  
   }
+     
 
-    if (session.user.email !== process.env.ADMIN_EMAIL) {
-    redirect("/authtenticatedLandingPage")  
+    if (session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
+   
+      redirect("/authenticatedLandingPage")  
   }
   const user=await getCurrentUser();
 

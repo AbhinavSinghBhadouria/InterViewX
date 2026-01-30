@@ -32,7 +32,7 @@ const router = useRouter();
    
 
         <Link href="#" className="flex items-center gap-2 m-2">
-        <Image src="/logo.png" alt="Logo" height={32} width={38} ></Image>
+        <Image src="/InterviewXlogo.png" alt="Logo" height={32} width={38} ></Image>
         <h2 className="text-primary-100">InterviewX</h2>
         </Link>
 
@@ -56,7 +56,7 @@ const router = useRouter();
    <DropdownMenuContent>
    
    <DropdownMenuItem
-  onSelect={() => router.push("/tools/resume")}
+  onSelect={() => router.push("/tools/ai-resume")}
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"
 >
   <FileText className="w-4 h-4" />

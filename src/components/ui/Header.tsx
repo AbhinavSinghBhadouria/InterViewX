@@ -27,7 +27,7 @@ const Header = () => {
     <>
      <div className="fixed top-0 h-16 w-full bg-black/20 flex justify-between px-3 py-2 text-lg font-bold z-50 backdrop-blur-md border border-2px-solid-white">
         <Link href="#" className="flex items-center gap-2 m-2">
-        <Image src="/logo.png" alt="Logo" height={32} width={38} ></Image>
+        <Image src="/InterviewXlogo.png" alt="Logo" height={32} width={38} ></Image>
         <h2 className="text-primary-100">InterviewX</h2>
         </Link>
        
