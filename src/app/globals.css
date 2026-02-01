@@ -1,3 +1,33 @@
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+html {
+  font-size: 80%;
+}
+
+@media print{
+  #no-print{
+    display:none
+  } 
+  #print-area{
+    display:block
+  }
+}
+body{
+  margin:0 ;
+  padding:0 ;
+  box-shadow:none;
+}
+
+@page{
+  size:auto;
+  margin:0mm;
+  padding : 0mm;
+  
+}
+
 /* -----------------------------------------
    TAILWIND v4 BASE IMPORTS
 ------------------------------------------ */
@@ -676,3 +706,10 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 }
 
 
+.resume-preview p,
+.resume-preview li,
+.resume-preview span,
+.resume-preview strong,
+.resume-preview em {
+  color: black !important;
+}

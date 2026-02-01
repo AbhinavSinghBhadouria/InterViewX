@@ -10,11 +10,20 @@ export default function LandingPage() {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const orbsRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
 
   const handleClick = () => {
     setLoading(true);
     router.push("/sign-up");
   };
+
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setPageLoading(false);
+  }, 1000); 
+
+  return () => clearTimeout(timer);
+}, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -69,6 +78,19 @@ export default function LandingPage() {
       'Built with a modern dual-database system separating authentication and application data for scalability and security.'
   }
 ]
+
+if (pageLoading) {
+  return (
+    <div className="h-screen w-screen flex items-center justify-center">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+      />
+    </div>
+  );
+}
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

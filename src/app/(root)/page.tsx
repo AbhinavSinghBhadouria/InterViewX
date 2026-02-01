@@ -43,8 +43,8 @@ const page = async() => {
   return (
    <>
 
-    <Link href={"/authenticatedLandingPage"}>
-         <Button variant="link" className="gap-2  pl-0 m-2">
+    <Link href={"/authenticatedLandingPage"} className="pl-2">
+         <Button variant="link" className="gap-2 pl-2 m-2">
            <ArrowLeft className="h-4 w-4"/>
            Back to DashBoard
            </Button>
