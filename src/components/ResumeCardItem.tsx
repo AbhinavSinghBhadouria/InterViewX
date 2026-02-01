@@ -47,7 +47,7 @@ const onDelete=async()=>{
       <div className="flex items-center justify-center">
       <img src="/resume.png" width={150} height={150}/>
 </div>
-<div className="bg-blue-950 p-4 mt-10 rounded-lg flex justify-between">
+<div className="bg-blue-950 p-4 rounded-lg flex justify-between">
  <h1 className="text-center font-bold">{resume.title}</h1> 
  <DropdownMenu>
   <DropdownMenuTrigger asChild>
