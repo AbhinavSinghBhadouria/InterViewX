@@ -22,7 +22,7 @@ const PerformanceChart = ({assessments}:any) => {
 
   return (
     <div>
-      <Card className="bg-black mt-6 border border-blue-500/30 shadow-[0_0_15px_rgba(0,140,255,0.35)] rounded-xl" >
+      <Card className="bg-black mt-6 border border-blue-500/30 shadow-[0_0_15px_rgba(0,140,255,0.35)] rounded-xl mt-2 mb-2" >
       <CardHeader>
         <CardTitle className="gradient-title text-3xl md:text-4xl text-center text-blue-300">
           Performance Trend
