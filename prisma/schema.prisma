@@ -45,7 +45,7 @@ model User {
 model Assessment {
   id            String    @id @default(cuid())
   userId        String    //the id to whome the assesment belongs to
-  user          User      @relation(fields: [userId], references: [id]) //it is a foreign key , inside this table we have userId which regernces the id from the User table
+  user          User      @relation(fields: [userId], references: [id]) //it is a foreign key , inside this table we have userId which references the id from the User table
   quizScore     Float     // Overall quiz score
   questions     Json[]    // Array of {question, answer, userAnswer, isCorrect}
   category      String    // "Technical", "Behavioral", etc.
@@ -57,6 +57,7 @@ model Assessment {
 }
 
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 model Resume {
   id          String    @id @default(cuid())
@@ -131,7 +132,7 @@ model Skill {
 }
 
 
-
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
