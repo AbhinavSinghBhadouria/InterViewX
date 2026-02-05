@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import { useForm ,Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { onboardingScehma } from '../schema/schema';
+import { onboardingScehma } from '../models/schema/schema';
 import { useRouter } from 'next/navigation';
 import { Card,CardContent, CardDescription,CardHeader, CardTitle,} from "@/components/ui/card"
 import {

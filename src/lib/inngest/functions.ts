@@ -1,19 +1,27 @@
+
+
 import { inngest } from "./client";
 import db from "../prisma";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 
-const apiKey = process.env.GEMINI_API_KEY;
-if (!apiKey) {
-  throw new Error("GEMINI_API_KEY is not defined");
-}
+export const runtime = "nodejs";
 
-const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const groq = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY!,
+  baseURL: "https://api.groq.com/openai/v1",
+});
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Function for getting the industry anayltics weekly updates from the inggest
 
 export const generateIndustryInsights = inngest.createFunction(
   { id: "generate-industry-insights", name: "Generate Industry Insights" },
-  { cron: "0 0 * * 0" }, // Every Sunday 12:00 AM
-  async ({ step }) => {
+  { cron: "0 0 * * 0" },
+
+
+  async ({ step  ,event}) => {
     const industry = "tech";
 
     const prompt = `
@@ -30,33 +38,65 @@ Analyze the current state of the ${industry} industry and provide insights in ON
   "recommendedSkills": ["skill1", "skill2"]
 }
 
-IMPORTANT: Return ONLY the JSON. No additional text, notes, or markdown formatting.
-Include at least 5 common roles for salary ranges.
-Growth rate should be a percentage.
-Include at least 5 skills and trends.
+IMPORTANT: Return ONLY JSON. No markdown. No explanation.
 `;
 
-    const res = await step.ai.wrap(
-      "gemini",
-      async (p) => {
-        return await model.generateContent(p);
-      },
-      prompt
-    );
+    const text = await step.run("Generate AI Industry Insights", async () => {
+      const completion = await groq.chat.completions.create({
+        model: "llama-3.1-8b-instant",
+        temperature: 0.7,
+       messages: [
+ {
+  role: "system",
+  content: `
+You are a backend JSON API.
 
+HARD REQUIREMENTS:
+- salaryRanges must contain exactly 5 entries
+- topSkills must contain AT LEAST 5 entries 
+- keyTrends must contain AT LEAST 5 entries
+- recommendedSkills must contain AT LEAST 5 entries
+- If any list is shorter, DO NOT answer — regenerate internally
+- Output ONLY valid JSON
+`
+} ,
+  { role: "user", content: prompt },
+],
+      });
 
-    const text =
-      (res?.response?.candidates?.[0]?.content?.parts?.[0] as any)?.text?.toString() ||
-      "";
+      return completion.choices[0].message.content ?? "";
+    });
 
     const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
     let insights: any;
     try {
       insights = JSON.parse(cleanedText);
-    } catch (e) {
-      throw new Error("Gemini returned invalid JSON");
+    } catch {
+      throw new Error("Groq returned invalid JSON");
     }
+
+
+
+
+    //validating the data that is coming from the groq api..
+    function validateInsights(data: any) {
+  if (
+    data.salaryRanges.length < 5 ||
+    data.topSkills.length < 5 ||
+    data.keyTrends.length < 5 ||
+    data.recommendedSkills.length < 5
+  ) {
+    throw new Error("AI returned incomplete structured data");
+  }
+}
+
+validateInsights(insights); 
+
+
+
+
+// inserting the data coming from the inngest in the database
 
     await step.run(`Update ${industry} insights`, async () => {
       await db.industryInsight.upsert({
@@ -64,13 +104,13 @@ Include at least 5 skills and trends.
         update: {
           ...insights,
           lastUpdated: new Date(),
-          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),   //the data will get updated after every 7 days
         },
         create: {
           industry,
           ...insights,
           lastUpdated: new Date(),
-          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), //one week
+          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         },
       });
     });
@@ -78,3 +118,6 @@ Include at least 5 skills and trends.
     return { ok: true };
   }
 );
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
