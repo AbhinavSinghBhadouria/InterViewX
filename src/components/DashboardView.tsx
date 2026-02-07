@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+
 import { AIIndustryInsights } from '../types'
 import {  LineChart, TrendingDown, TrendingUp ,BriefcaseIcon ,Brain } from 'lucide-react';
 import { format, formatDistanceToNow } from "date-fns";
@@ -135,7 +135,7 @@ const DashboardView = ({ insights, lastUpdated, nextUpdate }: Props) => {
   border border-blue-500/30
   shadow-[0_0_10px_rgba(0,140,255,0.35)]
   rounded-x">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 ">
             <CardTitle className="text-sm font-medium text-yellow-300">Top Skills</CardTitle>
             <Brain className="h-4 w-4 text-green-400" />
           </CardHeader>

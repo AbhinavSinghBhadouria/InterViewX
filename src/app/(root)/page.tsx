@@ -58,9 +58,7 @@ const page = async() => {
     </p>
 
     <StartInterviewButton/>
-    {/* <Button className="btn-primary max-sm:w-full flex items-center gap-2">
-      <Link href="/interview">Start an interview</Link>
-    </Button> */}
+   
 
    </div>
    

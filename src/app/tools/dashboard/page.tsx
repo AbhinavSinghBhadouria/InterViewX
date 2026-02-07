@@ -21,13 +21,14 @@ const row = await getIndustryInshights();  //since our db returns json thereofor
   return (
 <>
      
-    <div className="container mx-auto">
-       <Link href={"/authenticatedLandingPage"}>
+     <Link href={"/authenticatedLandingPage"}>
             <Button variant="link" className="gap-2 pl-0 ">
               <ArrowLeft className="h-4 w-4"/>
               Back to DashBoard
               </Button>
         </Link> 
+    <div className="container mx-auto">
+       
      
       <DashboardView  insights={parseIndustryInsightRow(row)}
           lastUpdated={row.lastUpdated}

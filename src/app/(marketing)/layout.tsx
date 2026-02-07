@@ -1,4 +1,4 @@
-import Footer from '@/src/components/ui/Footer'
+
 import Header from '@/src/components/ui/Header'
 import { ReactNode } from 'react'
 
@@ -12,7 +12,7 @@ const RootLayout = ({children}:{children:ReactNode}) => {
     
          {children}
     
-      <Footer/>
+     
     </div>
   )
 }

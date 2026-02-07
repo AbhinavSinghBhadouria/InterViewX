@@ -17,18 +17,18 @@ const page = async() => {
 
   return (
     <>
-    <Link href={"/authenticatedLandingPage"}>
+    <Link href={"/authenticatedLandingPage"} className="m-4">
                     <Button variant="link" className="gap-2  pl-0">
                       <ArrowLeft className="h-4 w-4"/>
                       Back to DashBoard
                       </Button>
                       </Link>
 
-    <div className="p-10 md:px-20 lg:px-32 min-h-screen">
+    <div className="p md:px-20 lg:px-32 min-h-screen">
          <h1 className="text-6xl font-extrabold bg-linear-to-r from-blue-600 via-blue-500 to-cyan-300 bg-clip-text text-transparent mt-5 text-center">
            My Resume     
         </h1>
-         <p className="font-bold text-center mt-2 text-3xl">Expore the AI Resume Studio to create resumes</p>
+         <p className="font-bold text-center mt-2 text-3xl">Expore the AI Resume Studio to create personalized resumes</p>
          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 mt-10">
           <AddResume/>
 

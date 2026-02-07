@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Footer from '@/src/components/ui/Footer'
 
 export default function LandingPage() {
   const router = useRouter();
@@ -92,6 +93,7 @@ if (pageLoading) {
 }
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -185,6 +187,8 @@ if (pageLoading) {
       </section>
     </motion.div>
 
-    
+     <Footer/>
+
+    </>
   );
 }

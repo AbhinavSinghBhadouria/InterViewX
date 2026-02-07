@@ -5,7 +5,7 @@ import { Button } from '@/src/components/ui/button'
 import { signOut } from 'next-auth/react'
 import { useState } from 'react'
 import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,DropdownMenuTrigger} from '@/components/ui/dropdown-menu'
-import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon } from 'lucide-react'
+import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon ,Bot } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from "next/navigation";
 
@@ -70,6 +70,15 @@ const router = useRouter();
         MCQ Practice
     
     </DropdownMenuItem>
+
+<DropdownMenuItem
+  onSelect={() => router.push("/tools/ai-chat-dashboard")}
+  className="bg-black m-1 flex items-center gap-2 cursor-pointer"
+>     <Bot className="h-4 w-4" />
+        AI Career Coach
+    
+    </DropdownMenuItem>
+
   
   </DropdownMenuContent>
 </DropdownMenu>
