@@ -4,8 +4,8 @@ export const inngest = new Inngest({
   id: "InterviewX", // unique app ID
   name: "InterviewX",
   credentials: {
-    gemini: {
-      apiKey: process.env.GEMINI_API_KEY,
+    groq: {
+      apiKey: process.env.GROQ_API_KEY,
     },
   },
 });

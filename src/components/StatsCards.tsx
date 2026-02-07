@@ -27,12 +27,13 @@ const StatsCards = ({assessments}:any) => {
     );
   };
   return (
-    <div className="grid gap-2 md:grid-cols-3 p-2">
-     
+   
+    
+     <div className="flex justify-center items-center gap-4">
  <Card className="w-89 bg-black
   border border-blue-500/30
   shadow-[0_0_25px_rgba(0,140,255,0.35)]
-  rounded-x">
+  rounded-x m-5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-xl text-blue-300">Average Score</CardTitle>
           <Trophy className="h-6 w-6 text-yellow-300" />
@@ -49,7 +50,7 @@ const StatsCards = ({assessments}:any) => {
     <Card className="w-90  bg-black
   border border-blue-500/30
   shadow-[0_0_15px_rgba(0,140,255,0.35)]
-  rounded-x" >
+  rounded-x m-5" >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-xl text-blue-300">
             Questions Practiced
@@ -65,7 +66,7 @@ const StatsCards = ({assessments}:any) => {
       <Card className="w-90  bg-black
   border border-blue-500/30
   shadow-[0_0_15px_rgba(0,140,255,0.35)]
-  rounded-x">
+  rounded-x m-5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-xl text-blue-300">Latest Score</CardTitle>
           <Target className="h-6 w-6 text-yellow-300" />
@@ -83,6 +84,7 @@ const StatsCards = ({assessments}:any) => {
       
     
     </div>
+    
   )
 }
 

@@ -13,7 +13,7 @@ const page = async() => {
     <div className="min-h-screen">
 
 
-          <Link href={"/authenticatedLandingPage"}>
+          <Link href={"/tools/dashboard"}>
             <Button variant="link" className="gap-2  pl-0">
               <ArrowLeft className="h-4 w-4"/>
               Back to DashBoard
