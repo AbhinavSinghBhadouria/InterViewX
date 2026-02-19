@@ -10,9 +10,10 @@ import { ArrowLeft } from 'lucide-react'
 
 const page = async() => {
 
-  const { isOnboarded}  = await getUserOnboardingStatus();
+const { isOnboarded}  = await getUserOnboardingStatus();
 
-  //if the user is not on boarded then push it to on boarding page
+//if the user is not on boarded then push it to on boarding page
+console.log("onboarding status" , isOnboarded);
 if(!isOnboarded){
   redirect("/tools/onboarding")
 }

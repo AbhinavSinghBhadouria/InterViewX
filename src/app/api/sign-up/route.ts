@@ -1,5 +1,5 @@
 import dbConnect from "@/src/lib/dbConnect";
-import UserModel from "@/src/models/User";
+import UserModel  ,{Plan}from "@/src/models/User";
 import bcrypt from "bcryptjs";
 import {toast} from "sonner";
 
@@ -28,11 +28,14 @@ export async function POST(request:Request){
         const newUser=await UserModel.create({
             name ,
             email ,
-            password:hashedPassword
+            password:hashedPassword ,
+            plan:Plan.FREE
         })
 
          //save the user
             await newUser.save();
+
+       
 
             return Response.json({
                 success:true ,

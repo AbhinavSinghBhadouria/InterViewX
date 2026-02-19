@@ -222,3 +222,6 @@ export function parseIndustryInsightRow(row: any): AIIndustryInsights {
   };
 }
 
+
+
+

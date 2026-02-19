@@ -1,4 +1,4 @@
-import React from 'react'
+"use server"
 
 import AddResume from '@/src/components/AddResume';
 import { getResume } from '@/src/actions/resume';
@@ -6,13 +6,23 @@ import ResumeCardItem from '@/src/components/ResumeCardItem';
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
-
+import { getUserOnboardingStatus } from '@/src/actions/user';
+import { redirect } from 'next/navigation';
 
 
 const page = async() => {
 
     //getting teh resumes present in the db
     const resumes = await getResume(); 
+
+
+    const { isOnboarded}  = await getUserOnboardingStatus();
+      
+      //if the user is not on boarded then push it to on boarding page
+      console.log("onboarding status" , isOnboarded);
+      if(!isOnboarded){
+        redirect("/tools/onboarding")
+      }
      
 
   return (

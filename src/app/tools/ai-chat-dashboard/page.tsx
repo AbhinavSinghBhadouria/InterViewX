@@ -7,10 +7,21 @@ import Link from "next/link"
 import { MessageSquare, Sparkle   , History } from "lucide-react"
 import { ArrowLeft } from "lucide-react"
 import { startChat } from "@/src/actions/ai-chat"
+import { getUserOnboardingStatus } from "@/src/actions/user"
+import { redirect } from "next/navigation"
 
 
 const page = async () => {
  
+
+  const { isOnboarded}  = await getUserOnboardingStatus();
+  
+  //if the user is not on boarded then push it to on boarding page
+  console.log("onboarding status" , isOnboarded);
+  if(!isOnboarded){
+    redirect("/tools/onboarding")
+  }
+  
   const session = await getServerSession(authOptions)
   const username = session?.user?.name?.split(" ")[0] || "there" //redering only the first name
 

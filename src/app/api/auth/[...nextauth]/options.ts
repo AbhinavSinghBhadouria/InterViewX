@@ -21,27 +21,36 @@ export const authOptions: NextAuthOptions={
             name: "Credentials" ,
 
             credentials:{
-                 identifier :{ label:"Email" , type:"text" } ,
+                 email :{ label:"Email" , type:"text" } ,
                   password:{ label:"Password" , type:"password"}
 
             },
 
             //designing the custom method for authorizing the credentials
             async authorize(credentials:any):Promise<any>{
-                
+
+             
+
+                  if (!credentials?.email || !credentials?.password) {
+      return null;
+    }
+
                 const client = await clientPromise;
                  const db = client.db();
 
+ 
+  const email = credentials.email.toLowerCase().trim();  //normalizing email
 
                 try{
                        //find the user in db using the credential ie  the email
                     //here we are using mongodb adapter for querying our database
                     
 const user = await db.collection("users").findOne({
-  email: credentials.identifier,
+  email: email,
 });
+  
 
-                        if(!user){
+                        if(!user ){
                             throw new Error("No user found with this email");
 
                         }
@@ -49,11 +58,17 @@ const user = await db.collection("users").findOne({
                         //decode the users password
 
                         const isPasswordCorrect=  await bcrypt.compare(credentials.password , user.password as string);
+ 
+                        if (!isPasswordCorrect) return null;
 
-                        if(isPasswordCorrect) return user; //this user will go into the jwt present in the callbacks part
-                        else {
-                            throw new Error("Incorrect password")  ;
-                        }
+                        
+
+return {
+  _id: user._id.toString(),
+  email: user.email,
+  name: user.name,
+  plan: user.plan ?? "free",
+};
                     
                 }catch(err:any){
                   throw new Error(err);

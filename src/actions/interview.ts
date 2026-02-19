@@ -6,12 +6,12 @@ import { authOptions } from "../app/api/auth/[...nextauth]/options";
 import db from "../lib/prisma";
 import Groq from "groq-sdk";
 
-/* -------------------- GROQ CLIENT -------------------- */
+// -------------------- groq client -------------------- 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY!,
 });
 
-/* -------------------- TYPES -------------------- */
+
 interface QuizQuestion {
   question: string;
   options: string[];
@@ -19,7 +19,8 @@ interface QuizQuestion {
   explanation: string;
 }
 
-/* -------------------- GENERATE QUIZ -------------------- */
+//-------generating  quiz
+
 export async function generateQuiz() {
 
   //getting the user id from the session of next auth
@@ -90,7 +91,9 @@ Return ONLY valid JSON in this format (no markdown, no extra text):
   }
 }
 
-/* -------------------- SAVE QUIZ RESULT -------------------- */
+
+
+// saving quiz result
 export async function saveQuizResult(
   questions: QuizQuestion[],
   answers: string[],
@@ -122,7 +125,8 @@ export async function saveQuizResult(
 
   const wrongAnswers = questionResults.filter(q => !q.isCorrect);
 
-  /* -------------------- IMPROVEMENT TIP -------------------- */
+
+//improvement tip
   let improvementTip: string | null = null;
 
   if (wrongAnswers.length > 0) {
@@ -172,7 +176,7 @@ Keep the response:
     }
   }
 
-  /* -------------------- SAVE TO DB -------------------- */
+//saving assessments to the db
   try {
     const assessment = await db.assessment.create({
       data: {
@@ -192,7 +196,7 @@ Keep the response:
 }
 
 
-//-------------------------Displaying Interview Progress-----------------
+//-------------------------displaying Interview Progress-----------------
 
 export async function getAssessments(){
   //check if the user is authenticated or not
@@ -230,3 +234,34 @@ console.log("Error fetching assessments" ,error);
 throw new Error("Failed to fetch assessments");
   }
 }
+
+
+export async function clearAssessments(){
+   //getting the user id from the session of next auth
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?._id) {
+    throw new Error("Unauthorized");
+  }
+
+  const authUserId = session.user._id;
+
+  const user = await db.user.findUnique({
+    where: { authUserId },
+  });
+
+  if (!user) {
+    throw new Error("User not found in neon db");
+  }
+
+    try{
+    await db.assessment.deleteMany({
+    where: {
+      userId: user.id,
+    },
+  });
+    }catch(error){
+    console.error("error deleting history" ,error)
+}
+
+  }

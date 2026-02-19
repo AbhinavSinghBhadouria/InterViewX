@@ -9,10 +9,12 @@ import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, 
 import { Loader2 } from 'lucide-react'
 import { useRouter } from "next/navigation";
 
+
 const HEADER_HEIGHT = "h-16";
 
 
-const ToolsHeader = () => {
+const ToolsHeader =() => {
+
   
 const router = useRouter();
 
@@ -28,9 +30,6 @@ const router = useRouter();
     <>
      <div className="fixed top-0 h-16 w-full bg-black/20 flex justify-between px-3 py-2 text-lg font-bold z-50 backdrop-blur-md border border-2px-solid-white">
 
-
-   
-
         <Link href="#" className="flex items-center gap-2 m-2">
         <Image src="/InterviewXlogo.png" alt="Logo" height={32} width={38} ></Image>
         <h2 className="text-primary-100">InterviewX</h2>
@@ -45,6 +44,7 @@ const router = useRouter();
             </Button>
             </Link>
 
+
     <DropdownMenu >
    <DropdownMenuTrigger asChild>
     <Button className="btn-secondary">
@@ -55,6 +55,7 @@ const router = useRouter();
    </DropdownMenuTrigger>
    <DropdownMenuContent>
    
+
    <DropdownMenuItem
   onSelect={() => router.push("/tools/ai-resume")}
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"

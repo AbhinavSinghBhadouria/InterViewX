@@ -23,8 +23,8 @@ const defaultSkill: SkillEntry = {
 
 
 const SkillsForm = ({enableNext}:any) => {
-  const [rating, setRating] = useState(0) 
-   const router=useRouter();
+ 
+const router=useRouter();
 const context = useContext(ResumeInfoContext);
 
   if (!context) {
