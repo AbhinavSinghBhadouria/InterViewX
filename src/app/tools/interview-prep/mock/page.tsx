@@ -2,8 +2,15 @@ import { Button } from '@/src/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import Quiz from '@/src/components/Quiz'
+import { getUserOnboardingStatus } from '@/src/actions/user'
+import { redirect } from 'next/navigation'
 
-const page = () => {
+
+const page = async() => {
+  const is_onboarded=await getUserOnboardingStatus();
+  if(!is_onboarded){
+    redirect("/tools/onboarding")
+  }
   return (
     <div className="min-h-screen flex flex-col space-y-2 mx-2">
       <Link href={"/tools/interview-prep"}>

@@ -4,13 +4,32 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../app/api/auth/[...nextauth]/options";
 
 
+export enum Plan{
+    FREE="free" ,
+    PREMIUM ="premium"
+}
+
+export enum SubscriptionPeriod {
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
+}
+
 export interface User extends Document{
      name:string ;
      email :string ;
      password?: string; //github and google wont supply a password
-     id:string;
-createdAt: Date;
-  updatedAt: Date;
+     id:string
+
+     //payment related stuff
+
+    plan? : Plan ,
+    subscriptionPeriod?: SubscriptionPeriod;
+    subscriptionStart?: Date;
+    subscriptionEnd?: Date;
+    stripeCustomerId?: string;
+
+    createdAt: Date;
+    updatedAt: Date;
      
 }
 
@@ -29,7 +48,34 @@ const UserSchema : Schema<User>=new mongoose.Schema({
     password:{
         type:String ,
         required:false 
-    }
+    } ,
+
+
+    //payment related
+
+    plan:{
+        type:String , 
+        enum:Object.values(Plan) ,
+        default:Plan.FREE
+    } ,
+   subscriptionPeriod: {
+      type: String,
+      enum: Object.values(SubscriptionPeriod),
+    },
+
+    subscriptionStart: Date,
+    subscriptionEnd: Date,
+
+
+ stripeCustomerId: {
+      type: String,
+      unique: true,
+      sparse: true, // otherwise mongodb will throw duplicate key error on null
+    },
+
+
+
+
 } , {timestamps:true})
 
 
@@ -53,3 +99,11 @@ export  async function getCurrentUser(){
     return user;
        
 }
+
+UserSchema.methods.hasPremiumAccess = function () {
+  return (
+    this.plan === Plan.PREMIUM &&
+    this.subscriptionEnd &&
+    this.subscriptionEnd > new Date()
+  );
+};

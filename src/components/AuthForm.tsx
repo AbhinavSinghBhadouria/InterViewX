@@ -101,7 +101,7 @@ const AuthForm = ({type}:{type:FormType}) => {
     setIsSubmitting(true);       
    const result=  await signIn("credentials" , {
         redirect:false,
-        identifier: data.email, //email is our indentifier
+        email: data.email, //email is our indentifier
         password: data.password
      })
     if(result?.error){

@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react"
 import { toast } from "sonner";
+
 
 
 
 export default function InterviewXDashboard() {
   const router = useRouter();
-  const { data: session } = useSession()  //for extracting the information of the user from the sesson in client component
+ 
+  
 
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLDivElement>(".card");
@@ -36,17 +37,21 @@ export default function InterviewXDashboard() {
       router.push("/tools/onboarding")
  }
 
+
+
   //function when we click the VAPI interview card
  const handleClick1=()=>{
-   //allowing only the admin i.e Amber Hasan to access the VAPI as it is paid 
-      const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL
+  
 
-    if (!isAdmin) {
-      toast.error("This AI interview feature is available in demo only")
-      return
-    }
-   toast.success("Redirecting to AI Powered Mock Interview Page..");
-   router.push("/")
+
+  //first of all we will check the status of the user , if he is not premium user then direct him to payment dashboard
+  //if he is a premium user then check whether he is admin or not, if he is then direct him to landing page of mock interview
+  //otherwise show him the msg that the payment has been made successfull but the admin of this website has restricted this feature from public use as VAPI credentials are paid
+    router.push("/payement/dashboard")
+
+
+
+
  }
 
   return (
@@ -78,7 +83,11 @@ export default function InterviewXDashboard() {
        
         <div className="cards-container">
           <div className="card" onClick={handleClick1}>
+          <div className="flex justify-between items-center">
  <div className="text-4xl mb-4">🎤</div>
+ <div className="bg-yellow-300 p-4 font-bold hover:bg-yellow-600 text-red-600 rounded lg m-2">Premium</div>
+
+ </div>
 
             <h2 className="text-2xl font-semibold text-blue-400 mb-3">
               AI-Powered Mock Interview
@@ -111,8 +120,9 @@ export default function InterviewXDashboard() {
             </p>
 
             <ul className="text-sm text-gray-400 space-y-1">
-              <li> AI Resume Studio</li>
-              <li> Industry Analytics</li>
+               <li> Industry Analytics</li>
+               <li>AI Career ChatBot</li>
+               <li> AI Resume Studio</li>
               <li> MCQ Mock Interview Practice</li>
             </ul>
           </div>

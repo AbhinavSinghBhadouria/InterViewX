@@ -65,6 +65,7 @@ await db.chat.deleteMany({
     userId:dbUser.id ,
   }
 });
+   //after deleting the chats we need to revalidate the cache of the chat dashboard page so that the user can see the updated list of chats
   revalidatePath("/ai-chat/history");
  return { success: true };
   }

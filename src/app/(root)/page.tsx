@@ -25,13 +25,13 @@ const page = async() => {
    
       redirect("/authenticatedLandingPage")  
   }
+
   const user=await getCurrentUser();
-
-  
  
-
+   
 
   if(!user) return null;
+
   const userInterviews=await getInterviewByUserId(user?._id.toString());
   const latestInterviews=await getLatestInterviews({userId:user?._id.toString()}); //since there are two arguments for this function
   if(!userInterviews) return null;
@@ -42,14 +42,18 @@ const page = async() => {
 
   return (
    <>
-
+  <div className="flex justify-between  items-center">
     <Link href={"/authenticatedLandingPage"} className="pl-2">
          <Button variant="link" className="gap-2 pl-2 m-2">
            <ArrowLeft className="h-4 w-4"/>
            Back to DashBoard
            </Button>
            </Link>
+           
 
+
+
+</div>
    <section className="card-cta m-3">
    <div className="flex flex-col gap-6 max-w-sm">
     <h2>Ace Your Interview with Smart AI Practice & Real-Time Feedback</h2>

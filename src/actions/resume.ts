@@ -412,12 +412,12 @@ export async function saveResumeEducation(
     throw new Error("Not allowed");
   }
 
-  // 🔥 Remove old education entries
+  //  Remove old education entries
   await db.education.deleteMany({
     where: { resumeId },
   });
 
-  // 🔥 Insert new ones
+  //  Insert new ones
   await db.education.createMany({
     data: educations.map((edu) => ({
       ...edu,
@@ -459,12 +459,12 @@ export async function saveResumeSkills(
     throw new Error("Not allowed");
   }
 
-  // 🔥 Remove old skills
+  //  Remove old skills
   await db.skill.deleteMany({
     where: { resumeId },
   });
 
-  // 🔥 Insert new skills
+  //  Insert new skills
   await db.skill.createMany({
     data: skills.map((skill) => ({
       name: skill.name,
@@ -520,7 +520,7 @@ export async function deleteResumeById(resumeId: string) {
   }
 
   try {
-    // OPTIONAL: delete related data first if cascading is not enabled
+    
     await db.experience.deleteMany({
       where: { resumeId },
     });
@@ -533,7 +533,7 @@ export async function deleteResumeById(resumeId: string) {
       where: { resumeId },
     });
 
-    // Delete the resume itself
+    // delete the resume itself
     await db.resume.delete({
       where: { id: resumeId },
     });
