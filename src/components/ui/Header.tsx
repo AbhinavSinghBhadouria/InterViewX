@@ -44,6 +44,7 @@ const Header = () => {
     active:scale-[0.97]
     transition-all duration-200
     focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2
+    cursor-pointer
   "
         onClick={logout}>
        

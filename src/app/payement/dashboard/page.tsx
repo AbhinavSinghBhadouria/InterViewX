@@ -104,7 +104,7 @@ const page = async() => {
     <div className="min-h-screen bg-black text-white overflow-x-hidden flex-col space-y-30">
         <div>
        <Link href={"/authenticatedLandingPage"}>
-            <Button variant="link" className="gap-2 pl-0 ">
+            <Button variant="link" className="gap-2 pl-0 cursor-pointer">
               <ArrowLeft className="h-4 w-4"/>
               Back to DashBoard
               </Button>
@@ -165,7 +165,7 @@ const page = async() => {
   <CheckoutButton
     priceId={plan.priceId}
     buttonText={plan.buttonText}
-    className="block w-full text-center rounded-xl py-3 font-semibold bg-blue-600 hover:bg-blue-700 disabled:opacity-70"
+    className="block w-full text-center rounded-xl py-3 font-semibold bg-blue-600 hover:bg-blue-700 disabled:opacity-70 cursor-pointer"
   />
 ) : (
   <a

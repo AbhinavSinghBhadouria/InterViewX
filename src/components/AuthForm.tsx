@@ -169,7 +169,7 @@ const AuthForm = ({type}:{type:FormType}) => {
          placeholder="Enter your password"/> 
 
    
-        <Button type="submit" className="btn" disabled={isSubmitting || loadingProvider=="github" || loadingProvider=="google"}>
+        <Button type="submit" className="btn cursor-pointer" disabled={isSubmitting || loadingProvider=="github" || loadingProvider=="google"}>
           {
             isSubmitting ?(
                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
@@ -184,7 +184,7 @@ const AuthForm = ({type}:{type:FormType}) => {
 
   <Button
     type="button"
-    className="btn-secondary w-full rounded-full"
+    className="btn-secondary w-full rounded-full cursor-pointer"
     disabled={loadingProvider === "google"}
     onClick={() => handleProviderSignIn("google")}  
   >
@@ -206,7 +206,7 @@ const AuthForm = ({type}:{type:FormType}) => {
 
   <Button
     type="button"
-    className="btn-secondary w-full rounded-full"
+    className="btn-secondary w-full rounded-full cursor-pointer"
     disabled={loadingProvider === "github" || loadingProvider=="google" || isSubmitting}
       onClick={() => handleProviderSignIn("github")}
 

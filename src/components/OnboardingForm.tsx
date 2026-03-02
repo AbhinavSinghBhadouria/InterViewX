@@ -4,18 +4,18 @@ import { useForm ,Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { onboardingScehma } from '../models/schema/schema';
 import { useRouter } from 'next/navigation';
-import { Card,CardContent, CardDescription,CardHeader, CardTitle,} from "@/components/ui/card"
+import { Card,CardContent, CardDescription,CardHeader, CardTitle,} from "@/src/components/ui/card"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Label } from '@/components/ui/label';
+} from "@/src/components/ui/select"
+import { Label } from '@/src/components/ui/label';
 import Image from "next/image";
 import { Input } from './ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from '@/src/components/ui/textarea';
 import { Button } from './ui/button';
 import useFetch from '../hooks/use-fetch';
 import { updateUser } from '../actions/user';
@@ -231,7 +231,7 @@ useEffect(()=>{
 )}
 </div>
 
-<Button type="submit" className="btn-primary w-full" disabled={updateLoading}>
+<Button type="submit" className="btn-primary w-full cursor-pointer" disabled={updateLoading}>
  { updateLoading ? (
    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
    

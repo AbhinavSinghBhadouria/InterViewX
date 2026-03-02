@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/src/components/ui/dialog"
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useRouter } from 'next/navigation';
@@ -52,8 +52,8 @@ function AddResume() {
       <Input className="mt-2" placeholder="Eg, Full Stack Resume" onChange={(e)=>setResumeTitle(e.target.value)}/>
       </DialogDescription>
       <div className="flex justify-end ">
-        <Button className="btn-secondary" onClick={()=> setOpenDialog(false)} >Cancel</Button>
-        <Button className='btn-primary' disabled={!resumeTitle || loading} onClick={onCreate} >   {loading ? "Creating..." : "Create"}</Button>
+        <Button className="btn-secondary cursor-pointer" onClick={()=> setOpenDialog(false)} >Cancel</Button>
+        <Button className='btn-primary cursor-pointer' disabled={!resumeTitle || loading} onClick={onCreate} >   {loading ? "Creating..." : "Create"}</Button>
       </div>
     </DialogHeader>
   </DialogContent>

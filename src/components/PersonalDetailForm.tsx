@@ -87,7 +87,7 @@ const PersonalDetailForm = ({enableNext}:any) => {
             <Input name="email" required onChange={handleInputChange} defaultValue={resumeInfo?.email} className="mt-2"/>
         </div>
     </div>
-    <div className="mt-3 flex justify-end"><Button type="submit">Save</Button></div>
+    <div className="mt-3 flex justify-end"><Button type="submit" className="cursor-pointer">Save</Button></div>
    </form>
     </div>
   )

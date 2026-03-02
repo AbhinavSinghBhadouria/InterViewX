@@ -48,7 +48,7 @@ function RichTextEditor({ value, onChange }: Props) {
     <div className="w-full">
       <div className="flex justify-between items-center my-2">
         <label className="text-sm">Summary</label>
-     <Button size="sm" onClick={onImprove} disabled={loading}>
+     <Button size="sm" className="cursor-pointer" onClick={onImprove} disabled={loading}>
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin mr-1" />
           ) : (

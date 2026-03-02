@@ -48,6 +48,7 @@ export default function InterviewXDashboard() {
   //if he is a premium user then check whether he is admin or not, if he is then direct him to landing page of mock interview
   //otherwise show him the msg that the payment has been made successfull but the admin of this website has restricted this feature from public use as VAPI credentials are paid
     router.push("/payement/dashboard")
+    toast.success("Redirecting to InterviewX's Premium feature.");
 
 
 

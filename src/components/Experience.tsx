@@ -156,11 +156,11 @@ const onSave=async(e:any)=>{
      
        <div className="flex justify-between">
         <div className='flex gap-2'>
-                          <Button variant="outline" className='text-primary' onClick={RemoveExperience}>- Remove</Button>
-              <Button variant="outline" className='text-primary' onClick={AddNewExperience}>+ Add more</Button>
+                          <Button variant="outline" className='text-primary cursor-pointer' onClick={RemoveExperience}>- Remove</Button>
+              <Button variant="outline" className='text-primary cursor-pointer' onClick={AddNewExperience}>+ Add more</Button>
         </div>
 
-        <Button type="submit" onClick={onSave}> Save</Button>
+        <Button type="submit" className="cursor-pointer" onClick={onSave}> Save</Button>
         </div>
 
     </div>

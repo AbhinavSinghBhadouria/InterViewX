@@ -30,8 +30,8 @@ const FormSection = () => {
 
       <div className="flex w-full justify-end gap-2 ">
         {activeFormIndex >1 
-        && <Button size="sm" onClick={()=>setActiveFormIndex(activeFormIndex-1)}> <ArrowLeft/> Back</Button>}
-         {activeFormIndex!==5 && <Button className="flex gap-2" size="sm" onClick={()=>setActiveFormIndex(activeFormIndex+1)} disabled={!enableNext}> Next <ArrowRight/></Button> }
+        && <Button size="sm" className="cursor-pointer" onClick={()=>setActiveFormIndex(activeFormIndex-1)}> <ArrowLeft/> Back</Button>}
+         {activeFormIndex!==5 && <Button className="flex gap-2 cursor-pointer" size="sm" onClick={()=>setActiveFormIndex(activeFormIndex+1)} disabled={!enableNext}> Next <ArrowRight/></Button> }
 
 
         </div>

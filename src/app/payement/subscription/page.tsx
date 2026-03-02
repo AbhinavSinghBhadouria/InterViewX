@@ -3,7 +3,7 @@
 import { getCurrentUser } from "../../../models/User";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { CheckCircle } from "lucide-react";
 import { Crown } from "lucide-react";

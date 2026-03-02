@@ -25,7 +25,7 @@ if(isOnboarded){
   return (
    <div className="min-h-screen">  
     <Link href={"/authenticatedLandingPage"}>
-            <Button variant="link" className="gap-2  pl-0 m-2">
+            <Button variant="link" className="gap-2  pl-0 m-2 cursor-pointer">
               <ArrowLeft className="h-4 w-4"/>
               Back to DashBoard
               </Button>

@@ -96,7 +96,7 @@ const page = async ({params} : RouteParams) => {
 
       <div className="buttons">
 
-        <Button className="btn-secondary flex-1">
+        <Button className="btn-secondary flex-1 cursor-pointer">
           <Link href="/" className="flex w-full justify-center">
             <p className="text-sm font-semibold text-primary-200 text-center">
               Back to dashboard
@@ -104,7 +104,7 @@ const page = async ({params} : RouteParams) => {
           </Link>
         </Button>
 
-        <Button className="btn-secondary flex-1 ">
+        <Button className="btn-secondary flex-1 cursor-pointer">
           <Link
             href={`/interview/${id}`}
             className="flex w-full justify-center"

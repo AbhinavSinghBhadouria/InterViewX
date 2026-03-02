@@ -23,7 +23,7 @@ const row = await getIndustryInshights();  //since our db returns json thereofor
 <>
      
      <Link href={"/authenticatedLandingPage"}>
-            <Button variant="link" className="gap-2 pl-0 ">
+            <Button variant="link" className="gap-2 pl-0 cursor-pointer">
               <ArrowLeft className="h-4 w-4"/>
               Back to DashBoard
               </Button>

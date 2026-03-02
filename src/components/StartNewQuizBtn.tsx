@@ -18,7 +18,7 @@ export default function StartNewQuizBtn() {
     <Button
       onClick={handleClick}
       disabled={loading}
-      className="btn-primary"
+      className="btn-primary cursor-pointer"
     >
       {loading ? (
         <>

@@ -44,7 +44,7 @@ const page = async() => {
    <>
   <div className="flex justify-between  items-center">
     <Link href={"/authenticatedLandingPage"} className="pl-2">
-         <Button variant="link" className="gap-2 pl-2 m-2">
+         <Button variant="link" className="gap-2 pl-2 m-2 cursor-pointer">
            <ArrowLeft className="h-4 w-4"/>
            Back to DashBoard
            </Button>

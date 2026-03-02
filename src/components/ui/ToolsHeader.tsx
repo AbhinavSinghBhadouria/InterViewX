@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/src/components/ui/button'
 import { signOut } from 'next-auth/react'
 import { useState } from 'react'
-import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,DropdownMenuTrigger} from '@/components/ui/dropdown-menu'
+import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,DropdownMenuTrigger} from '@/src/components/ui/dropdown-menu'
 import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon ,Bot } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from "next/navigation";
@@ -38,7 +38,7 @@ const router = useRouter();
 
         <div className="gap-2">
            <Link href="/tools/dashboard" >
-           <Button className="mr-4 btn-primary">
+           <Button className="mr-4 btn-primary cursor-pointer">
                <LayoutDashboard className="h-4 w-4"></LayoutDashboard>
                 Industry Analytics 
             </Button>
@@ -47,7 +47,7 @@ const router = useRouter();
 
     <DropdownMenu >
    <DropdownMenuTrigger asChild>
-    <Button className="btn-secondary">
+    <Button className="btn-secondary cursor-pointer">
         <StarsIcon className="h-4 w-4"/>
          Career Toolkit
          <ChevronDown className="h-4 w-4"/>

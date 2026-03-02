@@ -33,7 +33,7 @@ const ViewResumePage = ({resume , resumeId}:{resume:any , resumeId:string}) => {
      <ResumeInfoContext.Provider value={{resumeInfo , setResumeInfo ,resumeId}}>
     <div id="no-print">
         <Link href={"/tools/ai-resume"}>
-            <Button variant="link" className="gap-2  pl-0">
+            <Button variant="link" className="gap-2  pl-0 cursor-pointer">
               <ArrowLeft className="h-4 w-4"/>
               Back to Resume DashBoard
               </Button>
@@ -41,10 +41,10 @@ const ViewResumePage = ({resume , resumeId}:{resume:any , resumeId:string}) => {
 
       <div className="my-10 mx-10 md:mx-20 ">
         <h2 className="text-center text-2xl font-medium">Congrats!! Your AI Generated Resume Is Ready.</h2>
-        <p className="text-center">You’re all set! Download your resume now or share your unique resume link with friends and family.</p>
+        <p className="text-center">You're all set! Download your resume now or share your unique resume link with friends and family.</p>
         <div className="flex justify-end gap-3 mx-44 my-10 w-">
-          <Button onClick={handleDownload}>Download</Button>
-          <Button onClick={handleShare}>Share</Button>
+          <Button onClick={handleDownload} className="cursor-pointer">Download</Button>
+          <Button onClick={handleShare} className="cursor-pointer">Share</Button>
         </div>
         
       </div>

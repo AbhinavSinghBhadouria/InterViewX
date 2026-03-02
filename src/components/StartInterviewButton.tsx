@@ -18,7 +18,7 @@ export default function StartInterviewButton() {
     <Button
       onClick={handleClick}
       disabled={loading}
-      className="btn-primary max-sm:w-full flex items-center gap-2"
+      className="btn-primary max-sm:w-full flex items-center gap-2 cursor-pointer"
     >
       {loading ? (
         <>

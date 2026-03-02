@@ -18,7 +18,7 @@ const FreePlanBtn = () => {
     <>
       <button
         onClick={onClick}
-        className="bg-gray-800 hover:bg-gray-700 rounded-xl py-3 w-full"
+        className="bg-gray-800 hover:bg-gray-700 rounded-xl py-3 w-full cursor-pointer"
       >
         Get Started
       </button>

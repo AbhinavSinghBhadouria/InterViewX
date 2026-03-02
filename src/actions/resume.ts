@@ -278,7 +278,7 @@ export async function improveExperienceWithAI(summary: string) {
 
 
   //asking the AI for improved content in html format only
-  const prompt = `
+const prompt = `
 You are an expert resume writer for the tech industry.
 
 Improve the following professional experience description and RETURN VALID HTML.

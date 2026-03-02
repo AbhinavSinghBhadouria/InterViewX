@@ -128,42 +128,4 @@ validateInsights(insights);
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//FUNCTIONS FOR AI CAREER CHAT FUNCTOINALITY
 
-export const AiCareerChatAgent = createAgent({
-  name: "AiCareerChatAgent",
-  description: "An AI agent that provides career-focused guidance and mentoring",
-  system: `
-You are a professional and supportive AI Career Coach Agent.
-
-Your role is to help users with career-related topics such as:
-- Career planning and guidance
-- Job and internship search strategies
-- Interview preparation (technical and HR)
-- Resume and LinkedIn profile improvement
-- Skill development and learning roadmaps
-- Career transitions and industry trends
-
-Always respond with clear, encouraging, and actionable advice.
-If a question is not career-related, politely redirect the user to a career-focused topic.
-`,
- 
-
-    model: openai({
-    model: "llama-3.1-8b-instant",
-    apiKey: process.env.GROQ_API_KEY,
-     baseUrl: "https://api.groq.com/openai/v1",
-  }),
-})
-
-export const AiCareerAgent=inngest.createFunction(
-  { id:"AiCareerAgent"  } ,
- {event : "AiCareerAgent" }  ,
- async({event , step})=>{
-  const {userInput}= await event?.data;
-  const result=await AiCareerChatAgent.run(userInput);
-  return result;
-
- }
-
-)
