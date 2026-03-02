@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Button } from './ui/button'
 import { Brain } from 'lucide-react'
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "@/src/components/ui/textarea"
 import { useContext } from 'react'
 import { ResumeInfoContext } from '../context/ResumeInfoContest'
 import { useState } from 'react'
@@ -76,11 +76,11 @@ const SummaryForm = ({enableNext}:any) => {
 
 <div className="flex justify-between items-end">
     <label>Add Summary</label>
-    <Button   type="button" className="btn-primary" size="sm" onClick={onImprove}><Brain/> Improve with AI</Button>
+    <Button   type="button" className="btn-primary cursor-pointer" size="sm" onClick={onImprove}><Brain/> Improve with AI</Button>
 </div>
  <Textarea className="mt-5" required value={summary} onChange={(e:any)=>setSummary(e.target.value)}/>
     <div className="flex justify-end gap-2">
-        <Button className="mt-2">Save</Button>
+        <Button className="mt-2 cursor-pointer">Save</Button>
 
     </div>
       </form>

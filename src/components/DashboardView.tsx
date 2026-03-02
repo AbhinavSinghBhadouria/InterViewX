@@ -3,9 +3,9 @@
 import { AIIndustryInsights } from '../types'
 import {  LineChart, TrendingDown, TrendingUp ,BriefcaseIcon ,Brain } from 'lucide-react';
 import { format, formatDistanceToNow } from "date-fns";
-import { Badge } from '@/components/ui/badge'; 
-import {Card,CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card";
-import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/src/components/ui/badge'; 
+import {Card,CardContent, CardDescription, CardHeader, CardTitle,} from "@/src/components/ui/card";
+import { Progress } from '@/src/components/ui/progress';
 import { BarChart, Bar, XAxis, YAxis,CartesianGrid,Tooltip, ResponsiveContainer,} from "recharts";
 
 

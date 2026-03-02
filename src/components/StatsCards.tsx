@@ -1,5 +1,5 @@
 import { Brain, Target, Trophy } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 
 
 const StatsCards = ({assessments}:any) => {

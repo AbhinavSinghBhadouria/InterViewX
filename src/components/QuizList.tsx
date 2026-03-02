@@ -2,8 +2,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from './ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
 import { format } from "date-fns"
 import QuizResult from './QuizResult'
 import StartNewQuizBtn from './StartNewQuizBtn'
@@ -45,6 +45,7 @@ const QuizList = ({ assessments }: any) => {
               {assessments?.length > 0 && (
                 <Button
                   variant="destructive"
+                  className="cursor-pointer"
                   onClick={handleClearHistory}
                 >
                   Clear History

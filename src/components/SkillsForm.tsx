@@ -107,12 +107,12 @@ e.preventDefault();
       </div>
        <div className="flex justify-between">
                     <div className='flex gap-2'>
-                                      <Button variant="outline" className='text-primary' onClick={RemoveSkill}>- Remove</Button>
-                          <Button variant="outline" className='text-primary' onClick={AddNewSkill}>+ Add more</Button>
+                                      <Button variant="outline" className='text-primary cursor-pointer' onClick={RemoveSkill}>- Remove</Button>
+                          <Button variant="outline" className='text-primary cursor-pointer' onClick={AddNewSkill}>+ Add more</Button>
                     </div>
             
-                    <Button  type="submit" onClick={onSave}> Save</Button>
-                            <Button className="btn-primary" onClick={()=>router.push(`/my-resume/${resumeId}`)}>Finish</Button>
+                    <Button  type="submit" className="cursor-pointer" onClick={onSave}> Save</Button>
+                            <Button className="btn-primary cursor-pointer" onClick={()=>router.push(`/my-resume/${resumeId}`)}>Finish</Button>
                     </div>
       </div>
   )

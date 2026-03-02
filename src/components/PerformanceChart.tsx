@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import {format} from "date-fns"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,ResponsiveContainer,} from "recharts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/src/components/ui/card";
 const PerformanceChart = ({assessments}:any) => {
 
     const [chartData , setChartData]=useState([]);

@@ -8,10 +8,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/src/components/ui/card";
 import { Button } from "./ui/button";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/src/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { toast } from "sonner";
 import { Loader, Loader2 } from "lucide-react";
 import QuizResult from "./QuizResult";
@@ -134,7 +134,7 @@ const Quiz = () => {
 
         <CardFooter>
           <Button
-            className="w-full"
+            className="w-full cursor-pointer"
             onClick={generateQuizFn}
             disabled={generatingQuiz}
           >
@@ -198,6 +198,7 @@ const Quiz = () => {
             <Button
             onClick={()=>setShowExplanation(true)}
             variant="outline"
+            className="cursor-pointer"
             disabled={!answers[currentQuestion]}>
                 Show Explanation
             </Button>
@@ -205,7 +206,7 @@ const Quiz = () => {
 
         <Button
         onClick={handleNext}
-        className="btn-primary"
+        className="btn-primary cursor-pointer"
         disabled={!answers[currentQuestion] || savingResult}
         >
             {savingResult && (

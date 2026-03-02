@@ -1,6 +1,6 @@
 import { CheckCircle2, Trophy, XCircle } from 'lucide-react';
-import { CardContent ,Card } from '@/components/ui/card';
-import { CardFooter } from '@/components/ui/card';
+import { CardContent ,Card } from '@/src/components/ui/card';
+import { CardFooter } from '@/src/components/ui/card';
 import { Button } from './ui/button';
 import StartNewQuizBtn from './StartNewQuizBtn';
 

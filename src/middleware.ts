@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
   // Always allow auth pages
   if (isAuthPage) return NextResponse.next();
 
-  // Block protected pages if user not logged in
+  // Block protected pages if user not logged in and redirect the users to the landing pages
   if (isProtected && !token) {
     return NextResponse.redirect(new URL("/landingPage", request.url));
   }

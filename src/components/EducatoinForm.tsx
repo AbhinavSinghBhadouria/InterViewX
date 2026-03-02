@@ -1,6 +1,6 @@
-import { Input } from '@/components/ui/input'
+import { Input } from '@/src/components/ui/input'
 import { useContext, useState } from 'react'
-import { Textarea } from '@/components/ui/textarea'
+import { Textarea } from '@/src/components/ui/textarea'
 import { Button } from './ui/button'
 import { ResumeInfoContext } from '../context/ResumeInfoContest';
 import { useEffect } from 'react';
@@ -137,11 +137,11 @@ setEducationalList([...educationalList ,
 
        <div className="flex justify-between">
               <div className='flex gap-2'>
-                                <Button variant="outline" className='text-primary' onClick={RemoveEducation}>- Remove</Button>
-                    <Button variant="outline" className='text-primary' onClick={AddNewEducation}>+ Add more</Button>
+                                <Button variant="outline" className='text-primary cursor-pointer' onClick={RemoveEducation}>- Remove</Button>
+                    <Button variant="outline" className='text-primary cursor-pointer' onClick={AddNewEducation}>+ Add more</Button>
               </div>
       
-              <Button  type="submit" onClick={onSave}> Save</Button>
+              <Button  type="submit" className="cursor-pointer" onClick={onSave}> Save</Button>
               </div>
     </div>
   )

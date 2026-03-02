@@ -1,8 +1,8 @@
 "use client"
 import  { useState ,useEffect , useRef } from 'react'
 import {  Send ,ArrowLeft, Power} from "lucide-react"
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/src/components/ui/button'
+import { Input } from '@/src/components/ui/input'
 import EmptyState from '@/src/components/EmptyState'
 import  { useRouter } from 'next/navigation'
 import Markdown from 'react-markdown'

@@ -4,7 +4,7 @@ import db from "@/src/lib/prisma";
 import { redirect } from "next/navigation";
 import { authOptions } from '../../../api/auth/[...nextauth]/options';
 import { NextResponse } from "next/server";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react";
 import ClearChatsForm from '../../../../components/ClearChatsForm';
@@ -55,7 +55,7 @@ export default async function ChatHistoryPage() {
     <div className="p-10 mx-auto">
 <div className="flex justify-between">
         <Link href={"/tools/ai-chat-dashboard"}>
-                    <Button variant="link" className="gap-2  pl-0">
+                    <Button variant="link" className="gap-2  pl-0 cursor-pointer">
                       <ArrowLeft className="h-4 w-4"/>
                       Back to Chat DashBoard
                       </Button>

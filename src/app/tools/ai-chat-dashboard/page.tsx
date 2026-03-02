@@ -2,7 +2,7 @@
 
 import { authOptions } from "../../api/auth/[...nextauth]/options"
 import { getServerSession } from "next-auth"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
 import { MessageSquare, Sparkle   , History } from "lucide-react"
 import { ArrowLeft } from "lucide-react"
@@ -28,7 +28,7 @@ const page = async () => {
   return (
     <div className="min-h-screen px-6 md:px-10 lg:px-20  ">
         <Link href={"/authenticatedLandingPage"}>
-            <Button variant="link" className="gap-2  pl-0">
+            <Button variant="link" className="gap-2  pl-0 cursor-pointer">
               <ArrowLeft className="h-4 w-4"/>
               Back to DashBoard
               </Button>
@@ -75,13 +75,13 @@ const page = async () => {
          
 
      <form action={startChat}>
-            <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] mb-4">
+            <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] mb-4 cursor-pointer">
     <MessageSquare /> Start Chatting
   </Button>
 </form>
 
            <Link href="/ai-chat/history">
-            <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02]">
+            <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] cursor-pointer">
              <History/>Chat History
             </Button>
           </Link>

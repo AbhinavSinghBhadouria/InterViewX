@@ -6,7 +6,7 @@ import { authOptions } from '../../../../api/auth/[...nextauth]/options';
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { NextResponse } from "next/server";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react";
 
@@ -82,7 +82,7 @@ console.log("CHAT:", chat?.id, chat?.userId);
     <div className="p-6 mx-auto">
 
         <Link href={"/ai-chat/history"}>
-                            <Button variant="link" className="gap-2  pl-0">
+                            <Button variant="link" className="gap-2  pl-0 cursor-pointer">
                               <ArrowLeft className="h-4 w-4"/>
                               Back to Chat History
                               </Button>
