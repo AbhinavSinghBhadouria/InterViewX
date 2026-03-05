@@ -117,52 +117,50 @@ const Page = () => {
 
   const handleEndChat=async()=>{
   
-       try{
-        setEndingChat(true);
+    try{
+      if (isChatEnded || endingChat) {
+        return;
+      }
 
-        const res = await fetch("/api/ai-career-chat-agent/chat-end" , {
-          method:"POST" ,
-          headers : {"Content-Type": "application/json"} ,
-          body:JSON.stringify({
-               chatId ,   //from the params
-               messages:messageList ,  //sending the entire chat
-          })
-        });
+      if (!chatId) {
+        throw new Error("Chat ID is missing");
+      }
 
-    if (!res.ok) {
-      throw new Error("Failed to end chat");
+      setEndingChat(true);
+
+      const res = await fetch("/api/ai-career-chat-agent/chat-end", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chatId, messages: messageList })
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to end chat");
+      }
+
+      toast.success("Chat ended & saved successfully");
+      setIsChatEnded(true);
+
+    } catch (err) {
+      console.error("Error ending chat:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to end chat");
+    } finally {
+      setEndingChat(false);
     }
-
-    toast.success("Chat ended & saved successfully");
-    setIsChatEnded(true);
-
-
-   }catch (err) {
-    console.error(err);
-    toast.error("Failed to end chat");
-  } finally {
-    setEndingChat(false);
-  }
-  
-
-
   }
 
   const scrollToBottom = () => {
-  const el = chatContainerRef.current;
-  if (!el) return;
-
-  const isNearBottom =
-    el.scrollHeight - el.scrollTop - el.clientHeight < 120;
-
-  if (isNearBottom) {
-    el.scrollTop = el.scrollHeight; // instant scroll, no smooth
-  }
-};
+    setTimeout(() => {
+      const el = chatContainerRef.current;
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+    }, 0);
+  };
 
 useEffect(() => {
   scrollToBottom();
-}, [messageList.length]); 
+}, [messageList]); 
 
   
  
@@ -259,6 +257,12 @@ useEffect(() => {
         className="flex-1 rounded-lg border px-4 py-2 focus:outline-none"
         value={userInput}
         onChange={(e)=>setUserInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            onSend();
+          }
+        }}
       />
       <Button
       onClick={onSend}

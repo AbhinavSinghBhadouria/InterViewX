@@ -51,7 +51,7 @@ It is designed for **students, job seekers, and professionals** looking to impro
   - Education history
   - Skills with rating system
 - **AI-powered content improvements** for summaries and experience descriptions
-- **Dual export options**: PDF (Playwright) and DOCX (Microsoft Word format)
+- **Dual export options**: PDF (browser print via window.print()) and DOCX (Microsoft Word format)
 - ATS-friendly resume generation
 - Real-time preview during editing
 - Resume deletion and management
@@ -124,7 +124,7 @@ It is designed for **students, job seekers, and professionals** looking to impro
 | **Voice Agent** | @vapi-ai/web |
 | **Background Jobs** | Inngest |
 | **Payment** | Stripe |
-| **PDF/Document Generation** | Playwright (PDF), docx + file-saver (DOCX) |
+| **PDF/Document Generation** | Browser print API with CSS media queries (PDF), docx + file-saver (DOCX) |
 | **Rich Text Editor** | @uiw/react-md-editor, react-simple-wysiwyg |
 | **Styling** | Tailwind CSS 4, PostCSS |
 | **Animation** | Framer Motion |
@@ -812,8 +812,8 @@ The project can be deployed seamlessly on **Vercel**.
    - Maintains professional tone and ATS compatibility
 
 3. **Export Options**:
-   - **PDF Export**: Uses Playwright to generate professional PDF
-   - **DOCX Export**: Creates editable Microsoft Word document
+   - **PDF Export**: Uses browser's native print dialog (window.print()) with CSS @media print rules for professional formatting
+   - **DOCX Export**: Creates editable Microsoft Word document using docx library
    - Both formats are ATS-friendly
 
 ### Assessment & Progress Tracking
@@ -864,11 +864,6 @@ The project can be deployed seamlessly on **Vercel**.
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
 
 ## 📄 License
 
