@@ -5,7 +5,7 @@ import { Button } from '@/src/components/ui/button'
 import { signOut } from 'next-auth/react'
 import { useState } from 'react'
 import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,DropdownMenuTrigger} from '@/src/components/ui/dropdown-menu'
-import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon ,Bot } from 'lucide-react'
+import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon ,Bot, Route } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from "next/navigation";
 
@@ -77,6 +77,15 @@ const router = useRouter();
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"
 >     <Bot className="h-4 w-4" />
         AI Career Coach
+    
+    </DropdownMenuItem>
+
+
+    <DropdownMenuItem
+  onSelect={() => router.push("/tools/ai-roadmap-generator")}
+  className="bg-black m-1 flex items-center gap-2 cursor-pointer"
+>     <Route className="h-4 w-4" />
+        AI Roadmap Generator 
     
     </DropdownMenuItem>
 
