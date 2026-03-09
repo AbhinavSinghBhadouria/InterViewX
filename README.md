@@ -1,188 +1,125 @@
-# InterviewX 🎤🤖
+# InterviewX
 
-**Transform your interview preparation with AI-powered mock interviews, intelligent resume building, and personalized career guidance.**
+InterviewX is an AI-assisted interview preparation platform that combines mock interviews, a career coaching chat assistant, resume management, quiz-based assessment, and learning roadmap generation in one workflow.
 
----
+## Problem Statement
+Preparing for interviews usually requires multiple disconnected tools: question practice, resume editing, feedback, and career guidance. This project addresses that fragmentation by giving users a single platform where they can practice, improve, and track progress.
 
-## 🎯 The Problem
+## Project Overview
+InterviewX helps users:
+- Practice mock interviews (voice workflow + AI-generated feedback)
+- Use an AI career coach chat with persistent history
+- Create, edit, and organize multiple resumes
+- Take technical quiz assessments and review strengths/gaps
+- Generate AI learning roadmaps with visual node graphs
+- View industry insights such as trends, demand, and salary ranges
 
-Job seekers and professionals face critical challenges in interview preparation:
-- **Lack of realistic practice** - Limited access to diverse interview scenarios and real-time feedback
-- **Uncertainty about resume quality** - Don't know if their resume effectively showcases their skills to recruiters
-- **No personalized guidance** - Generic career advice doesn't address individual strengths and weaknesses
-- **Isolated learning** - No integrated platform to manage resumes, track progress, and receive actionable insights
-- **Fear of the unknown** - Mock interview anxiety due to limited practice opportunities
+## Core Features
+- AI mock interview generation and interview sessions
+- AI interview feedback from transcript analysis
+- Career coaching chat with streaming responses and chat history
+- Multi-resume creation, editing, deletion, and viewing
+- Resume content enhancement for summary and experience sections
+- Quiz generation, scoring, and improvement tips
+- Roadmap generation (nodes + edges for React Flow)
+- Industry insights dashboard with weekly background refresh
+- Authentication (credentials + Google + GitHub)
+- Stripe subscription flows for premium gating
 
----
+## Key Modules
+- Mock Interview System
+  - Voice workflow with VAPI client events and interview lifecycle handling
+  - Interview question generation and feedback storage
+- Career Coach / AI Assistant
+  - Streaming chat endpoint and persisted chat history
+- Resume Builder
+  - Multi-resume management with section-by-section editing
+  - Live preview via shared context state
+  - AI-assisted rewrite for summary/experience content
+- Assessment Module
+  - AI-generated technical quiz questions based on user profile
+  - Score tracking, explanations, and personalized improvement tips
+- Career Roadmap Generator
+  - AI-generated learning roadmaps stored as nodes and edges
+  - Interactive roadmap visualization with history support
+- AI Pipelines
+  - Interview question generation
+  - Transcript-to-feedback scoring
+  - Quiz generation and tip generation
+  - Roadmap JSON graph generation
+  - Industry insights generation (scheduled)
 
-## 💡 The Solution: InterviewX
 
-InterviewX is an **AI-powered interview simulation and career development platform** that combines:
+## Tech Stack
+- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS, Radix UI, Recharts, React Flow
+- Backend: Next.js App Router, Server Actions, API Routes
+- AI: Groq (Llama 3.1), Google Gemini, VAPI
+- Background Jobs: Inngest
+- Databases:
+  - PostgreSQL via Prisma (users profile mirror, resumes, chats, assessments, roadmaps, insights)
+  - MongoDB via Mongoose/adapter (auth users, interviews, interview feedback, subscription fields)
+- Auth: NextAuth (Credentials, Google, GitHub)
+- Payments: Stripe checkout + webhook
 
-### 🎙️ **AI Voice Interviewer**
-Practice realistic mock interviews with our AI interviewer powered by **VAPI**. Get instant feedback, track your performance metrics, and improve with each session.
+## Architecture Overview
+- App Router pages are grouped by route segments (`(auth)`, `(marketing)`, `(root)`, `tools`)
+- Client components handle interactive flows (chat UI, interview call UI, resume forms)
+- Server Actions handle authenticated mutations (resume CRUD, chat start, roadmap generation, quiz save)
+- API routes handle streaming, webhooks, and external callbacks
+- Hybrid persistence model is used:
+  - MongoDB for interview session artifacts and auth adapter records
+  - PostgreSQL for core product entities and analytics
 
-### 🤖 **AI Career Coach**
-Your personal AI career advisor powered by **Inngest Agent Kit** provides:
-- Personalized career guidance tailored to your industry and skills
-- Real-time answers to interview preparation questions
-- Context-aware advice based on your profile and experience
-- Continuous support throughout your job search journey
-
-### 📄 **Intelligent Resume Builder**
-- Create unlimited professionally formatted resumes
-- AI-powered improvements for your summary and experience descriptions
-- Live preview with ATS-friendly formatting
-- Export to PDF or DOCX with a single click
-- Industry-specific optimization suggestions
-
-### 📊 **Smart Progress Tracking**
-- Track interview performance over time with visual analytics
-- Identify weak areas and get personalized improvement tips
-- Measure skill development with detailed assessment reports
-- Monitor career growth with actionable insights
-
-### 💼 **Industry Insights Dashboard**
-- Real-time salary data and market trends for your industry
-- Growth rates and market demand for your target roles
-- Skill gap analysis with recommendations
-- Data-driven career planning information
-
----
-
-## 🤖 How AI Powers Your Success
-
-### AI Interview Simulation
-**VAPI Voice Agent** conducts realistic mock interviews:
-- Responds naturally to your answers
-- Asks follow-up questions based on your responses
-- Provides constructive, detailed feedback after each session
-- Helps you build confidence through repeated practice
-
-### Intelligent Content Enhancement
-**AI-powered resume improvements**:
-- Analyzes your professional summary and experience descriptions
-- Suggests improvements that highlight your achievements
-- Maintains ATS compatibility and professional tone
-- Saves time while ensuring quality content
-
-### Personalized Career Guidance
-**Inngest Agent Kit**-powered AI advisor:
-- Understands your unique career situation
-- Provides context-aware guidance for interview preparation
-- Suggests salary negotiation strategies
-- Recommends skill development paths
-
-### Adaptive Learning
-- Progress tracking helps identify improvement areas
-- AI generates personalized quiz questions based on your industry and skills
-- Adaptive difficulty that grows with your proficiency
-
----
-
-## ✨ Key Features
-
-| Feature | Benefit |
-|---------|---------|
-| 🎤 **Voice-Based Mock Interviews** | Practice real-world communication and think-on-your-feet skills |
-| 🤖 **AI Career Coach** | Get 24/7 personalized career advice and interview prep tips |
-| 📄 **Multiple Resume Management** | Create industry-specific resumes for different roles |
-| 📊 **Performance Analytics** | Visualize your progress and track improvement areas |
-| 💼 **Industry Insights** | Access real-time salary data and market trends |
-| 💾 **PDF/DOCX Export** | Download resumes in your preferred format |
-| 🔐 **Secure Authentication** | Multi-provider login (Email, Google, GitHub) |
-| 💳 **Premium Features** | Unlock advanced capabilities with flexible pricing |
-
----
-
-## 🚀 Quick Start
-
-### 1. Installation
+## Setup Instructions
+1. Clone and install
 ```bash
+git clone <repo-url>
+cd interview_x
 npm install
 ```
 
-### 2. Environment Setup
-Create a `.env.local` file with required API keys:
+2. Configure environment (`.env.local`)
 ```env
-# Databases
-MONGODB_URI=your_mongodb_connection
-DATABASE_URL=your_postgresql_connection
-
-# Authentication
-NEXTAUTH_SECRET=your_secret
+MONGODB_URI=
+DATABASE_URL=
+NEXTAUTH_SECRET=
 NEXTAUTH_URL=http://localhost:3000
 
-# AI Services
-NEXT_PUBLIC_VAPI_WEB_TOKEN=your_vapi_token
-NEXT_PUBLIC_VAPI_WORKFLOW_ID=your_workflow_id
-INNGEST_EVENT_KEY=your_inngest_key
-INNGEST_SIGNING_KEY=your_inngest_signing_key
+GROQ_API_KEY=
+GEMINI_API_KEY=
 
-# OAuth (Optional)
-GOOGLE_CLIENT_ID=your_google_id
-GOOGLE_CLIENT_SECRET=your_google_secret
-GITHUB_CLIENT_ID=your_github_id
-GITHUB_CLIENT_SECRET=your_github_secret
+NEXT_PUBLIC_VAPI_WEB_TOKEN=
+NEXT_PUBLIC_VAPI_WORKFLOW_ID=
 
-# Payment (Optional)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_key
-STRIPE_SECRET_KEY=your_stripe_secret
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+NEXT_PUBLIC_URL=http://localhost:3000
+
+INNGEST_EVENT_KEY=
+INNGEST_SIGNING_KEY=
+
+NEXT_PUBLIC_ADMIN_EMAIL=
 ```
 
-### 3. Database Setup
+3. Run Prisma migrations
 ```bash
 npx prisma migrate dev
+npx prisma generate
 ```
 
-### 4. Run Development Server
+4. Start app
 ```bash
 npm run dev
 ```
 
-Visit **http://localhost:3000** to get started!
+5. Optional: start Inngest dev server
+```bash
+npx inngest-cli@latest dev
+```
 
----
-
-## 🏗️ Tech Stack
-
-**Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS  
-**Backend**: Next.js App Router, Server Actions, API Routes  
-**Databases**: MongoDB (Auth), PostgreSQL (Application Data)  
-**AI/ML**: VAPI (Voice Interviews), Inngest (Career Agent), Groq & OpenAI (AI Improvements)  
-**Payments**: Stripe Integration  
-**Deployment**: Vercel  
-
----
-
-## 📈 Why InterviewX Wins
-
-✅ **All-in-one platform** - No need for multiple tools  
-✅ **AI-powered feedback** - Get actionable insights beyond generic tips  
-✅ **Real-time practice** - Voice-based interviews feel like real conversations  
-✅ **Career-focused** - Not just interview prep, but holistic career development  
-✅ **Data-driven growth** - Track progress with detailed analytics  
-✅ **Professional output** - ATS-optimized resumes and polished portfolios  
-
----
-
-## 📚 For More Details
-
-See [ComprehensiveREADME.md](./ComprehensiveREADME.md) for:
-- Detailed architecture overview
-- Complete project structure
-- API documentation
-- Deployment guidelines
-- Contributing guidelines
-
----
-
-## 📄 License
-
-This project is private and proprietary.
-
----
-
-**Built by AMBER HASAN**
-
-*Ready to ace your next interview? Let InterviewX help you succeed! 🚀*

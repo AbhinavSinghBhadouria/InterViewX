@@ -125,6 +125,7 @@ export default function InterviewXDashboard() {
                <li>AI Career ChatBot</li>
                <li> AI Resume Studio</li>
               <li> MCQ Mock Interview Practice</li>
+              <li>AI Career Roadmap Generator</li>
             </ul>
           </div>
         </div>
