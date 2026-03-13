@@ -70,7 +70,7 @@ const Page = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chatId ,
-        messages: [...messageList, userMsg],
+        message: userMsg.content, //sending the user's current query
       }),
     });
 
@@ -220,9 +220,9 @@ useEffect(() => {
     <EmptyState selectedQuestion={(q: string) => setUserInput(q)} />
   )}
 
-  {messageList.map((message, index) => (
+  {messageList.map((message) => (
     <div
-      key={index}
+      key={message.id}
       className={`flex ${
         message.role === "user" ? "justify-end" : "justify-start"
       }`}
@@ -266,7 +266,7 @@ useEffect(() => {
       />
       <Button
       onClick={onSend}
-  disabled={loading}
+  disabled={loading || isChatEnded}
   className="h-10 w-10 flex items-center justify-center rounded-lg bg-green-600 text-white hover:bg-blue-700 transition"
 >
   <Send className="h-5 w-5" />

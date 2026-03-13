@@ -1,17 +1,26 @@
 import OpenAI from "openai";
+import { retrieveMemories } from "@/src/lib/retrieveMemory";
+import { storeMemory } from "@/src/lib/storeMemory";
 
-export const runtime="edge";
+export const runtime = "nodejs";
 
 export async function POST(req:Request){
-    const {messages} = await req.json();
-    
-// Remove id before sending to Groq
-const cleanMessages = messages.map((m: any) => ({
-  role: m.role,
-  content: m.content,
-}));
+  const body = await req.json(); //we need chatId for pinecone namespace
+  const chatId = body?.chatId as string | undefined;
+  const userMessage = body?.message as string | undefined;
 
-console.log("RAW MESSAGES:", messages);
+  if (!chatId || !userMessage?.trim()) {
+    return new Response("Invalid request payload", { status: 400 });
+  }
+  const cleanedUserMessage = userMessage.trim();
+
+  // retrieving semantic memories (do not fail chat generation if memory lookup fails)
+  let memories: string[] = [];
+  try {
+    memories = await retrieveMemories(chatId, cleanedUserMessage);
+  } catch (error) {
+    console.error("Memory retrieval failed:", error);
+  }
 
 
      const client = new OpenAI({
@@ -56,19 +65,49 @@ CRITICAL RULES (must always follow):
 6. Do not explain your refusal.
 `
     },
-    ...cleanMessages,
+
+     {
+    role: "system",
+    content: `Relevant past conversation:\n${memories.join("\n")}`
+  },
+    {
+      role: "user",
+      content: cleanedUserMessage,
+    },
   ],
 });
+
+  try {
+    await storeMemory(chatId, cleanedUserMessage, "user");
+  } catch (error) {
+    console.error("User memory store failed:", error);
+  }
+
+
+let aiResponse = "";
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
 
-      for await (const chunk of completion) {
-        const token = chunk.choices[0]?.delta?.content || "";
-        controller.enqueue(encoder.encode(token));
-      }
+      try {
+        for await (const chunk of completion) {
+          const token = chunk.choices[0]?.delta?.content || "";
+          aiResponse += token;
+          controller.enqueue(encoder.encode(token));
+        }
+      } catch (error) {
+        console.error("Streaming failed:", error);
+      } finally {
+        controller.close();
 
-      controller.close();
+        if (aiResponse.trim().length > 0) {
+          try {
+            await storeMemory(chatId, aiResponse, "assistant");
+          } catch (error) {
+            console.error("Assistant memory store failed:", error);
+          }
+        }
+      }
     },
   });
 

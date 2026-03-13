@@ -2,6 +2,40 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import db from "@/src/lib/prisma";
+import { groq } from "@/src/lib/groq";
+import { retrieveTranscriptFromVectorDb } from "@/src/lib/retrieveTranscript";
+
+async function generateTitleFromTranscript(transcriptLines: string[]) {
+  if (!transcriptLines.length) {
+    return "AI Career Chat";
+  }
+
+  const transcript = transcriptLines.join("\n").slice(0, 8000);
+
+  const response = await groq.chat.completions.create({
+    model: "llama-3.1-8b-instant",
+    temperature: 0.2,
+    max_completion_tokens: 24,
+    messages: [
+      {
+        role: "system",
+        content:
+          "Generate a concise career-chat title (max 8 words). Return title only, no quotes, no punctuation at ends.",
+      },
+      {
+        role: "user",
+        content: `Transcript:\n${transcript}`,
+      },
+    ],
+  });
+
+  const rawTitle = response.choices[0]?.message?.content?.trim();
+  if (!rawTitle) {
+    return "AI Career Chat";
+  }
+
+  return rawTitle.replace(/^['"\s]+|['"\s]+$/g, "").slice(0, 80) || "AI Career Chat";
+}
 
 export async function POST(req: Request) {   //api called when the user ends the chat
   try {
@@ -72,13 +106,18 @@ export async function POST(req: Request) {   //api called when the user ends the
       })),
     });
 
-    // generating the title for the chat
-    const firstUserMessage = messages.find(
-      (m: any) => m.role === "user"
-    )?.content;
-
-    const title =
-      firstUserMessage?.slice(0, 50) || "AI Career Chat";
+    // generate title from full transcript stored in vector DB
+    let title = "AI Career Chat";
+    try {
+      const transcriptLines = await retrieveTranscriptFromVectorDb(chatId);
+      if (transcriptLines.length > 0) {
+        title = await generateTitleFromTranscript(transcriptLines);
+      }
+    } catch (error) {
+      console.error("TITLE GENERATION ERROR:", error);
+      const firstUserMessage = messages.find((m: any) => m.role === "user")?.content;
+      title = firstUserMessage?.slice(0, 50) || "AI Career Chat";
+    }
 
     // ending the chat
     await db.chat.update({
