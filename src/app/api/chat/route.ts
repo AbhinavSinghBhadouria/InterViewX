@@ -130,8 +130,8 @@ let aiResponse = "";
       } catch (error) {
         console.error("Streaming failed:", error);
       } finally {
-        controller.close();
-
+        // Persist assistant output before closing stream; this avoids losing
+        // post-stream writes on runtime teardown/disconnect edge cases.
         if (aiResponse.trim().length > 0) {
         //storing the ai response to redis db
            try {
@@ -154,6 +154,8 @@ let aiResponse = "";
 
            
         }
+
+        controller.close();
       }
     },
   });
