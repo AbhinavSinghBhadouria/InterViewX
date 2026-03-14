@@ -117,11 +117,11 @@ flowchart LR
 ```mermaid
 flowchart TD
   subgraph Keys
-    K1[interviewx:v1:chat:session:{chatId}]
-    K2[interviewx:v1:chat:messages:{chatId}]
-    K3[interviewx:v1:assessments:{userId}]
-    K4[interviewx:v1:roadmaps:user:{userId}]
-    K5[interviewx:v1:industry-insights:{industry}]
+    K1["interviewx:v1:chat:session:{chatId}"]
+    K2["interviewx:v1:chat:messages:{chatId}"]
+    K3["interviewx:v1:assessments:{userId}"]
+    K4["interviewx:v1:roadmaps:user:{userId}"]
+    K5["interviewx:v1:industry-insights:{industry}"]
   end
 
   Read[Read Request] --> Check{Key Exists?}
@@ -354,6 +354,7 @@ This design reduces collision risk and allows explicit versioning for future mig
 - Middleware route matching is currently static string based and may not fully cover dynamic segments.
 - Build currently ignores TypeScript errors (`ignoreBuildErrors: true`), which can hide unsafe regressions.
 - Add centralized input validation on all public API routes.
+
 
 ## 9. Rights and License
 
