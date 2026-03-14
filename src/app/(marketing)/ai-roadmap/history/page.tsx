@@ -1,55 +1,15 @@
 
-import { getServerSession } from "next-auth";
-import db from "@/src/lib/prisma";
-import { redirect } from "next/navigation";
-import { authOptions } from '../../../api/auth/[...nextauth]/options';
-import { NextResponse } from "next/server";
 import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react";
 import ClearRoadmapsForm from "@/src/components/ClearRoadmapsForm";
+import { getRoadmapHistory } from "@/src/actions/generate-roadmap";
 
 
 
 
 export default async function ChatHistoryPage() {
-  const session = await getServerSession(authOptions);
-
- 
-
-  if (!session?.user?._id) {
-     return NextResponse.json(
-        {
-           message:"User not found in mongodb" ,
-           status:404
-        }
-     )
-  }
-
-  //find out the prisma user id from the db
-  const user = await db.user.findUnique({
-    where: { authUserId: session.user._id },
-  });
-
-  if (!user) {
-     return NextResponse.json(
-        {
-           message:"User not found in prisma db" ,
-           status:404
-        }
-     )
-  }
-
-  //gettting all the roadmaps of the user from the db in descednig order
-  const roadmaps = await db.roadmap.findMany({
-    where: {
-      userId: user.id,
-      
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  });
+  const roadmaps = await getRoadmapHistory();
 
 
   return (

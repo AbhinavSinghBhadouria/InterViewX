@@ -105,6 +105,7 @@ validateInsights(insights);
 // inserting the data coming from the inngest in the database
 
     await step.run(`Update ${industry} insights`, async () => {
+      
       await db.industryInsight.upsert({
         where: { industry },
         update: {

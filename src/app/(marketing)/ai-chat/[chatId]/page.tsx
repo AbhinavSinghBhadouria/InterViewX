@@ -14,6 +14,7 @@ import { useParams } from 'next/navigation'
 
 
 
+
 type messages={
   id:string
   content:string ,
@@ -33,7 +34,7 @@ const Page = () => {
   const [isChatEnded, setIsChatEnded] = useState(false);
   const [endingChat, setEndingChat] = useState(false); 
   const chatContainerRef = useRef<HTMLDivElement | null>(null); //for scrolling pupose when new message arrives
-
+  const [isHydrating, setIsHydrating] = useState(true);
 
 
  const onSend = async () => {
@@ -70,7 +71,7 @@ const Page = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chatId ,
-        messages: [...messageList, userMsg],
+        message: userMsg.content, //sending the user's current query
       }),
     });
 
@@ -128,7 +129,7 @@ const Page = () => {
 
       setEndingChat(true);
 
-      const res = await fetch("/api/ai-career-chat-agent/chat-end", {
+      const res = await fetch("/api/chat/end", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chatId, messages: messageList })
@@ -162,7 +163,37 @@ useEffect(() => {
   scrollToBottom();
 }, [messageList]); 
 
-  
+
+
+  useEffect(() => {
+  let cancelled = false;
+
+  async function loadLiveMessages() {
+    try {
+            setIsHydrating(true);
+     const res = await fetch(`/api/chat/live?chatId=${chatId}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!cancelled && Array.isArray(data?.messages)) {
+        setMessageList(data.messages);
+      }
+    } catch (error) {
+      console.error("Failed to load live chat messages:", error);
+    }finally{
+       if (!cancelled) {
+        setIsHydrating(false);
+      }
+    }
+  }
+
+  if (chatId) {
+    loadLiveMessages();
+  }
+
+  return () => {
+    cancelled = true;
+  };
+}, [chatId]);
  
 
 
@@ -216,31 +247,30 @@ useEffect(() => {
 
   <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-6 space-y-3">
 
-  {messageList.length === 0 && (
-    <EmptyState selectedQuestion={(q: string) => setUserInput(q)} />
-  )}
-
-  {messageList.map((message, index) => (
+ {isHydrating ? (
+  <div className="h-full flex items-center justify-center">
+    <div className="text-sm text-muted-foreground animate-pulse">
+      Loading chat....
+    </div>
+  </div>
+) : messageList.length === 0 ? (
+  <EmptyState selectedQuestion={(q: string) => setUserInput(q)} />
+) : (
+  messageList.map((message) => (
     <div
-      key={index}
-      className={`flex ${
-        message.role === "user" ? "justify-end" : "justify-start"
-      }`}
+      key={message.id}
+      className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
     >
       <div
-        className={`px-4 py-2 rounded-lg max-w-[70%] whitespace-pre-wrap break-words ${
-          message.role === "user"
-            ? "bg-blue-900"
-            : "bg-green-800 text-white"
+        className={`px-4 py-2 rounded-lg max-w-[70%] whitespace-pre-wrap wrap-break-word ${
+          message.role === "user" ? "bg-blue-900" : "bg-green-800 text-white"
         }`}
       >
-        
-        <Markdown remarkPlugins={[remarkGfm]}>
-  {message.content}
-</Markdown>
+        <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
       </div>
     </div>
-  ))}
+  ))
+)}
 
  
  
@@ -266,7 +296,7 @@ useEffect(() => {
       />
       <Button
       onClick={onSend}
-  disabled={loading}
+  disabled={loading || isChatEnded || isHydrating}
   className="h-10 w-10 flex items-center justify-center rounded-lg bg-green-600 text-white hover:bg-blue-700 transition"
 >
   <Send className="h-5 w-5" />
