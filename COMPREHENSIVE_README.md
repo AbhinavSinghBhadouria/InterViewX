@@ -131,7 +131,7 @@ flowchart TD
   Set --> Return
 
   Write[Mutation] --> Persist[Persist DB]
-  Persist --> Invalidate[Delete Related Key(s)]
+  Persist --> Invalidate["Delete Related Keys"]
 ```
 
 ### 1.6 Chat Session Lifecycle Diagram
