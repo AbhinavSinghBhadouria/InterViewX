@@ -1,18 +1,50 @@
 import OpenAI from "openai";
 import { retrieveMemories } from "@/src/lib/retrieveMemory";
 import { storeMemory } from "@/src/lib/storeMemory";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/options";
+import db from "@/src/lib/prisma";
+import { appendChatMessage } from "@/src/lib/redis/chat-session";
 
 export const runtime = "nodejs";
 
 export async function POST(req:Request){
+
+   const session = await getServerSession(authOptions);
+
+  if (!session?.user?._id) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  const dbUser = await db.user.findUnique({
+    where: { authUserId: session.user._id },
+  });
+
+  if (!dbUser) {
+    return new Response("User not found", { status: 404 });
+  }
+
+
   const body = await req.json(); //we need chatId for pinecone namespace
   const chatId = body?.chatId as string | undefined;
-  const userMessage = body?.message as string | undefined;
+  const userMessage = body?.message as string | undefined; //current message of user
 
   if (!chatId || !userMessage?.trim()) {
     return new Response("Invalid request payload", { status: 400 });
   }
   const cleanedUserMessage = userMessage.trim();
+
+  //saving this message to redis db
+    try {
+    await appendChatMessage({
+      chatId,
+      userId: dbUser.id,
+      role: "user",
+      content: cleanedUserMessage,
+    });
+  } catch (error) {
+    console.error("Redis user-message append failed:", error);
+  }
 
   // retrieving semantic memories (do not fail chat generation if memory lookup fails)
   let memories: string[] = [];
@@ -101,11 +133,26 @@ let aiResponse = "";
         controller.close();
 
         if (aiResponse.trim().length > 0) {
+        //storing the ai response to redis db
+           try {
+            await appendChatMessage({
+              chatId,
+              userId: dbUser.id,
+              role: "assistant",
+              content: aiResponse,
+            });
+          } catch (error) {
+            console.error("Redis assistant-message append failed:", error);
+          }
+
+          //storing the ai response to vector db
           try {
             await storeMemory(chatId, aiResponse, "assistant");
           } catch (error) {
             console.error("Assistant memory store failed:", error);
           }
+
+           
         }
       }
     },

@@ -7,6 +7,9 @@ import db from "../lib/prisma";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { cacheKeys } from "../lib/redis/keys";
+import { TTL } from "../lib/redis/ttl";
+import { withCache, deleteKey } from "../lib/redis/cache";
 
 const groq = new Groq({
  apiKey: process.env.GROQ_API_KEY
@@ -206,10 +209,50 @@ const normalizedDuration = typeof roadmap.duration === "string" && roadmap.durat
    userId: user?.id //prisma user id
   }
  })
+ 
+
+ //invalidating the data
+
+   const historyKey = cacheKeys.roadmapsByUser(user.id);
+   await deleteKey(historyKey);
 
  return savedRoadmap
 
 
+}
+
+export async function getRoadmapHistory() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?._id) {
+    throw new Error("Unauthorized");
+  }
+
+  const authUserId = session.user._id;
+
+  const user = await db.user.findUnique({
+    where: { authUserId },
+  });
+
+  if (!user) {
+    throw new Error("User not found in database");
+  }
+
+  const key = cacheKeys.roadmapsByUser(user.id);
+
+  const { data, source } = await withCache(
+    key,
+    async () => {
+      return db.roadmap.findMany({
+        where: { userId: user.id },
+        orderBy: { updatedAt: "desc" },
+      });
+    },
+    TTL.ROADMAP_LIST_SECONDS
+  );
+
+  console.log("getRoadmapHistory source:", source);
+  return data;
 }
 
 
@@ -239,6 +282,9 @@ export async function deleteAllRoadmaps(){
           userId: dbUser.id
         }
       });
+
+      const key = cacheKeys.roadmapsByUser(dbUser.id);
+      await deleteKey(key);
 
       revalidatePath('/ai-roadmap/history');
       return { success: true };

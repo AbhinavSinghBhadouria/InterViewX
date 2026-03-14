@@ -4,6 +4,9 @@ import db from "@/src/lib/prisma";
 import { authOptions } from '../app/api/auth/[...nextauth]/options';
 import {GoogleGenerativeAI} from "@google/generative-ai"
 import { AIIndustryInsights } from "../types";
+import { cacheKeys } from "@/src/lib/redis/keys";
+import { TTL } from "@/src/lib/redis/ttl";
+import { getJSON, setJSON } from "@/src/lib/redis/cache";
 
 //explicitly validating the api key
 const apiKey = process.env.GEMINI_API_KEY;
@@ -58,6 +61,22 @@ export const generateAIInsights= async( industry:string ) : Promise<AIIndustryIn
    
 }
 
+function getInsightsTtlSeconds(nextUpdate: Date | string | null | undefined): number {
+  if (!nextUpdate) {
+    return TTL.INSIGHTS_MAX_SECONDS;
+  }
+
+  const target = new Date(nextUpdate).getTime();
+  const now = Date.now();
+  const deltaSeconds = Math.floor((target - now) / 1000);
+
+  if (!Number.isFinite(deltaSeconds) || deltaSeconds <= 0) {
+    return 60;
+  }
+
+  return Math.min(deltaSeconds, TTL.INSIGHTS_MAX_SECONDS);
+}
+
 export async function getIndustryInshights(){
     const session = await getServerSession(authOptions);
 
@@ -69,38 +88,58 @@ export async function getIndustryInshights(){
  //mongodb user id from the session
   const authUserId = session.user._id;
 
-  //look for this user id in the neon db
-  const user=await db.user.findUnique({
-    where:{
-        authUserId 
-    } ,
-    include :{
-        industryInsight:true
-    }
-  });
+    //look for this user id in the neon db
+    const user=await db.user.findUnique({
+      where:{
+          authUserId 
+      }
+    });
 
    if(!user) throw new Error("User not found in neon db");
-   
 
-   if(!user.industryInsight){
-    //we will generate them using AI
-    const insights = await generateAIInsights("tech");
+    const industry = (user.industry || "tech").toLowerCase();
+    const key = cacheKeys.industryInsights(industry);
 
-    const industryInsight = await db.industryInsight.upsert({
-    where: { industry: "tech" },
-        update: {
-    ...insights,
-  },
-  create: {
-    industry: "tech",
-    ...insights,
-    nextUpdate:new Date(Date.now() +7*24*60*60*1000),
-  },
-});
-   
+    //checking redis for data first
+    const cached = await getJSON<any>(key);
+    if (cached) {
+      console.log("getIndustryInshights source:", "cache");
+      return cached;
+    }
 
-    return industryInsight;
-   }
-   return user.industryInsight; //if we already had the industry insight
+    const existingInsight = await db.industryInsight.findUnique({
+      where: { industry },
+    });
+
+    if (existingInsight && new Date(existingInsight.nextUpdate).getTime() > Date.now()) {
+      //if the time is valid the store the data in redis and return the data
+      await setJSON(key, existingInsight, getInsightsTtlSeconds(existingInsight.nextUpdate));
+      console.log("getIndustryInshights source:", "origin-db");
+      return existingInsight;
+    }
+
+    // if missing or stale insights then regenerate and persist.
+    const insights = await generateAIInsights(industry);
+    const nextUpdate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const now = new Date();
+
+    const refreshedInsight = await db.industryInsight.upsert({
+      where: { industry },
+      update: {
+        ...insights,
+        lastUpdated: now,
+        nextUpdate,
+      },
+      create: {
+        industry,
+        ...insights,
+        lastUpdated: now,
+        nextUpdate,
+      },
+    });
+
+    await setJSON(key, refreshedInsight, getInsightsTtlSeconds(refreshedInsight.nextUpdate));
+    console.log("getIndustryInshights source:", "origin-ai");
+    return refreshedInsight;
 
 }

@@ -5,8 +5,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../app/api/auth/[...nextauth]/options";
 import db from "../lib/prisma";
 import Groq from "groq-sdk";
+import { cacheKeys } from "@/src/lib/redis/keys";
+import { TTL } from "@/src/lib/redis/ttl";
+import { withCache, deleteKey } from "@/src/lib/redis/cache";
 
-// -------------------- groq client -------------------- 
+
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY!,
 });
@@ -67,28 +70,74 @@ Return ONLY valid JSON in this format (no markdown, no extra text):
 }
 `;
 
-  try {
-    const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      messages: [
-        { role: "system", content: "You generate interview questions." },
-        { role: "user", content: prompt },
-      ],
-      temperature: 0.7,
-    });
+  const extractJsonObject = (raw: string): string => {
+    const cleaned = raw
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
 
-    const text = response.choices[0]?.message?.content;
+    const start = cleaned.indexOf("{");
+    const end = cleaned.lastIndexOf("}");
 
-    if (!text) {
-      throw new Error("Empty response from Groq");
+    if (start === -1 || end === -1 || end <= start) {
+      throw new Error("No valid JSON object found in model response");
     }
 
-    const quiz = JSON.parse(text);
-    return quiz.questions;
-  } catch (error) {
-    console.error("Error generating quiz:", error);
-    throw new Error("Failed to generate quiz questions");
+    return cleaned.slice(start, end + 1);
+  };
+
+  const maxAttempts = 2;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const response = await groq.chat.completions.create({
+        model: "llama-3.1-8b-instant",
+        messages: [
+          { role: "system", content: "You generate interview questions and return strict JSON only." },
+          { role: "user", content: prompt },
+        ],
+        temperature: 0.2,
+        response_format: { type: "json_object" },
+      });
+
+      const text = response.choices[0]?.message?.content;
+      const finishReason = response.choices[0]?.finish_reason;
+
+      if (!text) {
+        throw new Error("Empty response from Groq");
+      }
+
+      if (finishReason === "length") {
+        throw new Error("Model output was truncated (finish_reason=length)");
+      }
+
+      const jsonString = extractJsonObject(text);
+      const parsed = JSON.parse(jsonString);
+
+      if (!parsed || !Array.isArray(parsed.questions)) {
+        throw new Error("Invalid quiz schema: questions array missing");
+      }
+
+      if (parsed.questions.length !== 10) {
+        throw new Error(`Invalid question count: expected 10, got ${parsed.questions.length}`);
+      }
+
+      for (const q of parsed.questions) {
+        if (!q?.question || !Array.isArray(q?.options) || q.options.length !== 4 || !q?.correctAnswer) {
+          throw new Error("Invalid question structure in model response");
+        }
+      }
+
+      return parsed.questions;
+    } catch (error) {
+      if (attempt === maxAttempts) {
+        console.error("Error generating quiz:", error);
+        throw new Error("Failed to generate quiz questions");
+      }
+    }
   }
+
+  throw new Error("Failed to generate quiz questions");
 }
 
 
@@ -188,6 +237,12 @@ Keep the response:
       },
     });
 
+
+     //invalidating the cached data
+    const key = cacheKeys.assessmentsByUser(user.id);
+    await deleteKey(key);
+
+
     return assessment;
   } catch (error) {
     console.error("Error saving quiz result:", error);
@@ -218,16 +273,24 @@ export async function getAssessments(){
   }
 
 
+  //we will use cache aside pattern for getting the data
+  const key = cacheKeys.assessmentsByUser(user.id);
+
   try{
 
-   const assessments=await db.assessment.findMany({
-     where: {userId:user.id} ,
-     orderBy:{
-      createdAt: "asc"
-     } ,
-   }) ;
+const { data, source } = await withCache(
+key,
+async () => {
+return db.assessment.findMany({
+where: { userId: user.id },
+orderBy: { createdAt: "asc" },
+});
+},
+TTL.ASSESSMENTS_SECONDS
+);
 
-   return assessments;
+console.log("getAssessments source:", source);
+return data;
 
   }catch(error){
 console.log("Error fetching assessments" ,error);
@@ -260,6 +323,11 @@ export async function clearAssessments(){
       userId: user.id,
     },
   });
+
+  //invalidating the cache
+  const key = cacheKeys.assessmentsByUser(user.id);
+   await deleteKey(key);
+
     }catch(error){
     console.error("error deleting history" ,error)
 }
