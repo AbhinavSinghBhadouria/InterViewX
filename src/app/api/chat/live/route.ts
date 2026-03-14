@@ -33,8 +33,32 @@ export async function GET(req:Request){
     return NextResponse.json({ error: "Chat not found" }, { status: 404 });
   }
 
-  const messages = await getActiveChatMessages(chatId);
-  return NextResponse.json({ messages });
+  const redisMessages = await getActiveChatMessages(chatId);
+  if (redisMessages.length > 0) {
+    return NextResponse.json({ messages: redisMessages, source: "redis" });
+  }
+
+  // fallback for ended chats or Redis misses: hydrate from Postgres history.
+  const dbMessages = await db.message.findMany({
+    where: { chatId },
+    orderBy: { createdAt: "asc" },
+    select: {
+      id: true,
+      content: true,
+      role: true,
+      createdAt: true,
+    },
+  });
+
+  const messages = dbMessages.map((m) => ({
+    id: m.id,
+    chatId,
+    role: m.role,
+    content: m.content,
+    createdAt: m.createdAt.toISOString(),
+  }));
+
+  return NextResponse.json({ messages, source: "postgres" });
 
   }
 
