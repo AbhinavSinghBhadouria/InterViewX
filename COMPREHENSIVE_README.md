@@ -177,7 +177,7 @@ flowchart TD
   class Origin,Persist,Invalidate database;
   class Check decision;
 
-  linkStyle 2 stroke:#ef4444,stroke-width:2px,stroke-dasharray:8 5,color:#ef4444;
+  linkStyle 2 stroke:#ef4444,stroke-width:2px;
 ```
 
 ### 1.6 Chat Session Lifecycle Diagram
@@ -326,7 +326,7 @@ flowchart LR
   class H,S cache;
   class D database;
 
-  linkStyle 3 stroke:#ef4444,stroke-width:2px,stroke-dasharray:8 5,color:#ef4444;
+  linkStyle 3 stroke:#ef4444,stroke-width:2px;
 ```
 
 ### 4.2 Benchmark Methodology

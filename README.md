@@ -177,7 +177,7 @@ flowchart TD
   class RDATA,SET cache;
   class ORIGIN,DBW,INV database;
 
-  linkStyle 2 stroke:#ef4444,stroke-width:2px,stroke-dasharray:8 5,color:#ef4444;
+  linkStyle 2 stroke:#ef4444,stroke-width:2px;
 ```
 
 ## 7. Core Pipelines
