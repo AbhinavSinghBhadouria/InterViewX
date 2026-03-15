@@ -235,9 +235,61 @@ This design reduces collision risk and allows explicit versioning for future mig
 - Better perceived latency for chat due to Redis-backed active transcript.
 - Lower repeated computation cost for expensive AI outputs.
 
-## 4. Database Design
+## 4. Performance Benchmarking & Latency Optimization
 
-### 4.1 PostgreSQL (Prisma) Domain Models
+InterviewX uses a Redis cache-aside architecture (Upstash Redis) to accelerate database-heavy read paths, especially for repeated history/list retrieval operations.
+
+### 4.1 Cache-Aside Architecture
+- Read flow:
+  1. Backend checks Redis key.
+  2. On hit, cached payload is returned immediately.
+  3. On miss, backend queries PostgreSQL via Prisma, then writes result into Redis with TTL.
+- Write flow:
+  - After data mutations, related keys are invalidated to prevent stale reads.
+
+Simple cache path:
+
+```mermaid
+flowchart LR
+  C[Client] --> B[Backend API / Server Action]
+  B --> R{Redis Cache Hit?}
+  R -- Yes --> H[Return Cached Response]
+  R -- No --> D[(Database)]
+  D --> S[Store in Redis with TTL]
+  S --> H
+```
+
+### 4.2 Benchmark Methodology
+- Benchmark script: `scripts/measure-redis-latency.mjs`.
+- Measurement target: backend read-path latency (storage retrieval path only), not frontend render time.
+- Timing primitive: `performance.now()`.
+- Test modes:
+  - Cold-cache mode: force key delete, then execute Redis miss + database query + cache set.
+  - Warm-cache mode: pre-seed key, then execute Redis hit path.
+- Repeated multi-run sampling with percentile analysis (`p50`, `p95`) plus average latency.
+
+### 4.3 Measured Results
+Benchmark output (saved under `scripts/benchmark-results`) reported:
+
+- Combined p50 latency reduction: 87.81%
+- Combined p95 latency reduction: 92.92%
+- Combined average latency reduction: 89.73%
+
+These reductions were observed on backend data fetch paths where Redis serves repeated reads faster than querying the database for each request.
+
+### 4.4 Why Redis Improves Latency
+- Redis serves data from memory, which is substantially faster than repeated database query execution.
+- Warm-cache requests avoid repeated SQL planning/execution and related index/disk access overhead.
+- Lower read latency improves user-perceived responsiveness on high-frequency endpoints and reduces load pressure on primary databases.
+
+### 4.5 Why This Matters for Scalability and UX
+- Better tail latency (`p95`) helps maintain consistent response times under load spikes.
+- Faster read paths increase headroom before database bottlenecks appear.
+- Lower backend latency improves interaction smoothness for history dashboards, trend views, and repeated tool access.
+
+## 5. Database Design
+
+### 5.1 PostgreSQL (Prisma) Domain Models
 - `User`: relational profile linked by `authUserId` (Mongo identity bridge), skills array, onboarding fields.
 - `Chat` and `Message`: persisted conversation history after explicit chat end.
 - `Assessment`: quiz result snapshots with `questions` JSON array and optional AI tip.
@@ -245,23 +297,23 @@ This design reduces collision risk and allows explicit versioning for future mig
 - `IndustryInsight`: salary/trend snapshots with enums for demand and outlook.
 - `Roadmap`: JSON graph payload (`nodes`, `edges`) with metadata.
 
-### 4.2 MongoDB Models
+### 5.2 MongoDB Models
 - `User` (auth adapter + payment fields): credentials/OAuth identity and Stripe metadata.
 - `Interviews`: generated interview metadata and question arrays.
 - `FeedBack`: scored interview feedback and category breakdown.
 
-### 4.3 Relationship Notes
+### 5.3 Relationship Notes
 - Prisma and Mongo are intentionally split by domain responsibility.
 - `authUserId` in Prisma user table is the join bridge to Mongo-auth identity.
 - Stripe updates subscription state directly in Mongo user records.
 
-### 4.4 Redis and DB Interaction
+### 5.4 Redis and DB Interaction
 - Redis does not replace durable storage.
 - Redis buffers live sessions and accelerates reads; final source of truth remains Prisma/Mongo.
 
-## 5. AI Architecture
+## 6. AI Architecture
 
-### 5.1 AI Providers by Use Case
+### 6.1 AI Providers by Use Case
 - Groq (Llama 3.1):
   - Chat streaming responses.
   - Quiz generation and improvement tips.
@@ -274,12 +326,12 @@ This design reduces collision risk and allows explicit versioning for future mig
 - VAPI:
   - Voice interaction lifecycle and transcript events.
 
-### 5.2 Prompting and Output Handling
+### 6.2 Prompting and Output Handling
 - Most prompts request strict JSON with cleanup and parse guards.
 - Interview feedback normalized and validated against Zod schema before save.
 - Roadmap and quiz flows include JSON cleanup and structure checks.
 
-### 5.3 RAG/Memory Behavior
+### 6.3 RAG/Memory Behavior
 - Chat uses Pinecone namespace scoped by `chatId`.
 - On each user prompt:
   - Retrieve top-k semantic memories.
@@ -287,85 +339,85 @@ This design reduces collision risk and allows explicit versioning for future mig
   - Stream response.
   - Store user and assistant texts back into Pinecone.
 
-### 5.4 Chat History Usage
+### 6.4 Chat History Usage
 - Live phase: Redis serves current session transcript.
 - Historical phase: after ending chat, persisted Prisma `Message` rows serve history pages.
 
-## 6. Performance Design Decisions
+## 7. Performance Design Decisions
 
-### 6.1 Why Redis Here
+### 7.1 Why Redis Here
 - Chat sessions are high-frequency and short-lived; Redis is ideal for rapid append/read.
 - History/list endpoints repeatedly query similar data; cache-aside avoids redundant Prisma hits.
 
-### 6.2 Query Optimization Choices
+### 7.2 Query Optimization Choices
 - Prisma indexes:
   - Chats by `(userId, createdAt)`.
   - Industry insight by `industry`.
   - Assessments and roadmaps by `userId`.
 - Scoped queries by authenticated user id protect data and reduce broad scans.
 
-### 6.3 Chat Storage Strategy
+### 7.3 Chat Storage Strategy
 - Design uses delayed durable persistence (on chat end) to reduce write amplification during token streaming.
 - Redis acts as transient session state until explicit finalization.
 
-### 6.4 Runtime and Build Choices
+### 7.4 Runtime and Build Choices
 - Node runtime is explicitly used in handlers where required behavior matters (chat stream and Stripe webhook).
 - `postinstall` runs Prisma generate for deployment consistency.
 
-## 7. Scalability Considerations
+## 8. Scalability Considerations
 
-### 7.1 Current Scaling Strengths
+### 8.1 Current Scaling Strengths
 - Stateless Next.js API/server-action pattern (horizontal scaling friendly).
 - Externalized state to managed datastores/services (Redis, DBs, Stripe, Pinecone, AI APIs).
 - Cache version/prefix strategy supports future key evolution.
 
-### 7.2 Scale Risks and Bottlenecks
+### 8.2 Scale Risks and Bottlenecks
 - Dual write model across Prisma and Mongo adds operational complexity.
 - Some AI output parsing is heuristic and may require stronger schema enforcement at high volume.
 - Chat end persistence depends on explicit user action to finalize.
 
-### 7.3 Practical Next Scaling Steps
+### 8.3 Practical Next Scaling Steps
 - Add queue-based asynchronous persistence fallback for chat finalization.
 - Add route-level rate limiting on AI-heavy endpoints.
 - Add distributed tracing and cache hit-rate metrics.
 - Add partition/retention strategy for large transcript/message volumes.
 
-## 8. Security Considerations
+## 9. Security Considerations
 
-### 8.1 Authentication and Identity
+### 9.1 Authentication and Identity
 - NextAuth with:
   - Credentials provider (bcrypt compare).
   - Google and GitHub OAuth providers.
   - JWT session strategy with `_id` propagated into session token.
 - API and actions enforce session checks before protected operations.
 
-### 8.2 API Protection
+### 9.2 API Protection
 - Ownership checks are implemented in critical flows:
   - Chat read/end operations verify chat belongs to authenticated user.
   - Resume updates verify resume ownership.
   - Assessment/roadmap operations are user-scoped.
 
-### 8.3 Data Handling
+### 9.3 Data Handling
 - Secrets are read from environment variables.
 - Stripe webhook signature verification is enforced.
 - Passwords are hashed for credentials sign-up.
 
-### 8.4 Security Gaps to Address
+### 9.4 Security Gaps to Address
 - Middleware route matching is currently static string based and may not fully cover dynamic segments.
 - Build currently ignores TypeScript errors (`ignoreBuildErrors: true`), which can hide unsafe regressions.
 - Add centralized input validation on all public API routes.
 
 
-## 9. Rights and License
+## 10. Rights and License
 
-### 9.1 Repository Ownership
+### 10.1 Repository Ownership
 - This repository belongs to Amber Hasan.
 
-### 9.2 License Status
+### 10.2 License Status
 - No top-level LICENSE file is currently present in this repository.
 - In the absence of an explicit license grant, all rights are reserved by the repository owner.
 
-### 9.3 Third-Party Rights
+### 10.3 Third-Party Rights
 - Third-party libraries, platforms, and services integrated by this project are governed by their own licenses and terms.
 - Referenced logos, trademarks, and linked documentation remain the property of their respective owners.
 

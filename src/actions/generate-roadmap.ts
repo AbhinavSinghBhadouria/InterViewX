@@ -222,6 +222,9 @@ const normalizedDuration = typeof roadmap.duration === "string" && roadmap.durat
 }
 
 export async function getRoadmapHistory() {
+  const requestStartedAtMs = Date.now();
+  const requestId = crypto.randomUUID();
+
   const session = await getServerSession(authOptions);
 
   if (!session?.user?._id) {
@@ -240,7 +243,7 @@ export async function getRoadmapHistory() {
 
   const key = cacheKeys.roadmapsByUser(user.id);
 
-  const { data, source } = await withCache(
+  const { data, source, metrics } = await withCache(
     key,
     async () => {
       return db.roadmap.findMany({
@@ -252,6 +255,23 @@ export async function getRoadmapHistory() {
   );
 
   console.log("getRoadmapHistory source:", source);
+
+  console.log(
+    "LATENCY",
+    JSON.stringify({
+      action: "getRoadmapHistory",
+      requestId,
+      source,
+      totalMs: Date.now() - requestStartedAtMs,
+      redisGetMs: metrics.redisGetMs,
+      producerMs: metrics.producerMs,
+      redisSetMs: metrics.redisSetMs,
+      cachePathMs: metrics.totalMs,
+      key,
+      userId: user.id,
+    })
+  );
+
   return data;
 }
 

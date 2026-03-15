@@ -258,7 +258,19 @@ Also present in the repository `.env`: `OPENAI_API_KEY`, `PINECONE_INDEX`, `STRI
 - Streaming AI responses to reduce perceived latency.
 - Global singleton patterns for Prisma and Mongo clients in development.
 
-## 14. Rights and License
+## 14. Performance Benchmarking & Latency Optimization
+InterviewX uses a Redis cache-aside architecture (Upstash Redis) to optimize database-heavy read operations.
+
+A benchmark script at `scripts/measure-redis-latency.mjs` measures cold-cache paths (DB query + cache set) versus warm-cache paths (Redis hit) using `performance.now()` across multiple runs, then reports percentile metrics (`p50`, `p95`) and average latency.
+
+Measured backend read-path improvements:
+- Combined p50 latency reduction: 87.81%
+- Combined p95 latency reduction: 92.92%
+- Combined average latency reduction: 89.73%
+
+These metrics represent backend retrieval time improvements (Redis vs database), not full end-to-end UI rendering time. Redis improves this path by serving data from in-memory storage, avoiding repeated database query planning, execution, and disk/index overhead on hot reads.
+
+## 15. Rights and License
 - Repository ownership: This repository belongs to Amber Hasan.
 - License status: No top-level LICENSE file is currently present.
 - Rights notice: Until a license is explicitly added, all rights are reserved by the repository owner.

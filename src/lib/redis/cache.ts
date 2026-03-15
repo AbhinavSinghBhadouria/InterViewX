@@ -4,6 +4,15 @@ import { redis } from "./client";
 
 export type CacheSource = "cache" | "origin";
 
+export interface CacheMetrics {
+  redisGetMs: number;
+  producerMs: number;
+  redisSetMs: number;
+  totalMs: number;
+}
+
+const nowMs = () => Date.now();
+
 
 export async function getJSON<T>(key: string): Promise<T | null> {
   try {
@@ -62,15 +71,42 @@ export async function withCache<T>(
   key: string,
   producer: () => Promise<T>,
   ttlSeconds?: number
-): Promise<{ data: T; source: CacheSource }> {
+): Promise<{ data: T; source: CacheSource; metrics: CacheMetrics }> {
 
+  const startMs = nowMs();
+  const redisGetStartMs = nowMs();
   const cached = await getJSON<T>(key);
+  const redisGetMs = nowMs() - redisGetStartMs;
+
   if (cached !== null) {
-    return { data: cached, source: "cache" };
+    return {
+      data: cached,
+      source: "cache",
+      metrics: {
+        redisGetMs,
+        producerMs: 0,
+        redisSetMs: 0,
+        totalMs: nowMs() - startMs,
+      },
+    };
   }
 
+  const producerStartMs = nowMs();
   const fresh = await producer();  //getting the data from postgres
-  await setJSON(key, fresh, ttlSeconds);
+  const producerMs = nowMs() - producerStartMs;
 
-  return { data: fresh, source: "origin" };
+  const redisSetStartMs = nowMs();
+  await setJSON(key, fresh, ttlSeconds);
+  const redisSetMs = nowMs() - redisSetStartMs;
+
+  return {
+    data: fresh,
+    source: "origin",
+    metrics: {
+      redisGetMs,
+      producerMs,
+      redisSetMs,
+      totalMs: nowMs() - startMs,
+    },
+  };
 }

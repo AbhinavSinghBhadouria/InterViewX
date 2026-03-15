@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-03-15T16:10:29.306Z",
+  "runsPerMode": 30,
+  "userId": "a31993fb-05a7-45f0-ac53-e65a32aa66dd",
+  "benchmarks": [
+    {
+      "label": "getAssessments",
+      "key": "interviewx:v1:assessments:a31993fb-05a7-45f0-ac53-e65a32aa66dd",
+      "cold": {
+        "runs": 30,
+        "avgMs": 365.37,
+        "p50Ms": 326.49,
+        "p95Ms": 573.69,
+        "p99Ms": 938.8,
+        "minMs": 320.34,
+        "maxMs": 938.8
+      },
+      "warm": {
+        "runs": 30,
+        "avgMs": 41.49,
+        "p50Ms": 39.79,
+        "p95Ms": 50.08,
+        "p99Ms": 51.21,
+        "minMs": 38.04,
+        "maxMs": 51.21
+      },
+      "p50ReductionPercent": 87.81,
+      "p95ReductionPercent": 91.27,
+      "avgReductionPercent": 88.64
+    },
+    {
+      "label": "getRoadmapHistory",
+      "key": "interviewx:v1:roadmaps:user:a31993fb-05a7-45f0-ac53-e65a32aa66dd",
+      "cold": {
+        "runs": 30,
+        "avgMs": 446.24,
+        "p50Ms": 330.34,
+        "p95Ms": 806.04,
+        "p99Ms": 2630.95,
+        "minMs": 320.12,
+        "maxMs": 2630.95
+      },
+      "warm": {
+        "runs": 30,
+        "avgMs": 40.95,
+        "p50Ms": 40.26,
+        "p95Ms": 43.8,
+        "p99Ms": 48.29,
+        "minMs": 38.19,
+        "maxMs": 48.29
+      },
+      "p50ReductionPercent": 87.81,
+      "p95ReductionPercent": 94.57,
+      "avgReductionPercent": 90.82
+    }
+  ],
+  "combined": {
+    "p50ReductionPercent": 87.81,
+    "p95ReductionPercent": 92.92,
+    "avgReductionPercent": 89.73
+  }
+}
