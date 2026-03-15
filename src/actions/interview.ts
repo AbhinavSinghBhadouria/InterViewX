@@ -254,6 +254,9 @@ Keep the response:
 //-------------------------displaying Interview Progress-----------------
 
 export async function getAssessments(){
+  const requestStartedAtMs = Date.now();
+  const requestId = crypto.randomUUID();
+
   //check if the user is authenticated or not
 
    const session = await getServerSession(authOptions);
@@ -278,7 +281,7 @@ export async function getAssessments(){
 
   try{
 
-const { data, source } = await withCache(
+const { data, source, metrics } = await withCache(
 key,
 async () => {
 return db.assessment.findMany({
@@ -290,6 +293,24 @@ TTL.ASSESSMENTS_SECONDS
 );
 
 console.log("getAssessments source:", source);
+const totalMs = Date.now() - requestStartedAtMs;
+
+console.log(
+  "LATENCY",
+  JSON.stringify({
+    action: "getAssessments",
+    requestId,
+    source,
+    totalMs,
+    redisGetMs: metrics.redisGetMs,
+    producerMs: metrics.producerMs,
+    redisSetMs: metrics.redisSetMs,
+    cachePathMs: metrics.totalMs,
+    key,
+    userId: user.id,
+  })
+);
+
 return data;
 
   }catch(error){

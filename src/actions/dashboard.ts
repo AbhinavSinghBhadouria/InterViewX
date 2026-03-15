@@ -78,6 +78,9 @@ function getInsightsTtlSeconds(nextUpdate: Date | string | null | undefined): nu
 }
 
 export async function getIndustryInshights(){
+  const requestStartedAtMs = Date.now();
+  const requestId = crypto.randomUUID();
+
     const session = await getServerSession(authOptions);
 
        if (!session?.user?._id) {
@@ -101,28 +104,76 @@ export async function getIndustryInshights(){
     const key = cacheKeys.industryInsights(industry);
 
     //checking redis for data first
+    const redisGetStartMs = Date.now();
     const cached = await getJSON<any>(key);
+    const redisGetMs = Date.now() - redisGetStartMs;
+
     if (cached) {
       console.log("getIndustryInshights source:", "cache");
+
+      console.log(
+        "LATENCY",
+        JSON.stringify({
+          action: "getIndustryInshights",
+          requestId,
+          source: "cache",
+          totalMs: Date.now() - requestStartedAtMs,
+          redisGetMs,
+          dbReadMs: 0,
+          aiMs: 0,
+          redisSetMs: 0,
+          key,
+          industry,
+          userId: user.id,
+        })
+      );
+
       return cached;
     }
 
+    const dbReadStartMs = Date.now();
     const existingInsight = await db.industryInsight.findUnique({
       where: { industry },
     });
+    const dbReadMs = Date.now() - dbReadStartMs;
 
     if (existingInsight && new Date(existingInsight.nextUpdate).getTime() > Date.now()) {
       //if the time is valid the store the data in redis and return the data
+      const redisSetStartMs = Date.now();
       await setJSON(key, existingInsight, getInsightsTtlSeconds(existingInsight.nextUpdate));
+      const redisSetMs = Date.now() - redisSetStartMs;
+
       console.log("getIndustryInshights source:", "origin-db");
+
+      console.log(
+        "LATENCY",
+        JSON.stringify({
+          action: "getIndustryInshights",
+          requestId,
+          source: "origin-db",
+          totalMs: Date.now() - requestStartedAtMs,
+          redisGetMs,
+          dbReadMs,
+          aiMs: 0,
+          redisSetMs,
+          key,
+          industry,
+          userId: user.id,
+        })
+      );
+
       return existingInsight;
     }
 
     // if missing or stale insights then regenerate and persist.
+    const aiStartMs = Date.now();
     const insights = await generateAIInsights(industry);
+    const aiMs = Date.now() - aiStartMs;
+
     const nextUpdate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     const now = new Date();
 
+    const dbUpsertStartMs = Date.now();
     const refreshedInsight = await db.industryInsight.upsert({
       where: { industry },
       update: {
@@ -137,9 +188,32 @@ export async function getIndustryInshights(){
         nextUpdate,
       },
     });
+    const dbUpsertMs = Date.now() - dbUpsertStartMs;
 
+    const redisSetStartMs = Date.now();
     await setJSON(key, refreshedInsight, getInsightsTtlSeconds(refreshedInsight.nextUpdate));
+    const redisSetMs = Date.now() - redisSetStartMs;
+
     console.log("getIndustryInshights source:", "origin-ai");
+
+    console.log(
+      "LATENCY",
+      JSON.stringify({
+        action: "getIndustryInshights",
+        requestId,
+        source: "origin-ai",
+        totalMs: Date.now() - requestStartedAtMs,
+        redisGetMs,
+        dbReadMs,
+        aiMs,
+        dbUpsertMs,
+        redisSetMs,
+        key,
+        industry,
+        userId: user.id,
+      })
+    );
+
     return refreshedInsight;
 
 }
