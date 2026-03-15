@@ -25,14 +25,15 @@ This document is derived from the current repository implementation (Next.js App
 
 ### 1.2 High-Level Architecture Diagram
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"background": "#0b1020", "primaryColor": "#1b2333", "primaryBorderColor": "#3a4a66", "primaryTextColor": "#e6edf3", "lineColor": "#9aa6b2"}, "flowchart": {"curve": "basis"}}}%%
 flowchart TB
-  Browser[Client Browser]
+  Browser([Client Browser])
 
   subgraph NextApp[Next.js Monolith]
-    UI[App Router Pages + Client Components]
-    SA[Server Actions]
-    API[API Routes]
-    MW[Middleware]
+    UI([App Router Pages + Client Components])
+    SA([Server Actions])
+    API([API Routes])
+    MW([Middleware])
   end
 
   subgraph DataStores[Data Stores]
@@ -43,11 +44,11 @@ flowchart TB
   end
 
   subgraph AIExternal[AI + External Services]
-    GQ[Groq LLM]
-    GM[Gemini]
-    VP[VAPI]
-    ST[Stripe]
-    IG[Inngest]
+    GQ([Groq LLM])
+    GM([Gemini])
+    VP([VAPI])
+    ST([Stripe])
+    IG([Inngest])
   end
 
   Browser --> UI
@@ -70,72 +71,118 @@ flowchart TB
 
   IG --> PG
   IG --> GQ
+
+  classDef frontend fill:#1e3a8a,stroke:#60a5fa,color:#e0f2fe,stroke-width:1.5px;
+  classDef api fill:#4c1d95,stroke:#a78bfa,color:#f5f3ff,stroke-width:1.5px;
+  classDef cache fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:1.5px;
+  classDef database fill:#0f766e,stroke:#2dd4bf,color:#ccfbf1,stroke-width:1.5px;
+  classDef external fill:#9a3412,stroke:#fb923c,color:#fff7ed,stroke-width:1.5px;
+
+  class Browser,UI frontend;
+  class SA,API,MW api;
+  class RD cache;
+  class PG,MG,PN database;
+  class GQ,GM,VP,ST,IG external;
 ```
 
 ### 1.3 Data Flow Diagram
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"background": "#0b1020", "primaryColor": "#1b2333", "primaryBorderColor": "#3a4a66", "primaryTextColor": "#e6edf3", "lineColor": "#9aa6b2", "actorBkg": "#1b2333", "actorBorder": "#3a4a66", "actorTextColor": "#e6edf3", "signalColor": "#9aa6b2", "signalTextColor": "#e6edf3", "labelBoxBkgColor": "#0f172a", "labelBoxBorderColor": "#334155", "loopTextColor": "#e6edf3"}}}%%
 sequenceDiagram
-  participant U as User
-  participant FE as Next.js UI
-  participant SA as Server Action/API
-  participant RC as Redis
-  participant DB as Prisma/Mongo
-  participant AI as Groq/Gemini/Pinecone
+  box rgb(30,58,138,0.25) Frontend / Client
+    participant U as User
+    participant FE as Next.js UI
+  end
+  box rgb(76,29,149,0.25) API / Backend Services
+    participant SA as Server Action / API
+  end
+  box rgb(20,83,45,0.30) Cache Layer
+    participant RC as Redis
+  end
+  box rgb(15,118,110,0.30) Databases
+    participant DB as Prisma/Mongo
+  end
+  box rgb(154,52,18,0.28) External APIs
+    participant AI as Groq/Gemini/Pinecone
+  end
 
-  U->>FE: Submit action/message
+  U->>FE: Submit Action / Message
   FE->>SA: Request
-  SA->>RC: Read cache/session
-  alt Cache hit
+  SA->>RC: Read Cache / Session
+  alt Cache Hit
     RC-->>SA: Cached payload
-  else Cache miss
+  else Cache Miss
     SA->>DB: Query origin
     DB-->>SA: Origin payload
-    SA->>RC: Set cache with TTL
+    SA->>RC: Set Cache With TTL
   end
-  SA->>AI: AI retrieval/generation (if needed)
-  AI-->>SA: Structured/streamed output
-  SA->>DB: Persist durable records
+  SA->>AI: AI Retrieval / Generation (If Needed)
+  AI-->>SA: Structured / Streamed Output
+  SA->>DB: Persist Durable Records
   SA-->>FE: Response
   FE-->>U: Updated UI
 ```
 
 ### 1.4 AI Pipeline Architecture Diagram
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"background": "#0b1020", "primaryColor": "#1b2333", "primaryBorderColor": "#3a4a66", "primaryTextColor": "#e6edf3", "lineColor": "#9aa6b2"}, "flowchart": {"curve": "basis"}}}%%
 flowchart LR
-  I[Input: chat text / title / transcript / profile] --> C[Prompt Constructor]
-  C --> RAG[Pinecone Retrieval for chat context]
-  RAG --> LLM[Groq Llama 3.1]
-  C --> GMI[Gemini 2.5 Flash for industry insights]
-  LLM --> S1[Streaming text]
-  LLM --> S2[Structured JSON]
+  I([Input: Chat Text / Title / Transcript / Profile]) --> C([Prompt Constructor])
+  C --> RAG[(Pinecone Retrieval for chat context)]
+  RAG --> LLM([Groq Llama 3.1])
+  C --> GMI([Gemini 2.5 Flash for industry insights])
+  LLM --> S1([Streaming text])
+  LLM --> S2([Structured JSON])
   GMI --> S2
-  S1 --> Persist1[Redis active transcript + optional Pinecone memory]
-  S2 --> Persist2[Prisma/Mongo persistence]
+  S1 --> Persist1[(Redis active transcript + optional Pinecone memory)]
+  S2 --> Persist2[(Prisma/Mongo persistence)]
+
+  classDef compute fill:#78350f,stroke:#f59e0b,color:#fef3c7,stroke-width:1.5px;
+  classDef database fill:#0f766e,stroke:#2dd4bf,color:#ccfbf1,stroke-width:1.5px;
+  classDef external fill:#9a3412,stroke:#fb923c,color:#fff7ed,stroke-width:1.5px;
+
+  class C,S1,S2 compute;
+  class RAG,Persist1,Persist2 database;
+  class I,LLM,GMI external;
 ```
 
 ### 1.5 Redis Caching Architecture Diagram
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"background": "#0b1020", "primaryColor": "#1b2333", "primaryBorderColor": "#3a4a66", "primaryTextColor": "#e6edf3", "lineColor": "#9aa6b2"}, "flowchart": {"curve": "basis"}}}%%
 flowchart TD
   subgraph Keys
-    K1["interviewx:v1:chat:session:{chatId}"]
-    K2["interviewx:v1:chat:messages:{chatId}"]
-    K3["interviewx:v1:assessments:{userId}"]
-    K4["interviewx:v1:roadmaps:user:{userId}"]
-    K5["interviewx:v1:industry-insights:{industry}"]
+    K1[("interviewx:v1:chat:session:{chatId}")]
+    K2[("interviewx:v1:chat:messages:{chatId}")]
+    K3[("interviewx:v1:assessments:{userId}")]
+    K4[("interviewx:v1:roadmaps:user:{userId}")]
+    K5[("interviewx:v1:industry-insights:{industry}")]
   end
 
-  Read[Read Request] --> Check{Key Exists?}
-  Check -- Yes --> Return[Return Cache]
-  Check -- No --> Origin[Query Prisma]
-  Origin --> Set[Set TTL]
+  Read([Read Request]) --> Check{Key Exists?}
+  Check -. "Cache Hit" .-> Return([Return Cache])
+  Check -. "Cache Miss" .-> Origin([Query Prisma])
+  Origin --> Set([Set TTL])
   Set --> Return
 
-  Write[Mutation] --> Persist[Persist DB]
-  Persist --> Invalidate["Delete Related Keys"]
+  Write([Mutation]) --> Persist([Persist DB])
+  Persist --> Invalidate([Delete Related Keys])
+
+  classDef frontend fill:#1e3a8a,stroke:#60a5fa,color:#e0f2fe,stroke-width:1.5px;
+  classDef cache fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:1.5px;
+  classDef database fill:#0f766e,stroke:#2dd4bf,color:#ccfbf1,stroke-width:1.5px;
+  classDef decision fill:#1f2937,stroke:#94a3b8,color:#e2e8f0,stroke-width:1.5px;
+
+  class Read,Write frontend;
+  class K1,K2,K3,K4,K5,Return,Set cache;
+  class Origin,Persist,Invalidate database;
+  class Check decision;
+
+  linkStyle 2 stroke:#ef4444,stroke-width:2px,stroke-dasharray:8 5,color:#ef4444;
 ```
 
 ### 1.6 Chat Session Lifecycle Diagram
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"background": "#0b1020", "primaryColor": "#1b2333", "primaryBorderColor": "#3a4a66", "primaryTextColor": "#e6edf3", "lineColor": "#9aa6b2"}}}%%
 stateDiagram-v2
   [*] --> Active: startChat() creates Chat row
   Active --> Active: /api/chat appends user+assistant to Redis
@@ -144,6 +191,14 @@ stateDiagram-v2
   Persisted --> Cleanup: markChatSessionFinalized + clearChatSessionCache
   Cleanup --> Ended
   Ended --> [*]
+
+  classDef cache fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:1.5px;
+  classDef database fill:#0f766e,stroke:#2dd4bf,color:#ccfbf1,stroke-width:1.5px;
+  classDef api fill:#4c1d95,stroke:#a78bfa,color:#f5f3ff,stroke-width:1.5px;
+
+  class Active cache;
+  class Persisted database;
+  class Finalizing,Cleanup,Ended api;
 ```
 
 ## 2. Detailed Pipeline Explanations
@@ -250,13 +305,28 @@ InterviewX uses a Redis cache-aside architecture (Upstash Redis) to accelerate d
 Simple cache path:
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"background": "#0b1020", "primaryColor": "#1b2333", "primaryBorderColor": "#3a4a66", "primaryTextColor": "#e6edf3", "lineColor": "#9aa6b2"}, "flowchart": {"curve": "basis"}}}%%
 flowchart LR
-  C[Client] --> B[Backend API / Server Action]
+  C([Client]) --> B([Backend API / Server Action])
   B --> R{Redis Cache Hit?}
-  R -- Yes --> H[Return Cached Response]
-  R -- No --> D[(Database)]
-  D --> S[Store in Redis with TTL]
+  R -. "Cache Hit" .-> H([Return Cached Response])
+  R -. "Cache Miss" .-> D[(Database)]
+  D --> S([Store in Redis with TTL])
   S --> H
+
+  classDef frontend fill:#1e3a8a,stroke:#60a5fa,color:#e0f2fe,stroke-width:1.5px;
+  classDef api fill:#4c1d95,stroke:#a78bfa,color:#f5f3ff,stroke-width:1.5px;
+  classDef cache fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:1.5px;
+  classDef database fill:#0f766e,stroke:#2dd4bf,color:#ccfbf1,stroke-width:1.5px;
+  classDef decision fill:#1f2937,stroke:#94a3b8,color:#e2e8f0,stroke-width:1.5px;
+
+  class C frontend;
+  class B api;
+  class R decision;
+  class H,S cache;
+  class D database;
+
+  linkStyle 3 stroke:#ef4444,stroke-width:2px,stroke-dasharray:8 5,color:#ef4444;
 ```
 
 ### 4.2 Benchmark Methodology
