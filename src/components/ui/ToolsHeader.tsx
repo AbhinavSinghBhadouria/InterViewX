@@ -8,23 +8,48 @@ import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,DropdownMenuTrigg
 import { ChevronDown, FileText, GraduationCap, LayoutDashboard, LogOut, PenBox, StarsIcon ,Bot, Route } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from "next/navigation";
+import { toast } from 'sonner'
 
+
+interface ToolsHeaderProps {
+isOnboarded: boolean;
+}
 
 const HEADER_HEIGHT = "h-16";
 
 
-const ToolsHeader =() => {
+const ToolsHeader =({isOnboarded}:ToolsHeaderProps) => {
+
 
   
-const router = useRouter();
+    const router = useRouter();
 
      const[loggingOut , setIsLoggingOut]=useState(false);
     
       const logout= async():Promise<void>=>{
        setIsLoggingOut(true);
-       await signOut({callbackUrl:"/landingPage?loggedOut=true"}); //sending a query as well so that i can display the toast message on the main page
+       await signOut({callbackUrl:"/landingPage"}); //sending a query as well so that i can display the toast message on the main page
       
       }
+
+
+const handleToolkitNavigation = (path: string) => {
+if (!isOnboarded) {
+toast.error("Please complete your profile first.");
+router.push("/tools/onboarding");
+return;
+}
+router.push(path);
+};
+
+const handleClick=(path:string)=>{
+  if(!isOnboarded){
+    toast.error("Please complete your profile first.");
+router.push("/tools/onboarding");
+return;
+  }
+  router.push(path)
+}
   
   return (
     <>
@@ -37,12 +62,12 @@ const router = useRouter();
 
 
         <div className="gap-2">
-           <Link href="/tools/dashboard" >
-           <Button className="mr-4 btn-primary cursor-pointer">
+          
+           <Button className="mr-4 btn-primary cursor-pointer" onClick={()=>handleClick("/tools/dashboard")}>
                <LayoutDashboard className="h-4 w-4"></LayoutDashboard>
                 Industry Analytics 
             </Button>
-            </Link>
+           
 
 
     <DropdownMenu >
@@ -57,7 +82,7 @@ const router = useRouter();
    
 
    <DropdownMenuItem
-  onSelect={() => router.push("/tools/ai-resume")}
+  onSelect={() => handleToolkitNavigation("/tools/ai-resume")}
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"
 >
   <FileText className="w-4 h-4" />
@@ -65,7 +90,7 @@ const router = useRouter();
 </DropdownMenuItem>
 
 <DropdownMenuItem
-  onSelect={() => router.push("/tools/interview-prep")}
+onSelect={() => handleToolkitNavigation("/tools/interview-prep")}
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"
 >     <GraduationCap className="h-4 w-4" />
         MCQ Practice
@@ -73,7 +98,7 @@ const router = useRouter();
     </DropdownMenuItem>
 
 <DropdownMenuItem
-  onSelect={() => router.push("/tools/ai-chat-dashboard")}
+onSelect={() => handleToolkitNavigation("/tools/ai-chat-dashboard")}
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"
 >     <Bot className="h-4 w-4" />
         AI Career Coach
@@ -82,7 +107,7 @@ const router = useRouter();
 
 
     <DropdownMenuItem
-  onSelect={() => router.push("/tools/ai-roadmap-generator")}
+onSelect={() => handleToolkitNavigation("/tools/ai-roadmap-generator")}
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"
 >     <Route className="h-4 w-4" />
         AI Roadmap Generator 
