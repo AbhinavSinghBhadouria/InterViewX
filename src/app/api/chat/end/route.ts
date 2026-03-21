@@ -116,8 +116,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true });
     }
 
-    // build transcript directly from Redis transcript for title generation.
-    const transcriptLines = normalized.map((m) => `${m.role}: ${m.content}`);
+    // build transcript from only the first few messages for title generation.
+    const firstFewMessages = normalized.slice(0, 10);
+    const transcriptLines = firstFewMessages.map((m) => `${m.role}: ${m.content}`);
 
     let title = "AI Career Chat";
     try {
