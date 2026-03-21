@@ -136,7 +136,17 @@ const Page = () => {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to end chat");
+        let serverMessage = "Failed to end chat";
+        try {
+          const payload = await res.json();
+          if (payload?.error && typeof payload.error === "string") {
+            serverMessage = payload.error;
+          }
+        } catch {
+          // ignore JSON parse failures and keep fallback message.
+        }
+
+        throw new Error(serverMessage);
       }
 
       toast.success("Chat ended & saved successfully");
