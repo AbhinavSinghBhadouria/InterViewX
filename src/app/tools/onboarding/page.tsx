@@ -1,6 +1,4 @@
-import React from 'react'
-import ToolsHeader from '@/src/components/ui/ToolsHeader'
-import Footer from '@/src/components/ui/Footer'
+
 import OnboardingForm from '@/src/components/OnboardingForm'
 import { getUserOnboardingStatus } from '@/src/actions/user'
 import { redirect } from 'next/navigation'

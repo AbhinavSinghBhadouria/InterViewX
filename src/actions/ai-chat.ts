@@ -5,8 +5,7 @@ import { authOptions } from "../app/api/auth/[...nextauth]/options";
 import db from "../lib/prisma";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
-import { getActiveChatMessages } from "../lib/redis/chat-session";
+
 
 
 //this function will be called when the user clicks the start chat button on the chat dashboard
