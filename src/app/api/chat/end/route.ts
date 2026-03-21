@@ -75,7 +75,8 @@ export async function POST(req: Request) {
     }
 
     if (chat.isEnded) {
-      return NextResponse.json({ error: "Chat already ended" }, { status: 400 });
+      // Idempotent end operation: if already ended, treat as success.
+      return NextResponse.json({ success: true, alreadyEnded: true }, { status: 200 });
     }
 
    

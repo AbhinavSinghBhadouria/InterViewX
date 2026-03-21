@@ -49,7 +49,7 @@ export async function POST(req:Request){
   // retrieving semantic memories (do not fail chat generation if memory lookup fails)
   let memories: string[] = [];
   try {
-    memories = await retrieveMemories(chatId, cleanedUserMessage);
+    memories = await retrieveMemories(dbUser.id, cleanedUserMessage);
   } catch (error) {
     console.error("Memory retrieval failed:", error);
   }
@@ -110,7 +110,7 @@ CRITICAL RULES (must always follow):
 });
 
   try {
-    await storeMemory(chatId, cleanedUserMessage, "user");
+    await storeMemory(dbUser.id, chatId, cleanedUserMessage, "user");
   } catch (error) {
     console.error("User memory store failed:", error);
   }
@@ -147,7 +147,7 @@ let aiResponse = "";
 
           //storing the ai response to vector db
           try {
-            await storeMemory(chatId, aiResponse, "assistant");
+            await storeMemory(dbUser.id, chatId, aiResponse, "assistant");
           } catch (error) {
             console.error("Assistant memory store failed:", error);
           }

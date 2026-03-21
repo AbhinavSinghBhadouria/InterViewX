@@ -1,9 +1,11 @@
 import { index } from "./pinecone"
 
-export async function retrieveMemories(chatId: string, query: string) {
-  const results = await index.namespace(chatId).searchRecords({
+export async function retrieveMemories(userId: string, query: string) {
+  if (!userId || !query?.trim()) return [];
+
+  const results = await index.namespace(userId).searchRecords({
     query: {
-      topK: 5,
+      topK: 12,
       inputs: {
         text: query,
       },
