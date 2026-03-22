@@ -42,7 +42,7 @@ const page = async() => {
   //is the user is already subscribed then show him the billing page
   
   if(user?.plan=="premium"){
-    redirect("/payement/subscription");
+    redirect("/tools/payement/subscription");
   }
 
    const pricingList: PricingProps[] = [
