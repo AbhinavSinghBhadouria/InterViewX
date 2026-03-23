@@ -15,6 +15,7 @@ import { useParams } from 'next/navigation'
 
 
 
+
 type messages={
   id:string
   content:string ,
@@ -74,6 +75,13 @@ const Page = () => {
         message: userMsg.content, //sending the user's current query
       }),
     });
+
+    if (!res.ok) {
+   const data = await res.json();
+   toast.error(data.error);
+    return;
+  }
+
 
     if (!res.ok || !res.body) throw new Error("AI request failed");
 

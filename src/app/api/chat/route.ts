@@ -5,6 +5,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import db from "@/src/lib/prisma";
 import { appendChatMessage } from "@/src/lib/redis/chat-session";
+import { checkRateLimit } from "@/src/lib/rateLimit";
+import { checkDailyQuota } from "@/src/lib/quota";
 
 export const runtime = "nodejs";
 
@@ -23,6 +25,18 @@ export async function POST(req:Request){
   if (!dbUser) {
     return new Response("User not found", { status: 404 });
   }
+
+
+  //applying limit so that the user do not spam the ai model or exhaust the token
+  try {
+  await checkRateLimit(dbUser.id);     // e.g. 10 req/min
+  await checkDailyQuota(dbUser.id);    // e.g. 100 messages/day
+} catch (error:any) {
+  return Response.json(
+  { error: error.message },
+  { status: 429 }
+);
+}
 
 
   const body = await req.json(); //we need chatId for pinecone namespace

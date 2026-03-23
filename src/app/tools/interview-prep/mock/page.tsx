@@ -7,8 +7,10 @@ import { redirect } from 'next/navigation'
 
 
 const page = async() => {
-  const is_onboarded=await getUserOnboardingStatus();
-  if(!is_onboarded){
+
+  const  {isOnboarded} =await getUserOnboardingStatus();
+
+  if(!isOnboarded){
     redirect("/tools/onboarding")
   }
   return (
