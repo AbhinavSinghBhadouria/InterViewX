@@ -10,7 +10,7 @@ const page = async() => {
 
   const  {isOnboarded} =await getUserOnboardingStatus();
 
-  if(!isOnboarded){
+  if(!isOnboarded ){
     redirect("/tools/onboarding")
   }
   return (

@@ -63,7 +63,7 @@ return;
 
         <div className="gap-2">
           
-           <Button className="mr-4 btn-primary cursor-pointer" onClick={()=>handleClick("/tools/dashboard")}>
+           <Button className="mr-4 btn-primary cursor-pointer" onClick={()=>handleClick("/tools/industry-insights")}>
                <LayoutDashboard className="h-4 w-4"></LayoutDashboard>
                 Industry Analytics 
             </Button>
@@ -90,7 +90,7 @@ return;
 </DropdownMenuItem>
 
 <DropdownMenuItem
-onSelect={() => handleToolkitNavigation("/tools/interview-prep")}
+onSelect={() => handleToolkitNavigation("/tools/ai-assessments")}
   className="bg-black m-1 flex items-center gap-2 cursor-pointer"
 >     <GraduationCap className="h-4 w-4" />
         MCQ Practice

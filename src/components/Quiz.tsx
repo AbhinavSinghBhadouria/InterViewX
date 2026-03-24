@@ -15,12 +15,18 @@ import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { toast } from "sonner";
 import { Loader, Loader2 } from "lucide-react";
 import QuizResult from "./QuizResult";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+
+
+interface QuizProps {
+  type: string;
+  subject: string;
+}
 
 
 
-
-
-const Quiz = () => {
+const Quiz = ({type , subject}: QuizProps) => {
 
 //states for handling the quiz question
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -87,7 +93,7 @@ const Quiz = () => {
    const finishQuiz=async()=>{
     const score=calculateScore();
     try{
-        await saveQuizResultFn(quizData , answers , score)
+        await saveQuizResultFn(quizData , answers , score ,type , subject)
         toast.success("Quiz completed!")
     }catch(error){
         toast.error("Failed to save the quiz results")
@@ -105,6 +111,7 @@ const Quiz = () => {
     setResultData(null);
    }
 
+
    //SHOWING THE RESULTS WHEN THE QUIZ GETS COMPLETED
    if(resultData){
     return (
@@ -117,25 +124,34 @@ const Quiz = () => {
    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // BEFORE QUIZ START
   if (!quizData ) {
+    
     return (
-        <div className="flex items-center justify-center m-4">
+      <>
+         <Link href={"/tools/ai-assessments"}>
+            <Button variant="link" className="gap-2 pl-0 cursor-pointer">
+              <ArrowLeft className="h-4 w-4"/>
+              Back to Assessments DashBoard
+              </Button>
+        </Link> 
+
+        <div className="flex items-center justify-center m-10">
+
       <Card className="w-1/2">
         <CardHeader className="text-center">
           <CardTitle>Ready to test your skills?</CardTitle>
         </CardHeader>
 
-        <CardContent>
-          <p className="text-muted-foreground">
-            This mock interview contains 10 industry-specific questions based on
-            your skills. Choose the best answer for each question to simulate a
-            real interview.
-          </p>
-        </CardContent>
+  <CardContent>
+  <p className="text-muted-foreground">
+    This assessment includes 10 carefully designed questions to test your knowledge and problem-solving skills. 
+    Answer each question to evaluate your preparation and discover the topics you should focus on improving.
+  </p>
+</CardContent>
 
         <CardFooter>
           <Button
             className="w-full cursor-pointer"
-            onClick={generateQuizFn}
+            onClick={()=>generateQuizFn(type , subject)}
             disabled={generatingQuiz}
           >
             {generatingQuiz ? "Generating Questions..." : "Start Quiz"}
@@ -143,7 +159,9 @@ const Quiz = () => {
         </CardFooter>
       </Card>
       </div>
+       </>
     );
+  
   }
 
   const question=quizData[currentQuestion];

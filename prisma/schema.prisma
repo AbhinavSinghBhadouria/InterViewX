@@ -75,24 +75,34 @@ enum Role {
 }
 
 
-
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 model Assessment {
-  id            String    @id @default(cuid())
-  userId        String    //the id to whome the assesment belongs to
-  user          User      @relation(fields: [userId], references: [id]) //it is a foreign key , inside this table we have userId which references the id from the User table
-  quizScore     Float     // Overall quiz score
-  questions     Json[]    // Array of {question, answer, userAnswer, isCorrect}
-  category      String    // "Technical", "Behavioral", etc.
-  improvementTip String?  // AI-generated improvement tip
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+id String @id @default(cuid())
+userId String
+user User @relation(fields: [userId], references: [id])
 
-  @@index([userId])  //indexing with userId
+type String?
+subject String?
+
+quizScore Float
+totalQuestions Int?
+
+questions Json[]
+weakTopics String[]
+
+improvementTip String?
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+@@index([userId])
+@@index([userId, createdAt])
 }
 
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 model Resume {
   id          String    @id @default(cuid())

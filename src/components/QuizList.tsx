@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
 import { format } from "date-fns"
 import QuizResult from './QuizResult'
-import StartNewQuizBtn from './StartNewQuizBtn'
 import { clearAssessments } from '../actions/interview'
 
 const QuizList = ({ assessments }: any) => {
@@ -25,6 +24,14 @@ const QuizList = ({ assessments }: any) => {
     }
   }
 
+  //for formatting the title stored in database
+  function formatSubject(subject: string) {
+  return subject
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
   return (
     <>
       <Card className="bg-black mt-6 border border-blue-500/30 shadow-[0_0_15px_rgba(0,140,255,0.35)] rounded-xl">
@@ -40,7 +47,7 @@ const QuizList = ({ assessments }: any) => {
             </div>
 
             <div className="flex justify-center items-center gap-2">
-              <StartNewQuizBtn />
+             
 
               {assessments?.length > 0 && (
                 <Button
@@ -65,7 +72,11 @@ const QuizList = ({ assessments }: any) => {
               >
                 <CardHeader>
                   <CardTitle className="text-orange-600 text-3xl">
+
                     Quiz {i + 1}
+                    <span className=" ml-4 text-amber-500">
+                    {formatSubject(assessment.subject)}
+                    </span>
                   </CardTitle>
 
                   <CardDescription className="flex justify-between w-full">
@@ -104,7 +115,7 @@ const QuizList = ({ assessments }: any) => {
           <QuizResult
             result={selectedQuiz}
             hideStartNew
-            onStartNew={() => router.push("/interview-prep/tools/mock")}
+          
           />
         </DialogContent>
       </Dialog>

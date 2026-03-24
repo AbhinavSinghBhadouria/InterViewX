@@ -2,13 +2,22 @@ import { CheckCircle2, Trophy, XCircle } from 'lucide-react';
 import { CardContent ,Card } from '@/src/components/ui/card';
 import { CardFooter } from '@/src/components/ui/card';
 import { Button } from './ui/button';
-import StartNewQuizBtn from './StartNewQuizBtn';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+
 
 const QuizResult = ({result , hideStartNew=false , onStartNew}:any) => {
 
   if(!result) return null;
   return (
     <div className="mx-auto">
+
+       <Link href={"/tools/ai-assessments"}>
+            <Button variant="link" className="gap-2 pl-0 cursor-pointer">
+              <ArrowLeft className="h-4 w-4"/>
+              Back to Assessments DashBoard
+              </Button>
+        </Link> 
 
      <div className="flex justify-center items-center m-4">
     <div className="flex items-center sm:gap-2 gap-1 text-1xl sm:text-4xl gradient-title ">
@@ -69,12 +78,6 @@ const QuizResult = ({result , hideStartNew=false , onStartNew}:any) => {
 
     </CardContent>
 
-
-    {!hideStartNew && (
-      <CardFooter className="mb-5 flex items-center justify-center">
-       <StartNewQuizBtn/>
-      </CardFooter>
-    )}
     </div>
   
   

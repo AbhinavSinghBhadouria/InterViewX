@@ -14,7 +14,7 @@ export default function layout({children}:{ children: ReactNode }) {
     <div className="px-5">
        <div className="flex items-center justify-center mb-5" >
         <h1 className="text-6xl font-extrabold bg-linear-to-r from-blue-600 via-blue-500 to-cyan-300 bg-clip-text text-transparent mt-5">
-            Personalized Dashboard
+            Industry Analytics
         </h1>
        </div>
        <Suspense fallback={

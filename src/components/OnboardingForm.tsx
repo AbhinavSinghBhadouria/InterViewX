@@ -201,9 +201,7 @@ useEffect(()=>{
        {...register("skills")}
        />
 
-       <p className="text-sm mt-1 text-green-600!">
-        Seperate multiple skills with commas
-       </p>
+      <p className="text-sm mt-1 text-amber-400!"> Mention all your skills, your assessments are generated based on the skills you provide. Separate multiple skills with commas. </p>
 
 {errors.skills && (
   <p className="text-sm text-red-500! mt-1">
