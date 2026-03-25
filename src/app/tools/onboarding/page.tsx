@@ -16,7 +16,7 @@ const page = async() => {
 const {isOnboarded}= await getUserOnboardingStatus();
 
 if(isOnboarded){
-  redirect("/tools/dashboard");
+  redirect("/tools/industry-insights");
 }
 
 

@@ -28,7 +28,7 @@ const page = async () => {
 
   return (
     <div className="min-h-screen px-6 md:px-10 lg:px-20  ">
-        <Link href={"/authenticatedLandingPage"}>
+        <Link href={"/tools/dashboard"}>
             <Button variant="link" className="gap-2  pl-0 cursor-pointer">
               <ArrowLeft className="h-4 w-4"/>
               Back to DashBoard

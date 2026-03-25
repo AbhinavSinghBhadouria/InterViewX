@@ -63,7 +63,7 @@ const Page = async () => {
               </Button>
         </Link> 
        <h1 className="text-6xl font-extrabold bg-linear-to-r from-blue-600 via-blue-500 to-cyan-300 bg-clip-text text-transparent mt-5 text-center mb-5">
-            PRACTICE ASSESSMENT
+            PRACTICE ASSESSMENTS
         </h1>
       
         <Link href={"/tools/ai-assessments/history"}>
