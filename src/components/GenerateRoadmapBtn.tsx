@@ -38,7 +38,7 @@ const GenerateRoadmapBtn = () => {
     }
   return (
    <>
-     <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] mb-4 cursor-pointer" onClick={()=>setDialog(true)}>
+     <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] mb-2 cursor-pointer bg-green-400" onClick={()=>setDialog(true)}>
       <Route className="h-4 w-4" /> Generate Roadmap
      </Button>
 

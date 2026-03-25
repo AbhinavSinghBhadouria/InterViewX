@@ -4,7 +4,7 @@ import { authOptions } from "../../api/auth/[...nextauth]/options"
 import { getServerSession } from "next-auth"
 import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
-import { MessageSquare, Sparkle   , History } from "lucide-react"
+import { MessageSquare, Sparkle   , History, ClipboardCheck } from "lucide-react"
 import { ArrowLeft } from "lucide-react"
 import { startChat } from "@/src/actions/ai-chat"
 import { getUserOnboardingStatus } from "@/src/actions/user"
@@ -79,8 +79,13 @@ Generate a structured roadmap and discover exactly what to learn next.
 </form> 
            <GenerateRoadmapBtn/>
            <Link href="/ai-roadmap/history">
-            <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] cursor-pointer">
+            <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] cursor-pointer mb-2">
              <History/>View Roadmap History
+            </Button>
+          </Link>
+            <Link href="/ai-roadmap/curated">
+            <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] cursor-pointer bg-yellow-400">
+             <ClipboardCheck/>Custom Roadmaps by Amber Hasan
             </Button>
           </Link>
         <span className="inline-block mt-4 rounded-full bg-blue-100 px-4 py-1 text-sm font-semibold text-blue-700">
