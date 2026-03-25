@@ -39,7 +39,46 @@ if (!user) {
 const prompt = `
 You are an API that generates structured data for a React Flow roadmap visualization.
 
-Your task is to generate a comprehensive learning roadmap for the given career/skill.
+Your task is to generate a comprehensive learning roadmap for the given topic.
+The roadmap should contain between 8 and 15 nodes depending on topic complexity.
+
+IMPORTANT CONTEXT:
+
+The topic can belong to different categories such as:
+
+1. Career Roadmaps
+Examples:
+- Google SDE
+- Microsoft SWE
+- Amazon SDE Preparation
+
+2. Tech Stack Roadmaps
+Examples:
+- React Developer
+- Backend Developer
+- AI Engineer
+- Full Stack Developer
+
+3. Core Computer Science Subjects
+Examples:
+- OOPS (Object Oriented Programming)
+- DBMS (Database Management Systems)
+- CN (Computer Networks)
+-  OS (Operating Systems)
+- System Design
+
+4. Skill Based Roadmaps
+Examples:
+- DSA Mastery
+- Competitive Programming
+
+You must understand the context of the given topic and generate the roadmap accordingly.
+
+For example:
+- If the topic is "React Developer", generate a frontend development roadmap.
+- If the topic is "DBMS", generate a database learning roadmap.
+- If the topic is "System Design", generate a backend architecture learning roadmap.
+- If the topic is "Google SDE", generate a roadmap for preparing for that company's interviews.
 
 Follow these rules strictly:
 
@@ -88,17 +127,11 @@ Graph Rules:
 4. Avoid crossing edges when possible.
 5. Nodes should mostly increase in the y direction (top to bottom).
 
-
-
 Rules for positioning:
 - Root node should start near {x: 0, y: 0}
 - Child nodes should increase in y direction
 - Use spacing between nodes to avoid overlap
-
-
-
 - Create branching for specialization topics
-
 
 Learning Resource Rules (VERY IMPORTANT):
 
@@ -126,12 +159,9 @@ STRICT RULES:
 - Only include links you are confident exist.
 - If unsure, link to the official documentation homepage of that topic.
 
-
-
 The JSON must be syntactically valid and parseable by JSON.parse().
 
-Generate a roadmap for this career or skill:
-
+Generate a roadmap for this topic:
 `
 
 

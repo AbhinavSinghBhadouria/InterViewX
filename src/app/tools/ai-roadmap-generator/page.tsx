@@ -39,11 +39,11 @@ const page = async () => {
        
 
         <h1 className="text-6xl md:text-6xl font-extrabold bg-linear-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent">
-          AI Career Roadmap Generator
+          AI Powered Roadmap Generator
         </h1>
 
         <p className="mt-4 text-md md:text-2xl font-medium text-muted-foreground max-w-3xl mx-auto">
-         Generate a personalized step-by-step roadmap to achieve your dream career using the power of AI.
+         Generate a personalized step-by-step roadmap to guide your learning journey and achieve your dream career..
         </p>
       </div>
 
@@ -53,9 +53,9 @@ const page = async () => {
         {/* IMAGE */}
         <div className="rounded-2xl overflow-hidden">
           <img
-            src="/ai-roadmap.png"
-            width={600}
-            height={400}
+            src="/Roadmap.jpeg"
+            width={400}
+            height={450}
             alt="AI Career Roadmap Generator Preview"
             className="rounded-2xl object-cover"
           />
@@ -68,8 +68,8 @@ const page = async () => {
           </h1>
 
           <p className="text-muted-sm mb-6">
-           Your career journey starts here.
-Generate a smart roadmap and discover exactly what to learn next.
+Your career journey starts here.
+Generate a structured roadmap and discover exactly what to learn next.
           </p>
         
          
@@ -84,7 +84,7 @@ Generate a smart roadmap and discover exactly what to learn next.
             </Button>
           </Link>
         <span className="inline-block mt-4 rounded-full bg-blue-100 px-4 py-1 text-sm font-semibold text-blue-700">
-          AI-Generated Career Roadmaps
+          Personalized Career Roadmaps
         </span>
         </div>
       </div>
