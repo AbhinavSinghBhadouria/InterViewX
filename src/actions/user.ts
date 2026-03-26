@@ -111,22 +111,8 @@ export async function getUserOnboardingStatus(): Promise<onboardingStatus>{
  //mongodb user id from the session
   const authUserId = session.user._id;
 
-  //look for this user id in the neon db
-  const user=await db.user.findUnique({
-    where:{
-        authUserId 
-    } ,
-  });
-
-   if(!user){
-    return {
-      isOnboarded : false
-    }
-   }
-  //  if(!user) throw new Error("User not found in neon db");
-
    try{
-    const user=await db.user.findUnique({
+    const user = await db.user.findUnique({
     where:{
         authUserId 
     } ,
@@ -136,6 +122,12 @@ export async function getUserOnboardingStatus(): Promise<onboardingStatus>{
     } ,
       
    });
+
+   if(!user){
+    return {
+      isOnboarded : false
+    }
+   }
     
    return {
     isOnboarded : !!user?.industry 
@@ -144,6 +136,8 @@ export async function getUserOnboardingStatus(): Promise<onboardingStatus>{
 }
 catch(error){
     console.log("Error checking onboarding status" , error);
-    throw new Error("Failed to check onboarding status")
+    return {
+      isOnboarded : false
+    }
 }
 }

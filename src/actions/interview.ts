@@ -20,11 +20,12 @@ interface QuizQuestion {
   options: string[];
   correctAnswer: string;
   explanation: string;
+   topic: string;
 }
 
-//-------generating  quiz
+//-------generating  quiz------------------------------------------------------------------------------------------------------------------
 
-export async function generateQuiz() {
+export async function generateQuiz(type:string  ,subject:string) {
 
   //getting the user id from the session of next auth
   const session = await getServerSession(authOptions);
@@ -43,32 +44,131 @@ export async function generateQuiz() {
     throw new Error("User not found in neon db");
   }
 
-  const prompt = `
+
+  let prompt = "";
+
+//generating the assessment based upon the user skills
+if(type === "technical"){
+
+prompt = `
 You are an expert technical interviewer.
 
 Generate 10 technical interview questions for a ${user.industry} professional${
-    user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
-  }.
+  user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
+}.
 
-Each question must:
-- Be multiple choice
-- Have exactly 4 options
-- Have one correct answer
-- Include a short explanation
+The questions should resemble those asked in interviews by companies such as:
+Amazon, Microsoft, Adobe, Atlassian, Flipkart, Uber, Goldman Sachs.
 
-Return ONLY valid JSON in this format (no markdown, no extra text):
+Rules:
+- Focus on real interview concepts, not trivia.
+- Difficulty should be medium to hard.
+- Questions should test conceptual understanding.
+- Each question must be multiple choice.
+- Exactly 4 options.
+- Exactly one correct answer.
+- Include a "topic" field describing the concept being tested.
+
+Explanation rules:
+- Clearly explain WHY the correct answer is correct.
+- Mention the key concept involved.
+- If relevant, briefly indicate why other options are incorrect.
+- Explanation must be 1–2 sentences and under 25 words.
+
+Return ONLY valid JSON:
 
 {
-  "questions": [
+  "questions":[
     {
-      "question": "string",
-      "options": ["string", "string", "string", "string"],
-      "correctAnswer": "string",
-      "explanation": "string"
+      "question":"string",
+      "options":["string","string","string","string"],
+      "correctAnswer":"string",
+      "explanation":"string",
+      "topic":"string"
     }
   ]
 }
 `;
+}
+
+else if(type === "aptitude"){
+
+prompt = `
+You are an expert campus placement test designer.
+
+Generate 10 multiple choice aptitude questions for the subject: ${subject}.
+
+These questions should resemble those asked in campus placement assessments
+conducted by companies such as:
+
+TCS, Infosys, Wipro, Capgemini, Cognizant, Accenture, Tech Mahindra and HCL.
+
+Rules:
+- Match the difficulty level of Indian campus placement aptitude tests.
+- Focus on commonly asked placement topics.
+- Each question must have exactly 4 options.
+- Exactly one correct answer.
+- Include a "topic" field describing the concept tested.
+
+Explanation Rules:
+- Clearly explain WHY the correct answer is correct.
+- If relevant, briefly indicate why other options are incorrect.
+- Explanation must be 1–2 sentences and under 25 words.
+
+Return ONLY valid JSON in this format:
+
+{
+  "questions":[
+    {
+      "question":"string",
+      "options":["string","string","string","string"],
+      "correctAnswer":"string",
+      "explanation":"string",
+      "topic":"string"
+    }
+  ]
+}
+`;
+}
+
+else if(type === "core"){
+
+prompt = `
+You are a computer science interviewer.
+
+Generate 10 multiple-choice questions for the subject: ${subject}.
+
+The questions should resemble those asked in technical interview rounds
+by companies such as Amazon, Microsoft, Adobe, Goldman Sachs and Atlassian.
+
+Rules:
+- Focus on important concepts frequently asked in interviews.
+- Difficulty: medium to hard.
+- Test conceptual understanding rather than memorization.
+- Each question must have exactly 4 options.
+- Exactly one correct answer.
+- Include a "topic" field describing the concept tested.
+
+Explanation rules:
+- Explain the underlying concept clearly.
+- Mention the key CS concept (e.g., deadlock, normalization, TCP handshake).
+- Keep explanation under 25 words.
+
+Return ONLY valid JSON in this format:
+
+{
+  "questions":[
+    {
+      "question":"string",
+      "options":["string","string","string","string"],
+      "correctAnswer":"string",
+      "explanation":"string",
+      "topic":"string"
+    }
+  ]
+}
+`;
+}
 
   const extractJsonObject = (raw: string): string => {
     const cleaned = raw
@@ -86,17 +186,17 @@ Return ONLY valid JSON in this format (no markdown, no extra text):
     return cleaned.slice(start, end + 1);
   };
 
-  const maxAttempts = 2;
+  const maxAttempts = 5;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       const response = await groq.chat.completions.create({
         model: "llama-3.1-8b-instant",
-        messages: [
-          { role: "system", content: "You generate interview questions and return strict JSON only." },
+        messages: [  {role: "system",content:"You are an expert technical interviewer who creates high-quality placement questions. Always return strict JSON. Explanations must clearly explain the concept."} ,
           { role: "user", content: prompt },
         ],
         temperature: 0.2,
+         max_tokens: 2000,  
         response_format: { type: "json_object" },
       });
 
@@ -107,9 +207,10 @@ Return ONLY valid JSON in this format (no markdown, no extra text):
         throw new Error("Empty response from Groq");
       }
 
-      if (finishReason === "length") {
-        throw new Error("Model output was truncated (finish_reason=length)");
-      }
+     if (finishReason === "length") {
+  console.log("Retrying due to truncated output...");
+  continue;
+}
 
       const jsonString = extractJsonObject(text);
       const parsed = JSON.parse(jsonString);
@@ -123,12 +224,12 @@ Return ONLY valid JSON in this format (no markdown, no extra text):
       }
 
       for (const q of parsed.questions) {
-        if (!q?.question || !Array.isArray(q?.options) || q.options.length !== 4 || !q?.correctAnswer) {
-          throw new Error("Invalid question structure in model response");
-        }
-      }
+       if (!q?.question || !Array.isArray(q?.options) || q.options.length !== 4 || !q?.correctAnswer || !q?.topic) {
+       throw new Error("Invalid question structure in model response");
+           }}
 
       return parsed.questions;
+
     } catch (error) {
       if (attempt === maxAttempts) {
         console.error("Error generating quiz:", error);
@@ -146,7 +247,9 @@ Return ONLY valid JSON in this format (no markdown, no extra text):
 export async function saveQuizResult(
   questions: QuizQuestion[],
   answers: string[],
-  score: number
+  score: number,
+  type: string,
+  subject: string
 ) {
   const session = await getServerSession(authOptions);
 
@@ -166,12 +269,21 @@ export async function saveQuizResult(
 
   const questionResults = questions.map((q, index) => ({
     question: q.question,
+    topic: q.topic,
     answer: q.correctAnswer,
     userAnswer: answers[index] ?? "",
     isCorrect: q.correctAnswer === answers[index],
     explanation: q.explanation,
   }));
 
+  //extracting the weak topics
+  const weakTopics = [
+  ...new Set(
+    questionResults
+      .filter(q => !q.isCorrect)
+      .map(q => q.topic)
+  )
+];
   const wrongAnswers = questionResults.filter(q => !q.isCorrect);
 
 
@@ -190,20 +302,18 @@ User Answer: ${q.userAnswer}
       .join("\n");
 
     const improvementPrompt = `
-The user answered some ${user.industry} interview questions incorrectly.
+The user completed an assessment on ${subject} (${type}).
 
-Here are the details:
+Here are the questions they answered incorrectly:
 ${wrongQuestionsText}
 
-Based on these mistakes:
-- Identify the underlying knowledge gaps
-- Suggest what the user should focus on improving
+Identify the knowledge gaps and suggest what they should focus on improving.
 
 Keep the response:
 - Encouraging
 - Specific
 - Under 2 sentences
-- Do NOT mention mistakes explicitly
+
 `;
 
     try {
@@ -229,11 +339,14 @@ Keep the response:
   try {
     const assessment = await db.assessment.create({
       data: {
-        userId: user.id,
-        quizScore: score,
-        questions: questionResults,
-        category: "Technical",
-        improvementTip,
+     userId: user.id,
+    type,
+    subject,
+    quizScore: score,
+    totalQuestions: questions.length,
+    questions: questionResults,
+    weakTopics,
+    improvementTip,
       },
     });
 
@@ -320,6 +433,7 @@ throw new Error("Failed to fetch assessments");
 }
 
 
+
 export async function clearAssessments(){
    //getting the user id from the session of next auth
   const session = await getServerSession(authOptions);
@@ -354,3 +468,70 @@ export async function clearAssessments(){
 }
 
   }
+
+
+//-----------------------------------------------------------------------------------------
+//function for counting number of assessments
+
+type AssessmentTypeCounts = {
+  aptitude: number;
+  technical: number;
+  core: number;
+};
+
+export async function countAssessments(): Promise<AssessmentTypeCounts>{
+
+
+    //getting the user id from the session of next auth
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?._id) {
+    throw new Error("Unauthorized");
+  }
+
+  const authUserId = session.user._id;
+
+  const user = await db.user.findUnique({
+    where: { authUserId },
+  });
+
+  if (!user) {
+    throw new Error("User not found in neon db");
+  }
+
+  try{
+const counts = await db.assessment.groupBy({
+  by: ["type"],
+  where: {
+    userId: user.id
+  },
+  _count: {
+    type: true
+  }
+});
+
+const normalized: AssessmentTypeCounts = {
+  aptitude: 0,
+  technical: 0,
+  core: 0,
+};
+
+for (const entry of counts) {
+  const type = entry.type?.toLowerCase();
+  if (type === "aptitude" || type === "technical" || type === "core") {
+    normalized[type] = entry._count.type;
+  }
+}
+
+return normalized;
+
+  }catch(err){
+    console.error("Error getting assessment count" , err);
+    return {
+      aptitude: 0,
+      technical: 0,
+      core: 0,
+    };
+  }
+
+}
