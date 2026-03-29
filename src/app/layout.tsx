@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/src/components/ui/sonner";
+import PageTransition from "@/src/components/PageTransition";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -25,8 +26,8 @@ export default function RootLayout({
       <body
         className={`${monaSans.className} antialiased pattern min-h-screen`}
       > 
-    
-        {children}
+
+        <PageTransition>{children}</PageTransition>
         <Toaster closeButton richColors position="top-right" />
        
       </body>
