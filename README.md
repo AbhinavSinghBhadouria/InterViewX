@@ -317,7 +317,7 @@ Measured backend read-path improvements:
 These metrics represent backend retrieval time improvements (Redis vs database), not full end-to-end UI rendering time. Redis improves this path by serving data from in-memory storage, avoiding repeated database query planning, execution, and disk/index overhead on hot reads.
 
 ## 15. Rights and License
-- Repository ownership: This repository belongs to Amber Hasan.
+- Repository ownership: This repository is privately owned.
 - License status: No top-level LICENSE file is currently present.
 - Rights notice: Until a license is explicitly added, all rights are reserved by the repository owner.
 - Third-party notice: External services, SDKs, logos, and trademarks used by this project remain under their respective licenses and terms.

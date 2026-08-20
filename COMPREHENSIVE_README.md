@@ -481,7 +481,7 @@ These reductions were observed on backend data fetch paths where Redis serves re
 ## 10. Rights and License
 
 ### 10.1 Repository Ownership
-- This repository belongs to Amber Hasan.
+- This repository is privately owned.
 
 ### 10.2 License Status
 - No top-level LICENSE file is currently present in this repository.

@@ -15,7 +15,7 @@ const page = () => {
                               </Button>
                               </Link>
       <h1 className="text-6xl md:text-6xl font-extrabold mb-4 bg-linear-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent text-center">
-          Custom Rodmaps by Amber Hasan
+          Custom Roadmaps
         </h1>
 
          <div className="space-y-6 max-w-2xl mx-auto">

@@ -85,7 +85,7 @@ Generate a structured roadmap and discover exactly what to learn next.
           </Link>
             <Link href="/ai-roadmap/curated">
             <Button className="w-full text-lg py-6 transition-all hover:scale-[1.02] cursor-pointer bg-yellow-400">
-             <ClipboardCheck/>Custom Roadmaps by Amber Hasan
+             <ClipboardCheck/>Custom Roadmaps
             </Button>
           </Link>
         <span className="inline-block mt-4 rounded-full bg-blue-100 px-4 py-1 text-sm font-semibold text-blue-700">

@@ -9,8 +9,8 @@ export async function handleFreeAccess(){
  
     const session=await getServerSession(authOptions);
 
-     //allowing only the admin i.e Amber Hasan to access the VAPI as it is paid 
-      const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAILc
+     //allowing only the admin to access the VAPI as it is paid 
+      const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL
 
     if (isAdmin) {
       redirect("/");

@@ -126,7 +126,7 @@ const page = async ({ searchParams }: PageProps) => {
                 </p>
 
                 <p className="text-yellow-700 mt-2 font-semibold">
-                  — Amber Hasan (Admin)
+                  — Admin
                 </p>
               </div>
             </div>
