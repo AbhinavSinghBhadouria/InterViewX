@@ -18,6 +18,8 @@ services:
         sync: false
       - key: NEXTAUTH_SECRET
         generateValue: true
+      - key: INNGEST_SIGNING_KEY
+        sync: false
       
       # Auth Providers
       - key: GOOGLE_CLIENT_ID
@@ -35,6 +37,10 @@ services:
       - key: GEMINI_API_KEY
         sync: false
       - key: PINECONE_API_KEY
+        sync: false
+      - key: PINECONE_INDEX
+        sync: false
+      - key: OPENAI_API_KEY
         sync: false
 
       # VAPI
@@ -58,11 +64,17 @@ services:
         sync: false
       - key: STRIPE_YEARLY_PRICE_ID
         sync: false
+      - key: STRIPE_MONTHLY_PLAN_LINK
+        sync: false
+      - key: STRIPE_YEARLY_PLAN_LINK
+        sync: false
       - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
         sync: false
       - key: NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL
         sync: false
       - key: NEXT_PUBLIC_URL
+        sync: false
+      - key: NEXT_PUBLIC_BASE_URL
         sync: false
 
       # App Controls
@@ -72,3 +84,4 @@ services:
 databases:
   - name: interview-x-db
     plan: free
+
