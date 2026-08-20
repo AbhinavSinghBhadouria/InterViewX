@@ -1,0 +1,74 @@
+services:
+  - type: web
+    name: interview-x
+    env: node
+    plan: free
+    buildCommand: npx prisma db push && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      
+      # Core
+      - key: DATABASE_URL
+        fromDatabase:
+          name: interview-x-db
+          property: connectionString
+      - key: MONGODB_URI
+        sync: false
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      
+      # Auth Providers
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+
+      # AI Providers
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PINECONE_API_KEY
+        sync: false
+
+      # VAPI
+      - key: NEXT_PUBLIC_VAPI_WEB_TOKEN
+        sync: false
+      - key: NEXT_PUBLIC_VAPI_WORKFLOW_ID
+        sync: false
+
+      # Redis
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+
+      # Stripe
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_MONTHLY_PRICE_ID
+        sync: false
+      - key: STRIPE_YEARLY_PRICE_ID
+        sync: false
+      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL
+        sync: false
+      - key: NEXT_PUBLIC_URL
+        sync: false
+
+      # App Controls
+      - key: NEXT_PUBLIC_ADMIN_EMAIL
+        sync: false
+
+databases:
+  - name: interview-x-db
+    plan: free
