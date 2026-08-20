@@ -3,6 +3,7 @@ services:
     name: interview-x
     env: node
     plan: free
+    installCommand: npm install
     buildCommand: npx prisma db push && npm run build
     startCommand: npm run start
     envVars:
